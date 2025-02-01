@@ -21,6 +21,13 @@
 	--accent-yellow: #f9f871;
 	--accent-grey: var(--blueGrey900);
 
+	/* accent backgrounds */
+	--blueBG: rgba(0, 124, 255, 0.3);
+	--redBG: rgba(185, 0, 52, 0.3);
+	--purpleBG: rgba(124, 58, 237, 0.3);
+	--greenBG: rgba(0, 226, 189, 0.3);
+	--pinkBG: rgba(255, 0, 102, 0.3);
+
 	--decrease-accent: #ff333d;
 	--increase-accent: var(--accent-green);
 

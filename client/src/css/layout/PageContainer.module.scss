@@ -1,0 +1,8 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.PageContainer {
+	@include fill_container;
+	padding: 2rem;
+}
