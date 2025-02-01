@@ -1,0 +1,22 @@
+@mixin scrollbar($color: var(--blueGrey400)) {
+	&::-webkit-scrollbar {
+		display: inline;
+		display: none;
+		border-radius: 5rem;
+		width: 0.8rem;
+		// display: none;
+	}
+	&::-webkit-scrollbar-thumb {
+		width: 0.8rem;
+		border-radius: 5rem;
+		background-color: $color;
+	}
+}
+
+@mixin cardBase() {
+	width: 100%;
+	height: max-content;
+	border-radius: 1rem;
+	border: $borderLight;
+	padding: 1rem;
+}
