@@ -27,6 +27,8 @@
 		height: 28rem;
 		overflow-y: scroll;
 		list-style: none;
+		@include colCenter();
+		gap: 0.5rem 0;
 		// border: 1px solid red;
 	}
 }

@@ -12,5 +12,18 @@
 		color: $text3;
 		margin-bottom: 1rem;
 		padding-left: 0.5rem;
+		@include flex_row(space-between, baseline);
+
+		&_btn {
+			background-color: transparent;
+			border: none;
+			outline: none;
+			color: $accentBlue;
+			font-size: 1.4rem;
+			text-decoration: none;
+			& > a {
+				text-decoration: none;
+			}
+		}
 	}
 }

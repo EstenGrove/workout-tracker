@@ -10,8 +10,8 @@
 	width: 100dvw;
 	height: 7rem;
 	border-top: $borderLight;
-	background-color: $foreground;
-	backdrop-filter: blur(20px);
+	overflow-x: hidden;
+	@include glassy();
 
 	&_list {
 		width: 100%;
