@@ -4,6 +4,7 @@ export interface CurrentUser {
 	password: string;
 	firstName: string;
 	lastName: string;
+	userAvatar: string | null;
 	isActive: boolean;
 	createdDate: string;
 	lastLoginDate: string | null;

@@ -1,0 +1,32 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.RecentWorkouts {
+	width: 100%;
+	margin-top: 2rem;
+
+	&_header {
+		width: 100%;
+		font-size: 1.8rem;
+		color: $text3;
+		margin-bottom: 1rem;
+		padding-left: 0.5rem;
+		@include flex_row(flex-start, flex-start);
+
+		& i {
+			font-style: normal;
+			font-size: 1.6rem;
+			color: $text2;
+			margin-left: auto;
+		}
+	}
+
+	&_list {
+		width: 100%;
+		height: 28rem;
+		overflow-y: scroll;
+		list-style: none;
+		// border: 1px solid red;
+	}
+}

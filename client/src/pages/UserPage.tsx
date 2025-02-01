@@ -1,11 +1,14 @@
-import styles from "../css/pages/User.module.scss";
+import PageContainer from "../components/layout/PageContainer";
+import styles from "../css/pages/UserPage.module.scss";
 
-const User = () => {
+const UserPage = () => {
 	return (
-		<div className={styles.User}>
-			<h1>User</h1>
-		</div>
+		<PageContainer>
+			<div className={styles.UserPage}>
+				<h1>UserPage</h1>
+			</div>
+		</PageContainer>
 	);
 };
 
-export default User;
+export default UserPage;

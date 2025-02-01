@@ -2,7 +2,10 @@
 @import "../../sass/mixins";
 @import "../../sass/custom";
 
-.AppLayout {
-	width: 100%;
-	height: auto;
+.DetailsCard {
+	@include fill_container;
+
+	&_inner {
+		@include fill_container;
+	}
 }

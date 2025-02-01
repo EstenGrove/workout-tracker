@@ -5,25 +5,31 @@ import Dashboard from "./pages/Dashboard";
 import WorkoutsPage from "./pages/WorkoutsPage";
 import HistoryPage from "./pages/HistoryPage";
 import SettingsPage from "./pages/SettingsPage";
+import UserPage from "./pages/UserPage";
+import { Provider } from "react-redux";
+import { store } from "./store/store";
 
 function App() {
 	return (
-		<Router>
-			<div className="App">
-				<div className="App_main">
-					<Routes>
-						<Route path="/login" element={<div>Login Page</div>} />
+		<Provider store={store}>
+			<Router>
+				<div className="App">
+					<div className="App_main">
+						<Routes>
+							<Route path="/login" element={<div>Login Page</div>} />
 
-						<Route path="/" element={<AppLayout />}>
-							<Route index element={<Dashboard />} />
-							<Route path="workouts" element={<WorkoutsPage />} />
-							<Route path="history" element={<HistoryPage />} />
-							<Route path="settings" element={<SettingsPage />} />
-						</Route>
-					</Routes>
+							<Route path="/" element={<AppLayout />}>
+								<Route index element={<Dashboard />} />
+								<Route path="workouts" element={<WorkoutsPage />} />
+								<Route path="history" element={<HistoryPage />} />
+								<Route path="profile" element={<UserPage />} />
+								<Route path="settings" element={<SettingsPage />} />
+							</Route>
+						</Routes>
+					</div>
 				</div>
-			</div>
-		</Router>
+			</Router>
+		</Provider>
 	);
 }
 

@@ -1,0 +1,16 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.ActivityTypes {
+	padding: 4rem 3rem;
+	@include flex_row(center, center);
+	gap: 2rem;
+
+	&_type {
+		@include colCenter();
+		gap: 0.1rem 0;
+		font-size: 1.2rem;
+		color: $text3;
+	}
+}

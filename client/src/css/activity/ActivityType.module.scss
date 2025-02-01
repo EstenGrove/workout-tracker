@@ -1,0 +1,18 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+$size: 4.2rem;
+
+.ActivityType {
+	width: $size;
+	height: $size;
+	border-radius: 50%;
+	@include rowCenter();
+
+	&_icon {
+		width: 2.8rem;
+		height: 2.8rem;
+		fill: #fff;
+	}
+}

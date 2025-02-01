@@ -1,10 +1,13 @@
+import PageContainer from "../components/layout/PageContainer";
 import styles from "../css/pages/WorkoutsPage.module.scss";
 
 const WorkoutsPage = () => {
 	return (
-		<div className={styles.WorkoutsPage}>
-			<h1>Workouts</h1>
-		</div>
+		<PageContainer>
+			<div className={styles.WorkoutsPage}>
+				<h1>Workouts</h1>
+			</div>
+		</PageContainer>
 	);
 };
 
