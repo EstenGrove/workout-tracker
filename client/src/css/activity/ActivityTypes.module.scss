@@ -3,7 +3,8 @@
 @import "../../sass/custom";
 
 .ActivityTypes {
-	padding: 4rem 3rem;
+	width: 100%;
+	padding: 2rem 2rem;
 	@include flex_row(center, center);
 	gap: 2rem;
 

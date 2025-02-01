@@ -7,9 +7,7 @@ import DashboardHeader from "../components/dashboard/DashboardHeader";
 import WeeklyHeader from "../components/layout/WeeklyHeader";
 import RecentActivity from "../components/dashboard/RecentActivity";
 import ActivityCard from "../components/dashboard/ActivityCard";
-import NoData from "../components/shared/NoData";
 import RecentWorkouts from "../components/dashboard/RecentWorkouts";
-import ActivityTypes from "../components/activity/ActivityTypes";
 
 const Dashboard = () => {
 	const baseDate = new Date().toString();
@@ -30,10 +28,7 @@ const Dashboard = () => {
 			/>
 			<div className={styles.Dashboard_main}>
 				<div className={styles.Dashboard_main_row}>
-					<ActivityTypes />
-				</div>
-				<div className={styles.Dashboard_main_row}>
-					<RecentActivity title="Recent Steps" icon="recentActivity" />
+					<RecentActivity />
 				</div>
 				<div className={styles.Dashboard_main_row}>
 					<ActivityCard title="Steps" icon="badge" color="var(--accent-red)">
