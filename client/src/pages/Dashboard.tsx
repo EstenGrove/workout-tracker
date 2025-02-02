@@ -31,15 +31,11 @@ const Dashboard = () => {
 					<RecentActivity />
 				</div>
 				<div className={styles.Dashboard_main_row}>
-					<ActivityCard title="Steps" icon="badge" color="var(--accent-red)">
+					<ActivityCard title="Steps" icon="badge" color="var(--accent-green)">
 						{/*  */}
 						{/*  */}
 					</ActivityCard>
-					<ActivityCard
-						title="Strength"
-						icon="calories"
-						color="var(--accent-yellow)"
-					>
+					<ActivityCard title="Calories" icon="fire" color="var(--accent-red)">
 						{/*  */}
 						{/*  */}
 					</ActivityCard>

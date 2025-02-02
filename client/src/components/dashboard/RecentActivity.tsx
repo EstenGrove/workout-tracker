@@ -23,7 +23,7 @@ const NoData = () => {
 
 const getDetailsUrl = (type: Activity, date: string) => {
 	const basePath =
-		"/details?" +
+		"/recent?" +
 		new URLSearchParams({
 			type: "steps",
 			date: date,

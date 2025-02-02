@@ -9,6 +9,8 @@ import HistoryPage from "./pages/HistoryPage";
 import SettingsPage from "./pages/SettingsPage";
 import UserPage from "./pages/UserPage";
 import DetailsPage from "./pages/DetailsPage";
+import AllRecentActivity from "./pages/AllRecentActivity";
+import LoginPage from "./pages/LoginPage";
 
 function App() {
 	return (
@@ -17,10 +19,11 @@ function App() {
 				<div className="App">
 					<div className="App_main">
 						<Routes>
-							<Route path="/login" element={<div>Login Page</div>} />
+							<Route path="/login" element={<LoginPage />} />
 
 							<Route path="/" element={<AppLayout />}>
 								<Route index element={<Dashboard />} />
+								<Route path="recent" element={<AllRecentActivity />} />
 								<Route path="workouts" element={<WorkoutsPage />} />
 								<Route path="history" element={<HistoryPage />} />
 								<Route path="profile" element={<UserPage />} />

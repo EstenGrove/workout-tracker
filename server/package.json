@@ -6,10 +6,16 @@
   },
   "dependencies": {
     "@hono/node-server": "^1.13.8",
-    "hono": "^4.6.20"
+    "date-fns": "^4.1.0",
+    "dotenv": "^16.4.7",
+    "hono": "^4.6.20",
+    "pg": "^8.13.1"
   },
   "devDependencies": {
+    "@types/date-fns": "^2.5.3",
+    "@types/dotenv": "^6.1.1",
     "@types/node": "^20.11.17",
+    "@types/pg": "^8.11.11",
     "tsx": "^4.7.1"
   }
 }

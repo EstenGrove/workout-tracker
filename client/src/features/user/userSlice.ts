@@ -1,7 +1,9 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TStatus } from "../types";
 import { CurrentSession, CurrentUser } from "./types";
 import { RootState } from "../../store/store";
+import { getUserByLogin, getUserByID } from "./operations";
+import { UserResponse } from "../../utils/utils_user";
 
 export interface CurrentUserSlice {
 	status: TStatus;
@@ -35,6 +37,34 @@ const userSlice = createSlice({
 		resetUserState() {
 			return initialState;
 		},
+	},
+	extraReducers(builder) {
+		// Get user by login creds
+		builder
+			.addCase(getUserByLogin.pending, (state: CurrentUserSlice) => {
+				state.status = "PENDING";
+			})
+			.addCase(
+				getUserByLogin.fulfilled,
+				(state: CurrentUserSlice, action: PayloadAction<UserResponse>) => {
+					state.status = "FULFILLED";
+					state.currentUser = action.payload.user;
+					state.currentSession = action.payload.session;
+				}
+			);
+		// Get user by ID
+		builder
+			.addCase(getUserByID.pending, (state: CurrentUserSlice) => {
+				state.status = "PENDING";
+			})
+			.addCase(
+				getUserByID.fulfilled,
+				(state: CurrentUserSlice, action: PayloadAction<UserResponse>) => {
+					state.status = "FULFILLED";
+					state.currentUser = action.payload.user;
+					state.currentSession = action.payload.session;
+				}
+			);
 	},
 });
 
