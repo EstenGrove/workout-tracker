@@ -34,7 +34,7 @@ const API_AUTH = {
 	},
 };
 
-const CURRENT_ENV_KEY = "local";
+const CURRENT_ENV_KEY = "network";
 const CURRENT_ENV = API_AUTH[CURRENT_ENV_KEY];
 
 const API_ENDPOINTS = {
@@ -42,7 +42,13 @@ const API_ENDPOINTS = {
 		getByLogin: "/user/getUserByLogin",
 		getByID: "/user/getUserByID",
 	},
+	workouts: {
+		getAll: "/workouts/getAllWorkouts",
+		getUserWorkouts: "/workouts/getUserWorkouts",
+	},
 };
+
+export const { user: userApis, workouts: workoutApis } = API_ENDPOINTS;
 
 export {
 	BASE_URL as baseUrl,

@@ -12,16 +12,16 @@ export interface CurrentUserSlice {
 }
 
 const fakeUser: CurrentUser = {
-	userID: "e8sld-81k34-lKdjhr",
+	userID: "4f515e66-ec64-447e-8d26-79f8ad83c5a3",
 	username: "EstenGrove",
-	password: "1234",
-	firstName: "Esten",
-	lastName: "Grove",
+	password: "Tripper99",
+	firstName: "Steven",
+	lastName: "Gore",
 	userAvatar: null,
 	isActive: true,
-	createdDate: new Date().toISOString(),
-	lastLoginDate: new Date().toISOString(),
-	token: "token",
+	createdDate: "2025-02-02 08:25:22.769558",
+	lastLoginDate: null,
+	token: "640d912e-693c-4d35-ad3a-5f89d176d379",
 };
 
 const initialState: CurrentUserSlice = {
