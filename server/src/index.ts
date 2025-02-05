@@ -18,6 +18,7 @@ app.get("/", (c) => {
 });
 
 app.route("/user", allRoutes.user);
+app.route("/meds", allRoutes.meds);
 app.route("/workouts", allRoutes.workouts);
 
 // Log env info:

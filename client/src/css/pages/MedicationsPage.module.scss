@@ -1,0 +1,32 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+// header: 15rem
+// week: 5rem
+
+.MedicationsPage {
+	width: 100%;
+
+	&_body {
+		width: 100%;
+		padding: 2rem;
+		// height: calc(100% - 10dvh);
+		height: 100%;
+		padding-bottom: 6rem;
+
+		&_actions {
+			width: 100%;
+			padding: 1rem 0;
+			@include flex_row(flex-end, center);
+		}
+	}
+	&_cards {
+		width: 100%;
+		display: block;
+
+		&_card {
+			margin: 2rem 0;
+		}
+	}
+}

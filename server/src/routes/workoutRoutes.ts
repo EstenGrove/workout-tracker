@@ -32,5 +32,10 @@ app.get("/getUserWorkouts", async (ctx: Context) => {
 
 	// user workouts
 });
+app.get("/getOpenWorkouts", async (ctx: Context) => {
+	const { userID } = ctx.req.query();
+
+	// open workouts
+});
 
 export default app;

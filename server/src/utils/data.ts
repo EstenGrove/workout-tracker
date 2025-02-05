@@ -1,3 +1,7 @@
+import type {
+	MedLogEntryClient,
+	MedLogEntryDB,
+} from "../services/MedicationsService.ts";
 import type { UserClient, UserDB } from "../services/UserService.ts";
 import type { WorkoutClient, WorkoutDB } from "../services/WorkoutService.ts";
 
@@ -42,4 +46,16 @@ const normalizeWorkouts = (workouts: WorkoutDB[]): WorkoutClient[] => {
 	return clientWorkouts;
 };
 
-export { normalizeUser, normalizeWorkout, normalizeWorkouts };
+const normalizeMedLog = (log: MedLogEntryDB): MedLogEntryClient => {
+	const clientLog: MedLogEntryClient = {
+		logID: log.log_id,
+		scheduleID: log.schedule_id,
+		loggedAt: log.logged_at,
+		dose: log.dose,
+		notes: log.notes,
+		createdDate: log.created_date,
+	};
+	return clientLog;
+};
+
+export { normalizeUser, normalizeWorkout, normalizeWorkouts, normalizeMedLog };

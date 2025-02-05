@@ -44,7 +44,11 @@ const API_ENDPOINTS = {
 	},
 	workouts: {
 		getAll: "/workouts/getAllWorkouts",
+		getOpen: "/workouts/getOpenWorkouts",
 		getUserWorkouts: "/workouts/getUserWorkouts",
+	},
+	meds: {
+		logMed: "/meds/logMedication",
 	},
 };
 

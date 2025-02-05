@@ -53,6 +53,8 @@ const iconsMap = {
 	empty: "fridge-with-open-door",
 	empty2: "fridge-with-open-door-2",
 	empty3: "fridge-with-open-door-3",
+	pill: "pill",
+	pillBottle: "pillBottle",
 } as const;
 
 export { iconsMap };

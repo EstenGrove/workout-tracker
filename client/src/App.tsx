@@ -11,6 +11,7 @@ import UserPage from "./pages/UserPage";
 import DetailsPage from "./pages/DetailsPage";
 import AllRecentActivity from "./pages/AllRecentActivity";
 import LoginPage from "./pages/LoginPage";
+import MedicationsPage from "./pages/MedicationsPage";
 
 function App() {
 	return (
@@ -28,6 +29,7 @@ function App() {
 								<Route path="history" element={<HistoryPage />} />
 								<Route path="profile" element={<UserPage />} />
 								<Route path="details" element={<DetailsPage />} />
+								<Route path="meds" element={<MedicationsPage />} />
 								<Route path="settings" element={<SettingsPage />} />
 							</Route>
 						</Routes>

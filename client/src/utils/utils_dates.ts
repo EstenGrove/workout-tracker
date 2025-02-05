@@ -133,7 +133,7 @@ const FORMAT_TOKENS: DateFormats = {
 	time: {
 		noTod: "hh:mm",
 		short: "h:m a",
-		long: "hh:mm a",
+		long: "h:mm a",
 		mil: "HH:mm a",
 		db: "HH:mm",
 	},
@@ -275,6 +275,13 @@ const getYearStartAndEnd = (base: Date | string = new Date()) => {
 	return { startDate, endDate };
 };
 
+// Converts date to ISO string
+const prepareTimestamp = (date: Date | string) => {
+	const base = new Date(date);
+
+	return base.toISOString();
+};
+
 export {
 	MONTHS,
 	WEEK_DAYS,
@@ -298,4 +305,6 @@ export {
 	getWeekStartAndEnd,
 	getMonthStartAndEnd,
 	getYearStartAndEnd,
+	// parsing & preparing utils
+	prepareTimestamp,
 };
