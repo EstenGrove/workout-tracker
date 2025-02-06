@@ -1,15 +1,24 @@
 import styles from "../../css/meds/MedsHeader.module.scss";
 import { format } from "date-fns";
 
-const getTodaysDate = () => {
-	const now = new Date();
-	const today = format(now, "EEE, MMM do");
-
-	return today;
+type Props = {
+	selectedDate: Date | string | null;
 };
 
-const Titles = () => {
-	const today = getTodaysDate();
+const getTodaysDate = (selectedDate: Date | string | null) => {
+	if (!selectedDate) {
+		const now = new Date();
+		const today = format(now, "EEE, MMM do");
+
+		return today;
+	} else {
+		const thisDate = format(selectedDate, "EEE, MMM do");
+		return thisDate;
+	}
+};
+
+const Titles = ({ selectedDate }: Props) => {
+	const today = getTodaysDate(selectedDate);
 	return (
 		<div className={styles.MedsHeader_main_titles}>
 			<div className={styles.MedsHeader_main_titles_today}>{today}</div>
@@ -18,11 +27,11 @@ const Titles = () => {
 	);
 };
 
-const MedsHeader = () => {
+const MedsHeader = ({ selectedDate }: Props) => {
 	return (
 		<div className={styles.MedsHeader}>
 			<div className={styles.MedsHeader_main}>
-				<Titles />
+				<Titles selectedDate={selectedDate} />
 			</div>
 		</div>
 	);

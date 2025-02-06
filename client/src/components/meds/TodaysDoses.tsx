@@ -1,14 +1,14 @@
 import { useState } from "react";
 import sprite from "../../assets/icons/main.svg";
 import styles from "../../css/meds/TodaysDoses.module.scss";
-import { MedLogEntry, MedLogSummary } from "../../features/meds/types";
+import { MedLogEntry, PillSummary } from "../../features/meds/types";
 import { formatTime } from "../../utils/utils_dates";
 import { addEllipsis } from "../../utils/utils_misc";
 
 type Props = {
 	medName: string;
 	logs: MedLogEntry[];
-	summary: MedLogSummary;
+	summary: PillSummary;
 };
 
 type MedLogProps = {
@@ -32,18 +32,18 @@ const getAmountDesc = (logEntry: MedLogEntry) => {
 };
 
 const pillFractions = {
-	0.125: "1/8",
-	0.25: "1/4",
-	0.5: "1/2",
-	0.75: "3/4",
-	1.0: "1",
-	1.25: "1 1/4",
-	1.5: "1 1/2",
-	1.75: "1 3/4",
-	2.0: "2",
-};
+	"0.125": "1/8",
+	"0.25": "1/4",
+	"0.50": "1/2",
+	"0.75": "3/4",
+	"1.00": "1",
+	"1.25": "1 1/4",
+	"1.50": "1 1/2",
+	"1.75": "1 3/4",
+	"2.00": "2",
+} as const;
 
-const getPillFraction = (dose: number) => {
+const getPillFraction = (dose: number): string => {
 	const fraction = pillFractions[dose as keyof object];
 
 	return fraction;
@@ -75,6 +75,7 @@ const MedLogItem = ({ name = "Buprenorphine", logEntry }: MedLogProps) => {
 	const mgTaken: number = dose * pillSizeInMg;
 	const action: string = notes.toLowerCase();
 	const doseage = getPillFraction(dose);
+
 	return (
 		<li className={styles.MedLogItem}>
 			<div className={styles.MedLogItem_top}>
@@ -105,7 +106,7 @@ const MedLogItem = ({ name = "Buprenorphine", logEntry }: MedLogProps) => {
 };
 
 const TodaysDoses = ({ logs }: Props) => {
-	const [showTodaysLogs, setShowTodaysLogs] = useState<boolean>(false);
+	const [showTodaysLogs, setShowTodaysLogs] = useState<boolean>(true);
 
 	const toggleLogs = () => {
 		setShowTodaysLogs(!showTodaysLogs);

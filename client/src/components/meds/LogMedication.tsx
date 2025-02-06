@@ -11,6 +11,7 @@ import { useAppDispatch } from "../../store/store";
 import { logMedication } from "../../features/meds/operations";
 import CounterInput from "../shared/CounterInput";
 import TimePicker from "../shared/TimePicker";
+import { PillSummary } from "../../features/meds/types";
 
 type Props = {
 	medication: {
@@ -18,7 +19,7 @@ type Props = {
 		medID: number;
 	};
 	logs: MedLogEntry[];
-	summary: MedLogSummary;
+	summary: PillSummary;
 };
 
 interface MedLogEntry {
@@ -30,17 +31,10 @@ interface MedLogEntry {
 	pillSizeInMg: number;
 }
 
-interface MedLogSummary {
-	totalPills: number;
-	pillsTaken: number;
-	pillsRemaining: number;
-	pillsTakenToday: number;
-}
-
 type TodaySummaryProps = {
 	medName: string;
 	logs: MedLogEntry[];
-	summary: MedLogSummary;
+	summary: PillSummary;
 };
 
 type MedLogProps = {
@@ -193,8 +187,16 @@ const MedLogItem = ({ logEntry }: MedLogProps) => {
 	);
 };
 
+const getTodayTotal = (summary: PillSummary) => {
+	if ("pillsTakenToday" in summary) {
+		return Number(summary.pillsTakenToday).toFixed(2);
+	} else {
+		return 0.0;
+	}
+};
+
 const TodaysMedSummary = ({ logs, summary }: TodaySummaryProps) => {
-	const totalToday = summary.pillsTakenToday.toFixed(2);
+	const totalToday = getTodayTotal(summary);
 	const [showTodaysLogs, setShowTodaysLogs] = useState<boolean>(false);
 
 	const toggleLogs = () => {
@@ -238,17 +240,10 @@ const TodaysMedSummary = ({ logs, summary }: TodaySummaryProps) => {
 	);
 };
 
-const fakeSummary: MedLogSummary = {
-	totalPills: 60,
-	pillsTaken: 47,
-	pillsRemaining: 13.75,
-	pillsTakenToday: 1.25,
-};
-
 const LogMedication = ({
-	medication = { name: "Acetaminophen", medID: 1 },
-	logs = fakeLogs,
-	summary = fakeSummary,
+	medication = { name: "Buphrenorphine", medID: 1 },
+	logs,
+	summary,
 }: Props) => {
 	const { name } = medication;
 	const [values, setValues] = useState({
@@ -282,7 +277,7 @@ const LogMedication = ({
 		});
 
 		console.log("[TAKEN]:", medLog);
-		// dispatch(logMedication({ userID: userID, medLog }));
+		dispatch(logMedication({ userID: userID, medLog }));
 	};
 
 	const skipMed = () => {

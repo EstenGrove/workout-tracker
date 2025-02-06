@@ -93,7 +93,7 @@ const getExtraPills = (pillCounts: PillsAndDaysLeft) => {
 };
 
 const PillSummary = ({
-	title = "Acetaminophen",
+	title = "Medication",
 	totalPills = 60,
 	pillsTaken = 47,
 	pillsLeft = 13,
@@ -105,14 +105,18 @@ const PillSummary = ({
 		daysLeft,
 	});
 	return (
-		<DetailsCard icon="pill" title={newTitle} color="var(--accent-blue)">
+		<DetailsCard
+			to="details"
+			icon="pill"
+			title={newTitle}
+			color="var(--accent-blue)"
+		>
 			<div className={styles.PillSummary}>
 				<div className={styles.PillSummary_wrapper}>
 					<MainItem
 						total={pillsLeft}
 						label="Pills Left"
 						icon="pill"
-						// color="var(--accent-blue)"
 						color={pillLeftCss.color}
 					/>
 					<MainItem

@@ -49,6 +49,10 @@ const API_ENDPOINTS = {
 	},
 	meds: {
 		logMed: "/meds/logMedication",
+		getPillSummaryByDate: "/meds/getPillSummary",
+		getSummaryByDate: "/meds/getMedSummaryByDate",
+		getSummariesByDate: "/meds/getMedSummariesByDate",
+		getUserMeds: "/meds/getUserMeds",
 	},
 };
 

@@ -1,67 +1,64 @@
 import styles from "../css/pages/MedicationsPage.module.scss";
-import MedsHeader from "../components/meds/MedsHeader";
-import WeeklyHeader from "../components/layout/WeeklyHeader";
-import { useAppDispatch } from "../store/store";
-import { useState } from "react";
+import { RootState, useAppDispatch } from "../store/store";
+import { useState, useEffect, useCallback, ReactNode } from "react";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../features/user/userSlice";
 import { CurrentUser } from "../features/user/types";
+import {
+	PillSummary as IPillSummary,
+	SummaryForDate,
+} from "../features/meds/types";
+import {
+	selectIsMedLoading,
+	selectMedSummary,
+	selectSummaryByMedID,
+} from "../features/meds/medsSlice";
+import { getMedSummariesByDate } from "../features/meds/operations";
+import { formatDate } from "../utils/utils_dates";
+// components
 import Button from "../components/shared/Button";
 import Modal from "../components/layout/Modal";
 import LogMedication from "../components/meds/LogMedication";
 import TodaysDoses from "../components/meds/TodaysDoses";
-import { MedLogEntry } from "../features/meds/types";
 import PillSummary from "../components/meds/PillSummary";
 import LoggedMedsCard from "../components/meds/LoggedMedsCard";
+import MedsHeader from "../components/meds/MedsHeader";
+import WeeklyHeader from "../components/layout/WeeklyHeader";
+import Loader from "../components/layout/Loader";
 
-const fakeSummary = {
-	totalPills: 60,
-	pillsTaken: 47,
-	pillsRemaining: 13.75,
-	pillsTakenToday: 1.25,
+const Layout = ({
+	header,
+	children,
+}: {
+	header: JSX.Element;
+	children: ReactNode;
+}) => {
+	return (
+		<div className={styles.Layout}>
+			<div className={styles.Layout_header}>{header}</div>
+			{children}
+		</div>
+	);
 };
 
-const fakeLogs: MedLogEntry[] = [
-	{
-		logID: 1,
-		scheduleID: 1,
-		loggedAt: new Date(2025, 1, 4, 7, 38),
-		dose: 0.25,
-		notes: "Taken",
-		pillSizeInMg: 8,
+const customCSS = {
+	log: {
+		marginLeft: "auto",
+		marginBottom: "2rem",
 	},
-	{
-		logID: 1,
-		scheduleID: 1,
-		loggedAt: new Date(2025, 1, 4, 8, 8),
-		dose: 0.0,
-		notes: "Skipped",
-		pillSizeInMg: 8,
-	},
-	{
-		logID: 1,
-		scheduleID: 1,
-		loggedAt: new Date(2025, 1, 4, 8, 47),
-		dose: 0.25,
-		notes: "Taken",
-		pillSizeInMg: 8,
-	},
-	{
-		logID: 1,
-		scheduleID: 1,
-		loggedAt: new Date(2025, 1, 4, 9, 15),
-		dose: 0.25,
-		notes: "Taken",
-		pillSizeInMg: 8,
-	},
-];
+};
 
 const MedicationsPage = () => {
-	// const dispatch = useAppDispatch();
+	const dispatch = useAppDispatch();
 	const baseDate = new Date().toString();
+	const isLoading: boolean = useSelector(selectIsMedLoading);
+	const currentUser: CurrentUser = useSelector(selectCurrentUser);
+	const medSummary: SummaryForDate = useSelector(selectMedSummary);
 	const [selectedDate, setSelectedDate] = useState<Date | string>(baseDate);
 	const [showLogMedModal, setShowLogMedModal] = useState<boolean>(false);
-	const currentUser: CurrentUser = useSelector(selectCurrentUser);
+	const summary = useSelector((state: RootState) =>
+		selectSummaryByMedID(state, 1)
+	);
 
 	const selectDate = (date: Date | string) => {
 		setSelectedDate(date);
@@ -75,45 +72,74 @@ const MedicationsPage = () => {
 		setShowLogMedModal(false);
 	};
 
+	// fetch med summary info
+	const fetchSummary = useCallback(() => {
+		const params = {
+			userID: currentUser.userID,
+			targetDate: formatDate(selectedDate, "long"),
+		};
+		dispatch(getMedSummariesByDate(params));
+	}, [currentUser.userID, dispatch, selectedDate]);
+
+	useEffect(() => {
+		let isMounted = true;
+		if (!isMounted) {
+			return;
+		}
+
+		if (currentUser.userID && selectedDate) {
+			fetchSummary();
+		}
+
+		return () => {
+			isMounted = false;
+		};
+	}, [currentUser.userID, fetchSummary, selectedDate]);
+
 	return (
 		<div className={styles.MedicationsPage}>
-			<MedsHeader />
+			<MedsHeader selectedDate={selectedDate} />
 			<WeeklyHeader
 				baseDate={baseDate}
 				onSelect={selectDate}
 				selectedDate={selectedDate}
 			/>
-			<div className={styles.MedicationsPage_body}>
-				<div className={styles.MedicationsPage_body_actions}>
-					<Button onClick={openLogMedModal}>Log Medication</Button>
-				</div>
-				<div className={styles.MedicationsPage_cards}>
-					<div className={styles.MedicationsPage_cards_card}>
+
+			<Layout
+				header={
+					<Button onClick={openLogMedModal} style={customCSS.log}>
+						Log Medication
+					</Button>
+				}
+			>
+				{isLoading && <Loader />}
+				{!isLoading && summary && (
+					<div className={styles.MedicationsPage_cards}>
 						<PillSummary
 							title="Buprenorphine"
-							pillsLeft={11.25}
-							pillsTaken={48.75}
-							totalPills={60}
-							daysLeft={10}
+							pillsLeft={summary.pillsRemaining}
+							pillsTaken={summary.pillsTaken}
+							totalPills={summary.totalPills}
+							daysLeft={summary.daysLeft}
 						/>
-					</div>
-					<div className={styles.MedicationsPage_cards_card}>
-						<LoggedMedsCard>
+						<LoggedMedsCard pillsTakenToday={summary.pillsTakenToday}>
 							<TodaysDoses
 								medName="Buprenorphine"
-								logs={fakeLogs}
-								summary={fakeSummary}
+								logs={medSummary.logs}
+								summary={summary}
 							/>
 						</LoggedMedsCard>
 					</div>
-					{/* CARDS FOR DIFFERENT MEDICATIONS */}
-					{/* CARDS FOR DIFFERENT MEDICATIONS */}
-				</div>
-			</div>
+				)}
+			</Layout>
 
 			{showLogMedModal && (
 				<Modal closeModal={closeLogMedModal}>
-					<LogMedication logs={fakeLogs} summary={fakeSummary} />
+					<LogMedication
+						medication={{ medID: 1, name: "Buprenorphine" }}
+						logs={medSummary.logs}
+						summary={summary as IPillSummary}
+					/>
 				</Modal>
 			)}
 		</div>

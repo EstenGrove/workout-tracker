@@ -1,7 +1,15 @@
 import type {
+	DaysLeftClient,
+	DaysLeftDB,
+	MedInfoClient,
+	MedInfoDB,
 	MedLogEntryClient,
 	MedLogEntryDB,
-} from "../services/MedicationsService.ts";
+	PillSummaryClient,
+	PillSummaryDB,
+	TakenPillsByRangeClient,
+	TakenPillsByRangeDB,
+} from "../services/types.ts";
 import type { UserClient, UserDB } from "../services/UserService.ts";
 import type { WorkoutClient, WorkoutDB } from "../services/WorkoutService.ts";
 
@@ -20,7 +28,6 @@ const normalizeUser = (user: UserDB): UserClient => {
 
 	return clientUser;
 };
-
 const normalizeWorkout = (workout: WorkoutDB): WorkoutClient => {
 	const clientWorkout: WorkoutClient = {
 		workoutID: workout.workout_id,
@@ -37,7 +44,6 @@ const normalizeWorkout = (workout: WorkoutDB): WorkoutClient => {
 
 	return clientWorkout;
 };
-
 const normalizeWorkouts = (workouts: WorkoutDB[]): WorkoutClient[] => {
 	if (!workouts || !workouts.length) return [];
 
@@ -45,7 +51,6 @@ const normalizeWorkouts = (workouts: WorkoutDB[]): WorkoutClient[] => {
 
 	return clientWorkouts;
 };
-
 const normalizeMedLog = (log: MedLogEntryDB): MedLogEntryClient => {
 	const clientLog: MedLogEntryClient = {
 		logID: log.log_id,
@@ -57,5 +62,70 @@ const normalizeMedLog = (log: MedLogEntryDB): MedLogEntryClient => {
 	};
 	return clientLog;
 };
+const normalizePillSummary = (summary: PillSummaryDB): PillSummaryClient => {
+	const clientSummary: PillSummaryClient = {
+		scheduleID: summary.schedule_id,
+		totalPills: summary.total_pills,
+		pillsRemaining: summary.total_pills_remaining,
+		pillsTaken: summary.total_pills_taken,
+		pillsTakenToday: summary.total_pills_taken_today,
+		daysLeft: summary.days_left,
+	};
 
-export { normalizeUser, normalizeWorkout, normalizeWorkouts, normalizeMedLog };
+	return clientSummary;
+};
+const normalizeDaysLeft = (daysLeft: DaysLeftDB): DaysLeftClient => {
+	const client: DaysLeftClient = {
+		scheduleID: daysLeft.schedule_id,
+		startDate: daysLeft.start_date,
+		endDate: daysLeft.end_date,
+		daysLeft: daysLeft.days_left,
+	};
+
+	return client;
+};
+// Normalizes total pills taken within a date range
+const normalizePillsTaken = (
+	row: TakenPillsByRangeDB
+): TakenPillsByRangeClient => {
+	const client: TakenPillsByRangeClient = {
+		pillsTaken: row.pills_taken,
+		startDate: row.start_date,
+		endDate: row.end_date,
+	};
+
+	return client;
+};
+// User Meds (custom)
+const normalizeMedInfo = (med: MedInfoDB) => {
+	const clientMed: MedInfoClient = {
+		userID: med.user_id,
+		medID: med.medication_id,
+		medName: med.med_name,
+		dosage: med.dosage,
+		quantity: med.quantity,
+		refillDate: med.refill_date,
+		refillInterval: med.refill_interval,
+		isActive: med.is_active,
+		createdDate: med.created_date,
+		scheduleID: med.schedule_id,
+		scheduleStart: med.schedule_start,
+		scheduleEnd: med.schedule_end,
+		dosageDesc: med.dosage_desc,
+		scheduleDose: med.schedule_dose,
+		scheduleFrequency: med.schedule_frequency,
+		scheduleAmount: med.schedule_amount,
+	};
+
+	return clientMed;
+};
+export {
+	normalizeUser,
+	normalizeWorkout,
+	normalizeWorkouts,
+	normalizeMedLog,
+	normalizePillSummary,
+	normalizePillsTaken,
+	normalizeDaysLeft,
+	normalizeMedInfo,
+};

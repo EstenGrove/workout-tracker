@@ -1,5 +1,13 @@
 import type { Pool } from "pg";
 import type { TQueryRow } from "../db/db.ts";
+import type {
+	DaysLeftDB,
+	MedInfoDB,
+	MedLogEntryDB,
+	PillSummaryDB,
+	TakenPillsByRangeDB,
+	TotalPillsTakenDB,
+} from "./types.ts";
 
 export interface LogMedBody {
 	userID: string;
@@ -9,27 +17,20 @@ export interface LogMedBody {
 	loggedAt: Date | string;
 }
 
-export interface MedLogEntryDB {
-	log_id: number;
-	schedule_id: number;
-	logged_at: string;
-	dose: number;
-	notes: string;
-	created_date: string;
-}
-export interface MedLogEntryClient {
-	logID: number;
-	scheduleID: number;
-	loggedAt: string;
-	dose: number;
-	notes: string;
-	createdDate: string;
-}
-
 interface TakenPillsParams {
 	scheduleID: number;
 	startDate: Date | string;
 	endDate: Date | string;
+}
+
+interface PillSummaryParams {
+	scheduleID: number;
+	targetDate: Date | string;
+}
+
+interface DaysLeftParams {
+	scheduleID: number;
+	userID: string;
 }
 
 class MedicationsService {
@@ -63,8 +64,87 @@ class MedicationsService {
 		}
 	}
 
+	async getUserMeds(userID: string): Promise<MedInfoDB[] | unknown> {
+		try {
+			const query = `SELECT * FROM get_user_medications(
+				$1
+			)`;
+			const results = await this.#db.query(query, [userID]);
+			const rows = results?.rows as TQueryRow<MedInfoDB[]>;
+
+			return rows as MedInfoDB[];
+		} catch (error) {
+			return error;
+		}
+	}
+
+	async getDaysLeft(
+		userID: string,
+		scheduleID: number
+	): Promise<DaysLeftDB | unknown> {
+		try {
+			const query = `SELECT * FROM get_days_left_in_schedule(
+				$1,
+				$2
+			)`;
+			const results = await this.#db.query(query, [userID, scheduleID]);
+			const row = results?.rows?.[0] as DaysLeftDB;
+
+			return row;
+		} catch (error) {
+			return error;
+		}
+	}
+
+	async getAllPillSummariesByDate(
+		userID: string,
+		targetDate: string
+	): Promise<PillSummaryDB[] | unknown> {
+		try {
+			const query = `SELECT * FROM get_all_pill_summaries(
+				$1,
+				$2
+			)`;
+			const results = await this.#db.query(query, [userID, targetDate]);
+			const rows = results?.rows as PillSummaryDB[];
+
+			return rows as PillSummaryDB[];
+		} catch (error) {
+			return error;
+		}
+	}
+
+	// Calculates various totals for a given schedule & date
+	async getPillSummaryByDate(
+		userID: string,
+		params: PillSummaryParams
+	): Promise<PillSummaryDB | unknown> {
+		const { scheduleID, targetDate } = params;
+
+		try {
+			const query = `SELECT * FROM get_pill_summary_by_date(
+				$1,
+				$2,
+				$3
+			)`;
+			const results = await this.#db.query(query, [
+				userID,
+				scheduleID,
+				targetDate,
+			]);
+			const row = results?.rows?.[0] as PillSummaryDB;
+
+			return row;
+		} catch (error) {
+			return error;
+		}
+	}
+
 	// Get total # of pills taken within a date range
-	async getTakenPillsByRange(userID: string, params: TakenPillsParams) {
+	async getTakenPillsByRange(
+		userID: string,
+		params: TakenPillsParams
+	): Promise<TakenPillsByRangeDB | unknown> {
 		const { scheduleID, startDate, endDate } = params;
 		try {
 			const query = `SELECT * FROM get_taken_pills_by_range(
@@ -91,12 +171,29 @@ class MedicationsService {
 		}
 	}
 
+	async getAllLogsForDate(
+		userID: string,
+		targetDate: string
+	): Promise<MedLogEntryDB[] | unknown> {
+		try {
+			const query = `SELECT * FROM get_all_logged_meds_for_date(
+				$1,
+				$2
+			)`;
+			const results = await this.#db.query(query, [userID, targetDate]);
+			const rows = results?.rows as MedLogEntryDB[];
+			return rows;
+		} catch (error) {
+			return error;
+		}
+	}
+
 	// Get all logs for a given date
-	async getLoggedMedsForDate(
+	async getLogsForMedByDate(
 		userID: string,
 		scheduleID: number,
 		targetDate: Date | string = new Date()
-	) {
+	): Promise<MedLogEntryDB[] | unknown> {
 		const date = targetDate.toString();
 
 		try {
@@ -115,17 +212,17 @@ class MedicationsService {
 	}
 
 	// Gets all logs for a given schedule
-	async getTotalPillsTaken(userID: string, scheduleID: number) {
+	async getTotalPillsTaken(
+		userID: string,
+		scheduleID: number
+	): Promise<TotalPillsTakenDB | unknown> {
 		try {
 			const query = `SELECT * FROM get_total_pills_taken_in_schedule(
 				$1,
 				$2
 			)`;
 			const results = await this.#db.query(query, [userID, scheduleID]);
-			const row = results?.rows?.[0] as {
-				total_taken: number;
-				schedule_id: number;
-			};
+			const row = results?.rows?.[0] as TotalPillsTakenDB;
 
 			return row;
 		} catch (error) {

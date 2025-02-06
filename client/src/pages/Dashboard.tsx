@@ -14,8 +14,8 @@ import RecentWorkouts from "../components/dashboard/RecentWorkouts";
 const Dashboard = () => {
 	const dispatch = useAppDispatch();
 	const baseDate = new Date().toString();
-	const [selectedDate, setSelectedDate] = useState<Date | string>(baseDate);
 	const currentUser: CurrentUser = useSelector(selectCurrentUser);
+	const [selectedDate, setSelectedDate] = useState<Date | string>(baseDate);
 
 	const selectDate = (date: Date | string) => {
 		setSelectedDate(date);
@@ -37,7 +37,7 @@ const Dashboard = () => {
 		return () => {
 			isMounted = false;
 		};
-	}, []);
+	}, [dispatch]);
 
 	return (
 		<div className={styles.Dashboard}>

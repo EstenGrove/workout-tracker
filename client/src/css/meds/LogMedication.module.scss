@@ -4,12 +4,9 @@
 
 .LogMedication {
 	width: 100%;
-	// @include fill_container;
 	min-height: auto;
 	padding: 2rem;
 	border-radius: 1rem;
-	border: $borderLight;
-	// background-color: $foreground;
 
 	&_name {
 		font-size: 2.5rem;

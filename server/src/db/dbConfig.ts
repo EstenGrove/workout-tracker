@@ -17,6 +17,4 @@ const DB_CONFIG: PgSQLConfig = {
 	port: Number(process.env.DB_PORT),
 };
 
-console.log("DB_CONFIG", DB_CONFIG);
-
 export { DB_CONFIG as dbConfig };
