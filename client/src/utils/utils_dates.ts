@@ -97,6 +97,7 @@ export interface DateFormats {
 		input: string;
 		shortMonth: string;
 		month: string;
+		url: string;
 	};
 	time: {
 		noTod: string;
@@ -129,6 +130,7 @@ const FORMAT_TOKENS: DateFormats = {
 		input: "yyyy-MM-dd",
 		shortMonth: "MMM do, yyyy",
 		month: "MMM",
+		url: "MM-dd-yyyy",
 	},
 	time: {
 		noTod: "hh:mm",

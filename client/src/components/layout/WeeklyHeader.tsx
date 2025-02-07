@@ -32,14 +32,6 @@ type WeekDayProps = {
 	selectDate: () => void;
 };
 
-const getDateCss = (isSelected: boolean) => {
-	return {
-		color: isSelected ? "var(--accent-blue)" : "",
-		// borderBottom: isSelected ? "1px solid var(--accent)" : "none",
-		// border: isSelected ? "1px solid var(--accent-blue)" : "none",
-	};
-};
-
 const WeekDay = ({
 	weekDay,
 	weekDate,
@@ -48,22 +40,32 @@ const WeekDay = ({
 }: WeekDayProps) => {
 	const date = getDate(weekDate);
 
-	const css = {
-		color: isSelected ? "var(--accent-blue)" : "",
-	};
 	return (
-		<div
-			className={styles.WeekDay}
+		<button
+			type="button"
+			className={
+				isSelected ? `${styles.WeekDay} ${styles.isSelected}` : styles.WeekDay
+			}
 			onClick={selectDate}
 			data-selected-date={isSelected}
 		>
-			<div className={styles.WeekDay_day} style={css}>
+			<div
+				className={styles.WeekDay_day}
+				style={{
+					color: isSelected ? "var(--accent-blue)" : "var(--text1_5)",
+				}}
+			>
 				{weekDay}
 			</div>
-			<div className={styles.WeekDay_date} style={getDateCss(isSelected)}>
+			<div
+				className={styles.WeekDay_date}
+				style={{
+					color: isSelected ? "var(--accent-blue)" : "#fff",
+				}}
+			>
 				{date}
 			</div>
-		</div>
+		</button>
 	);
 };
 

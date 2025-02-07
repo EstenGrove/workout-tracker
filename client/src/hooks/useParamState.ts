@@ -70,9 +70,8 @@ const useParamState = <T extends string | number | boolean | null>(
 		}
 	};
 
-	console.log("allParams", allParams);
-
 	return {
+		allParams: allParams,
 		param: param,
 		setParam: setParamState,
 		getParam: getParam,

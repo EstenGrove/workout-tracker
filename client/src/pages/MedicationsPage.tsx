@@ -15,6 +15,7 @@ import {
 } from "../features/meds/medsSlice";
 import { getMedSummariesByDate } from "../features/meds/operations";
 import { formatDate } from "../utils/utils_dates";
+import { useQueryParams } from "../hooks/useQueryParams";
 // components
 import Button from "../components/shared/Button";
 import Modal from "../components/layout/Modal";
@@ -25,7 +26,6 @@ import LoggedMedsCard from "../components/meds/LoggedMedsCard";
 import MedsHeader from "../components/meds/MedsHeader";
 import WeeklyHeader from "../components/layout/WeeklyHeader";
 import Loader from "../components/layout/Loader";
-import { useParamState } from "../hooks/useParamState";
 
 const Layout = ({
 	header,
@@ -49,9 +49,14 @@ const customCSS = {
 	},
 };
 
+const defaultDate = new Date();
+
 const MedicationsPage = () => {
 	const dispatch = useAppDispatch();
-	const baseDate = formatDate(new Date(), "long");
+	const { getParams, setParams } = useQueryParams();
+
+	const base = getParams("selectedDate") as string;
+	const baseDate = formatDate(base || defaultDate, "url");
 	const isLoading: boolean = useSelector(selectIsMedLoading);
 	const currentUser: CurrentUser = useSelector(selectCurrentUser);
 	const medSummary: SummaryForDate = useSelector(selectMedSummary);
@@ -60,13 +65,13 @@ const MedicationsPage = () => {
 	const summary = useSelector((state: RootState) =>
 		selectSummaryByMedID(state, 1)
 	);
-	const { param, setParam } = useParamState(baseDate as string);
-	console.log("param", param);
 
 	const selectDate = (date: Date | string) => {
-		const dateStr = formatDate(date, "long");
+		const dateStr = formatDate(date, "url");
 		setSelectedDate(dateStr);
-		setParam("selectedDate", dateStr);
+		setParams({
+			selectedDate: dateStr,
+		});
 	};
 
 	const openLogMedModal = () => {
@@ -81,7 +86,7 @@ const MedicationsPage = () => {
 	const fetchSummary = useCallback(() => {
 		const params = {
 			userID: currentUser.userID,
-			targetDate: formatDate(selectedDate, "long"),
+			targetDate: formatDate(selectedDate, "url"),
 		};
 		dispatch(getMedSummariesByDate(params));
 	}, [currentUser.userID, dispatch, selectedDate]);
