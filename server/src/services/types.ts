@@ -1,3 +1,11 @@
+export type Activity =
+	| "Walk"
+	| "Strength"
+	| "Stretch"
+	| "Cardio"
+	| "Timed"
+	| "Other";
+
 export interface PillSummaryDB {
 	schedule_id: number;
 	total_pills: number;
@@ -104,4 +112,44 @@ export interface MedInfoClient {
 	scheduleDose: number;
 	scheduleFrequency: string;
 	scheduleAmount: number;
+}
+
+export interface WorkoutHistoryDB {
+	history_id: number;
+	activity_id: number;
+	workout_id: number;
+	plan_id: number;
+	user_id: string;
+	workout_date: string;
+	start_time: string;
+	end_time: string;
+	recorded_effort: string;
+	recorded_mins: number;
+	recorded_weight: number;
+	recorded_reps: number;
+	recorded_steps: number;
+	recorded_miles: number;
+	created_date: string;
+}
+export interface WorkoutHistoryClient {
+	historyID: number;
+	activityID: number;
+	workoutID: number;
+	planID: number;
+	userID: string;
+	workoutDate: string;
+	startTime: string;
+	endTime: string;
+	recordedEffort: string;
+	recordedMins: number;
+	recordedWeight: number;
+	recordedReps: number;
+	recordedSteps: number;
+	recordedMiles: number;
+	createdDate: string;
+}
+
+export interface DateRange {
+	startDate: Date | string;
+	endDate: Date | string;
 }

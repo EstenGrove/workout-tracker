@@ -9,6 +9,8 @@ import type {
 	PillSummaryDB,
 	TakenPillsByRangeClient,
 	TakenPillsByRangeDB,
+	WorkoutHistoryClient,
+	WorkoutHistoryDB,
 } from "../services/types.ts";
 import type { UserClient, UserDB } from "../services/UserService.ts";
 import type { WorkoutClient, WorkoutDB } from "../services/WorkoutService.ts";
@@ -50,6 +52,27 @@ const normalizeWorkouts = (workouts: WorkoutDB[]): WorkoutClient[] => {
 	const clientWorkouts = workouts.map((record) => normalizeWorkout(record));
 
 	return clientWorkouts;
+};
+// Normalizes a single workout history record
+const normalizeHistory = (history: WorkoutHistoryDB): WorkoutHistoryClient => {
+	const client: WorkoutHistoryClient = {
+		userID: history.user_id,
+		historyID: history.history_id,
+		activityID: history.activity_id,
+		workoutID: history.workout_id,
+		planID: history.plan_id,
+		workoutDate: history.workout_date,
+		startTime: history.start_time,
+		endTime: history.end_time,
+		recordedEffort: history.recorded_effort,
+		recordedMins: history.recorded_mins,
+		recordedWeight: history.recorded_weight,
+		recordedReps: history.recorded_reps,
+		recordedSteps: history.recorded_steps,
+		recordedMiles: history.recorded_miles,
+		createdDate: history.created_date,
+	};
+	return client;
 };
 const normalizeMedLog = (log: MedLogEntryDB): MedLogEntryClient => {
 	const clientLog: MedLogEntryClient = {
@@ -124,6 +147,7 @@ export {
 	normalizeWorkout,
 	normalizeWorkouts,
 	normalizeMedLog,
+	normalizeHistory,
 	normalizePillSummary,
 	normalizePillsTaken,
 	normalizeDaysLeft,

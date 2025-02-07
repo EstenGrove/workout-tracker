@@ -20,6 +20,7 @@ type Props = {
 	};
 	logs: MedLogEntry[];
 	summary: PillSummary;
+	onSave?: () => void;
 };
 
 interface MedLogEntry {
@@ -40,41 +41,6 @@ type TodaySummaryProps = {
 type MedLogProps = {
 	logEntry: MedLogEntry;
 };
-
-const fakeLogs: MedLogEntry[] = [
-	{
-		logID: 1,
-		scheduleID: 1,
-		loggedAt: new Date(2025, 1, 4, 7, 38),
-		dose: 0.25,
-		notes: "Taken",
-		pillSizeInMg: 8,
-	},
-	{
-		logID: 1,
-		scheduleID: 1,
-		loggedAt: new Date(2025, 1, 4, 8, 8),
-		dose: 0.0,
-		notes: "Skipped",
-		pillSizeInMg: 8,
-	},
-	{
-		logID: 1,
-		scheduleID: 1,
-		loggedAt: new Date(2025, 1, 4, 8, 47),
-		dose: 0.25,
-		notes: "Taken",
-		pillSizeInMg: 8,
-	},
-	{
-		logID: 1,
-		scheduleID: 1,
-		loggedAt: new Date(2025, 1, 4, 9, 15),
-		dose: 0.25,
-		notes: "Taken",
-		pillSizeInMg: 8,
-	},
-];
 
 const TakenBadge = () => {
 	return (
@@ -244,6 +210,7 @@ const LogMedication = ({
 	medication = { name: "Buphrenorphine", medID: 1 },
 	logs,
 	summary,
+	onSave,
 }: Props) => {
 	const { name } = medication;
 	const [values, setValues] = useState({
@@ -278,6 +245,7 @@ const LogMedication = ({
 
 		console.log("[TAKEN]:", medLog);
 		dispatch(logMedication({ userID: userID, medLog }));
+		return onSave && onSave();
 	};
 
 	const skipMed = () => {
@@ -292,6 +260,7 @@ const LogMedication = ({
 
 		console.log("[SKIPPED]:", medLog);
 		// dispatch(logMedication({ userID: userID, medLog }));
+		return onSave && onSave();
 	};
 
 	return (

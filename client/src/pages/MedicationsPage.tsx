@@ -25,6 +25,7 @@ import LoggedMedsCard from "../components/meds/LoggedMedsCard";
 import MedsHeader from "../components/meds/MedsHeader";
 import WeeklyHeader from "../components/layout/WeeklyHeader";
 import Loader from "../components/layout/Loader";
+import { useParamState } from "../hooks/useParamState";
 
 const Layout = ({
 	header,
@@ -50,7 +51,7 @@ const customCSS = {
 
 const MedicationsPage = () => {
 	const dispatch = useAppDispatch();
-	const baseDate = new Date().toString();
+	const baseDate = formatDate(new Date(), "long");
 	const isLoading: boolean = useSelector(selectIsMedLoading);
 	const currentUser: CurrentUser = useSelector(selectCurrentUser);
 	const medSummary: SummaryForDate = useSelector(selectMedSummary);
@@ -59,9 +60,13 @@ const MedicationsPage = () => {
 	const summary = useSelector((state: RootState) =>
 		selectSummaryByMedID(state, 1)
 	);
+	const { param, setParam } = useParamState(baseDate as string);
+	console.log("param", param);
 
 	const selectDate = (date: Date | string) => {
-		setSelectedDate(date);
+		const dateStr = formatDate(date, "long");
+		setSelectedDate(dateStr);
+		setParam("selectedDate", dateStr);
 	};
 
 	const openLogMedModal = () => {
@@ -139,6 +144,10 @@ const MedicationsPage = () => {
 						medication={{ medID: 1, name: "Buprenorphine" }}
 						logs={medSummary.logs}
 						summary={summary as IPillSummary}
+						onSave={() => {
+							closeLogMedModal();
+							fetchSummary();
+						}}
 					/>
 				</Modal>
 			)}
