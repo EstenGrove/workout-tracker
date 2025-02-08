@@ -3,12 +3,14 @@ import { useDispatch } from "react-redux";
 import userReducer from "../features/user/userSlice";
 import sharedReducer from "../features/shared/sharedSlice";
 import dashboardReducer from "../features/dashboard/dashboardSlice";
+import medicationsReducer from "../features/meds/medsSlice";
 
 const store = configureStore({
 	reducer: {
 		user: userReducer,
 		shared: sharedReducer,
 		dashboard: dashboardReducer,
+		medications: medicationsReducer,
 	},
 });
 

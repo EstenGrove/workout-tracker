@@ -15,18 +15,24 @@
 .WeekDay {
 	width: 5rem;
 	height: 5rem;
-	// border: $borderLight;
-	border-radius: 0.5rem;
+	border: $borderLight;
+	border: none;
+	outline: none;
+	border-radius: 1.5rem;
 	@include colCenter();
+	background-color: transparent;
 
 	&_day {
 		font-size: 1.4rem;
-		// font-size: 1.8rem;
 		color: $text3;
 	}
 	&_date {
 		font-size: 1.7rem;
-		// font-size: 1.5rem;
 		color: $text1;
 	}
+}
+
+.isSelected {
+	border: 1px solid $accentBlue;
+	color: $accentBlue;
 }

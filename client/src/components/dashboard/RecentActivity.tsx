@@ -23,7 +23,7 @@ const NoData = () => {
 
 const getDetailsUrl = (type: Activity, date: string) => {
 	const basePath =
-		"/details?" +
+		"/recent?" +
 		new URLSearchParams({
 			type: "steps",
 			date: date,
@@ -39,6 +39,8 @@ const RecentActivity = ({
 }: Props) => {
 	// based off activity type & date
 	const detailsUrl = getDetailsUrl("Walk", new Date().toString());
+	console.log("activityData", activityData);
+
 	return (
 		<div className={styles.RecentActivity}>
 			<header className={styles.RecentActivity_header}>

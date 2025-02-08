@@ -1,16 +1,31 @@
-import { serve } from '@hono/node-server'
-import { Hono } from 'hono'
+import "dotenv/config";
+import { serve } from "@hono/node-server";
+import { Hono } from "hono";
+import { cors } from "hono/cors";
+import { logger } from "hono/logger";
+import { logInfo } from "./utils/env.ts";
+import { allRoutes } from "./routes/index.ts";
 
-const app = new Hono()
+const HOST = process.env.API_HOST;
+const PORT = 3000;
+const app = new Hono().basePath("/api/v1");
 
-app.get('/', (c) => {
-  return c.text('Hello Hono!')
-})
+app.use(logger());
+app.use(cors());
 
-const port = 3000
-console.log(`Server is running on http://localhost:${port}`)
+app.get("/", (c) => {
+	return c.text("Hello Hono!");
+});
+
+app.route("/user", allRoutes.user);
+app.route("/meds", allRoutes.meds);
+app.route("/workouts", allRoutes.workouts);
+
+// Log env info:
+logInfo();
 
 serve({
-  fetch: app.fetch,
-  port
-})
+	fetch: app.fetch,
+	port: PORT,
+	hostname: HOST,
+});

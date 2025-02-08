@@ -13,9 +13,20 @@ type Props = {
 	currentUser: CurrentUser;
 };
 
+const getInitials = (user: CurrentUser) => {
+	if (!user || !("firstName" in user) || !("lastName" in user)) {
+		return "NU";
+	} else {
+		const { firstName, lastName } = user;
+		const first = firstName.slice(0, 1);
+		const last = lastName.slice(0, 1);
+		const initials = first + last;
+		return initials;
+	}
+};
+
 const UserBadge = ({ currentUser }: { currentUser: CurrentUser }) => {
-	const initials =
-		currentUser.firstName.slice(0, 1) + currentUser.lastName.slice(0, 1);
+	const initials = getInitials(currentUser);
 	return (
 		<div className={styles.UserBadge}>
 			<div>{initials}</div>

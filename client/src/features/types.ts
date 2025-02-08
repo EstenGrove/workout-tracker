@@ -9,7 +9,11 @@ export type TResponse<T> = {
 	StackTrace: string | null;
 };
 
+// Example: AsyncResponse<{ user: CurrentUser; session: CurrentSession }>
+// - Designed to be used within an async function definition, NOT the consumer
 export type AsyncResponse<T> = Promise<TResponse<T> | unknown>;
+// Example: AwaitedResponse<{ user: CurrentUser; session: CurrentSession }>
+// - Designed to be used within an async function consumer (eg when awaiting a response)
 export type AwaitedResponse<T> = TResponse<T>;
 
 export interface DateRange {

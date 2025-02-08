@@ -1,0 +1,74 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.AddQuickWorkout {
+	width: 100%;
+	height: auto;
+
+	&_header {
+		width: 100%;
+		height: auto;
+		font-size: 1.7rem;
+		text-align: center;
+		margin-bottom: 2rem;
+	}
+
+	&_types {
+		width: 100%;
+		margin-bottom: 2rem;
+	}
+
+	&_about {
+		width: 100%;
+
+		&_field {
+			width: 100%;
+			margin-bottom: 2rem;
+
+			& label {
+				font-size: 1.6rem;
+				color: $text3;
+			}
+		}
+	}
+	&_mins {
+		width: 100%;
+		display: block;
+		margin-top: 4rem;
+	}
+}
+
+.LengthOptions {
+	width: 100%;
+	height: auto;
+	@include flex_row(space-between, flex-start, wrap);
+	gap: 1rem 1rem;
+	margin-top: 0.5rem;
+
+	&_preset {
+		width: 10rem;
+		height: 3.5rem;
+		border-radius: 0.5rem;
+		background-color: $foreground;
+		color: $accentBlue;
+		border: 1px solid $accentBlue;
+		outline: none;
+		cursor: pointer;
+		font-size: 1.5rem;
+	}
+}
+
+[data-selected="true"] {
+	background-color: $accentBlue;
+	color: #fff;
+}
+
+label {
+	font-size: 1.6rem;
+	color: $text3;
+
+	& > span {
+		color: $text2;
+	}
+}

@@ -3,8 +3,8 @@ import styles from "../../css/layout/NavArrows.module.scss";
 import { useNavigate } from "react-router";
 
 type Props = {
-	showBack: boolean;
-	showForward: boolean;
+	showBack?: boolean;
+	showForward?: boolean;
 };
 
 const NavArrows = ({ showBack = true, showForward }: Props) => {
