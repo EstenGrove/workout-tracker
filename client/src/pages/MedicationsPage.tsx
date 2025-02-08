@@ -56,18 +56,18 @@ const MedicationsPage = () => {
 	const { getParams, setParams } = useQueryParams();
 
 	const base = getParams("selectedDate") as string;
-	const baseDate = formatDate(base || defaultDate, "url");
+	const baseDate = formatDate(base || defaultDate, "long");
 	const isLoading: boolean = useSelector(selectIsMedLoading);
 	const currentUser: CurrentUser = useSelector(selectCurrentUser);
 	const medSummary: SummaryForDate = useSelector(selectMedSummary);
-	const [selectedDate, setSelectedDate] = useState<Date | string>(baseDate);
+	const [selectedDate, setSelectedDate] = useState<string>(baseDate);
 	const [showLogMedModal, setShowLogMedModal] = useState<boolean>(false);
 	const summary = useSelector((state: RootState) =>
 		selectSummaryByMedID(state, 1)
 	);
 
 	const selectDate = (date: Date | string) => {
-		const dateStr = formatDate(date, "url");
+		const dateStr = formatDate(date, "long");
 		setSelectedDate(dateStr);
 		setParams({
 			selectedDate: dateStr,
@@ -84,9 +84,10 @@ const MedicationsPage = () => {
 
 	// fetch med summary info
 	const fetchSummary = useCallback(() => {
+		const userID = currentUser.userID;
 		const params = {
-			userID: currentUser.userID,
-			targetDate: formatDate(selectedDate, "url"),
+			userID: userID,
+			targetDate: formatDate(selectedDate, "long"),
 		};
 		dispatch(getMedSummariesByDate(params));
 	}, [currentUser.userID, dispatch, selectedDate]);
@@ -104,7 +105,7 @@ const MedicationsPage = () => {
 		return () => {
 			isMounted = false;
 		};
-	}, [currentUser.userID, fetchSummary, selectedDate]);
+	}, [currentUser?.userID, fetchSummary, selectedDate]);
 
 	return (
 		<div className={styles.MedicationsPage}>
@@ -127,15 +128,15 @@ const MedicationsPage = () => {
 					<div className={styles.MedicationsPage_cards}>
 						<PillSummary
 							title="Buprenorphine"
-							pillsLeft={summary.pillsRemaining}
-							pillsTaken={summary.pillsTaken}
-							totalPills={summary.totalPills}
-							daysLeft={summary.daysLeft}
+							pillsLeft={summary?.pillsRemaining}
+							pillsTaken={summary?.pillsTaken}
+							totalPills={summary?.totalPills}
+							daysLeft={summary?.daysLeft}
 						/>
-						<LoggedMedsCard pillsTakenToday={summary.pillsTakenToday}>
+						<LoggedMedsCard pillsTakenToday={summary?.pillsTakenToday}>
 							<TodaysDoses
 								medName="Buprenorphine"
-								logs={medSummary.logs}
+								logs={medSummary?.logs}
 								summary={summary}
 							/>
 						</LoggedMedsCard>
@@ -147,7 +148,7 @@ const MedicationsPage = () => {
 				<Modal closeModal={closeLogMedModal}>
 					<LogMedication
 						medication={{ medID: 1, name: "Buprenorphine" }}
-						logs={medSummary.logs}
+						logs={medSummary?.logs}
 						summary={summary as IPillSummary}
 						onSave={() => {
 							closeLogMedModal();

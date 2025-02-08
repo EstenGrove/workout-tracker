@@ -35,8 +35,4 @@
 .isSelected {
 	border: 1px solid $accentBlue;
 	color: $accentBlue;
-
-	& > svg {
-		fill: $accentBlue;
-	}
 }

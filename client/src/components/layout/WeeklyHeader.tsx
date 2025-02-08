@@ -11,7 +11,7 @@ import { formatDate } from "../../utils/utils_dates";
 type Props = {
 	baseDate: string;
 	onSelect: (day: Date | string) => void;
-	selectedDate: Date | string;
+	selectedDate: string;
 };
 
 const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"] as const;

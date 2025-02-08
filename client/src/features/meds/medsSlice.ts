@@ -23,7 +23,7 @@ const initialState: MedicationsSlice = {
 	meds: [],
 	logs: [],
 	summaryForDate: {
-		date: formatDate(new Date(), "long"),
+		date: formatDate(new Date().toString(), "long"),
 		summaries: [],
 		logs: [], // logs for selected date
 	},

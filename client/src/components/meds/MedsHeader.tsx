@@ -1,12 +1,13 @@
 import styles from "../../css/meds/MedsHeader.module.scss";
-import { format } from "date-fns";
+import { format, isValid } from "date-fns";
 
 type Props = {
-	selectedDate: Date | string | null;
+	selectedDate: Date | string;
 };
 
-const getTodaysDate = (selectedDate: Date | string | null) => {
-	if (!selectedDate) {
+// Returns: 'Fri, Feb 7th
+const getTodaysDate = (selectedDate: Date | string = new Date()) => {
+	if (!selectedDate || !isValid(selectedDate)) {
 		const now = new Date();
 		const today = format(now, "EEE, MMM do");
 
@@ -17,8 +18,9 @@ const getTodaysDate = (selectedDate: Date | string | null) => {
 	}
 };
 
-const Titles = ({ selectedDate }: Props) => {
-	const today = getTodaysDate(selectedDate);
+const Titles = ({ selectedDate = new Date() }: Props) => {
+	const today: string = getTodaysDate(selectedDate);
+	console.log("today", today);
 	return (
 		<div className={styles.MedsHeader_main_titles}>
 			<div className={styles.MedsHeader_main_titles_today}>{today}</div>
@@ -27,7 +29,7 @@ const Titles = ({ selectedDate }: Props) => {
 	);
 };
 
-const MedsHeader = ({ selectedDate }: Props) => {
+const MedsHeader = ({ selectedDate = new Date() }: Props) => {
 	return (
 		<div className={styles.MedsHeader}>
 			<div className={styles.MedsHeader_main}>
