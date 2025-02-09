@@ -76,7 +76,11 @@ const fetchMedSummariesByDate = async (
 	url += "&" + new URLSearchParams({ targetDate: targetDate });
 
 	try {
-		const request = await fetch(url);
+		const request = await fetch(url, {
+			method: "GET",
+			headers: { Accept: "application/json" },
+		});
+		// const request = await fetch(url);
 		const response = await request.json();
 
 		return response as AsyncResponse<MedSummariesByDate>;

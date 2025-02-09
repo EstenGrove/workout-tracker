@@ -51,6 +51,12 @@ const customCSS = {
 
 const defaultDate = new Date();
 
+fetch("https://192.168.0.203:5173/api/v1/hello")
+	.then((x) => x.text())
+	.then((data) => {
+		console.log("data", data);
+	});
+
 const MedicationsPage = () => {
 	const dispatch = useAppDispatch();
 	const { getParams, setParams } = useQueryParams();
@@ -151,8 +157,8 @@ const MedicationsPage = () => {
 						logs={medSummary?.logs}
 						summary={summary as IPillSummary}
 						onSave={() => {
-							closeLogMedModal();
 							fetchSummary();
+							closeLogMedModal();
 						}}
 					/>
 				</Modal>

@@ -6,24 +6,28 @@ const API_AUTH = {
 		base: import.meta.env.VITE_API_BASE,
 		user: import.meta.env.VITE_API_USER,
 		password: import.meta.env.VITE_API_USER_PASSWORD,
+		enableHttps: import.meta.env.VITE_ENABLE_HTTPS,
 	},
 	production: {
 		assets: import.meta.env.VITE_APP_ASSETS_URL,
 		base: import.meta.env.VITE_API_BASE,
 		user: import.meta.env.VITE_API_USER,
 		password: import.meta.env.VITE_API_USER_PASSWORD,
+		enableHttps: import.meta.env.VITE_ENABLE_HTTPS,
 	},
 	testing: {
 		assets: import.meta.env.VITE_APP_ASSETS_URL,
 		base: import.meta.env.VITE_API_BASE,
 		user: import.meta.env.VITE_API_USER,
 		password: import.meta.env.VITE_API_USER_PASSWORD,
+		enableHttps: import.meta.env.VITE_ENABLE_HTTPS,
 	},
 	local: {
 		assets: import.meta.env.VITE_APP_ASSETS_URL,
 		base: import.meta.env.VITE_API_BASE,
 		user: import.meta.env.VITE_API_USER,
 		password: import.meta.env.VITE_API_USER_PASSWORD,
+		enableHttps: import.meta.env.VITE_ENABLE_HTTPS,
 	},
 	// USED FOR TESTING ON LOCAL NETWORK
 	network: {
@@ -31,10 +35,20 @@ const API_AUTH = {
 		base: import.meta.env.VITE_TEST_API_BASE,
 		user: import.meta.env.VITE_TEST_API_USER,
 		password: import.meta.env.VITE_TEST_API_USER_PASSWORD,
+		enableHttps: import.meta.env.VITE_ENABLE_HTTPS,
+	},
+	ssl: {
+		assets: import.meta.env.VITE_SSL_API_ASSETS_URL,
+		// base: import.meta.env.VITE_SSL_API_BASE,
+		base: "https://192.168.0.203:3000/api/v1",
+		// base: "https://localhost:3000/api/v1",
+		user: import.meta.env.VITE_SSL_API_USER,
+		password: import.meta.env.VITE_SSL_API_USER_PASSWORD,
+		enableHttps: true,
 	},
 };
 
-const CURRENT_ENV_KEY = "network";
+const CURRENT_ENV_KEY = "ssl";
 const CURRENT_ENV = API_AUTH[CURRENT_ENV_KEY];
 
 const API_ENDPOINTS = {

@@ -140,7 +140,6 @@ app.get("/getMedSummariesByDate", async (ctx: Context) => {
 		summaries: pillSummaries,
 		logs: logsForDate,
 	});
-
 	return ctx.json(response);
 });
 
