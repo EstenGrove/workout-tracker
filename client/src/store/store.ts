@@ -4,11 +4,13 @@ import userReducer from "../features/user/userSlice";
 import sharedReducer from "../features/shared/sharedSlice";
 import dashboardReducer from "../features/dashboard/dashboardSlice";
 import medicationsReducer from "../features/meds/medsSlice";
+import workoutsReducer from "../features/workouts/workoutsSlice";
 
 const store = configureStore({
 	reducer: {
 		user: userReducer,
 		shared: sharedReducer,
+		workouts: workoutsReducer,
 		dashboard: dashboardReducer,
 		medications: medicationsReducer,
 	},

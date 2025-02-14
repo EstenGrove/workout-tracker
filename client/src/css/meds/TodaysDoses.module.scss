@@ -190,3 +190,17 @@
 		gap: 1rem 0;
 	}
 }
+
+.NoDoses {
+	width: 100%;
+	padding: 2rem 0;
+	@include rowCenter();
+	gap: 0 0.5rem;
+	font-size: 1.6rem;
+
+	&_icon {
+		width: 2rem;
+		height: 2rem;
+		fill: $accentRed;
+	}
+}

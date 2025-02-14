@@ -13,6 +13,8 @@ import AllRecentActivity from "./pages/AllRecentActivity";
 import LoginPage from "./pages/LoginPage";
 import MedicationsPage from "./pages/MedicationsPage";
 import MedicationDetailsPage from "./pages/MedicationDetailsPage";
+import ActiveWorkoutPage from "./pages/ActiveWorkoutPage";
+import DemoPage from "./pages/DemoPage";
 
 function App() {
 	return (
@@ -22,11 +24,15 @@ function App() {
 					<div className="App_main">
 						<Routes>
 							<Route path="/login" element={<LoginPage />} />
-
+							<Route path="/demo" element={<DemoPage />} />
 							<Route path="/" element={<AppLayout />}>
 								<Route index element={<Dashboard />} />
 								<Route path="recent" element={<AllRecentActivity />} />
 								<Route path="workouts" element={<WorkoutsPage />} />
+								<Route
+									path="workouts/active/:id?"
+									element={<ActiveWorkoutPage />}
+								/>
 								<Route path="history" element={<HistoryPage />} />
 								<Route path="profile" element={<UserPage />} />
 								<Route path="details" element={<DetailsPage />} />

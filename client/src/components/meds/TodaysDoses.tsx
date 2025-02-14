@@ -105,6 +105,17 @@ const MedLogItem = ({ name = "Buprenorphine", logEntry }: MedLogProps) => {
 	);
 };
 
+const NoDoses = () => {
+	return (
+		<div className={styles.NoDoses}>
+			<svg className={styles.NoDoses_icon}>
+				<use xlinkHref={`${sprite}#icon-empty-box`}></use>
+			</svg>
+			<span>No doses yet today.</span>
+		</div>
+	);
+};
+
 const TodaysDoses = ({ logs }: Props) => {
 	const [showTodaysLogs, setShowTodaysLogs] = useState<boolean>(true);
 
@@ -131,6 +142,7 @@ const TodaysDoses = ({ logs }: Props) => {
 						</div>
 					</div>
 					<div className={styles.TodaysDoses_logs}>
+						{(!logs || !logs.length) && <NoDoses />}
 						{logs &&
 							logs.map((log, idx) => (
 								<MedLogItem key={`${log.logID}-${idx}`} logEntry={log} />

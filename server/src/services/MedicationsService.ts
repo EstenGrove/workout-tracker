@@ -4,6 +4,7 @@ import type {
 	DaysLeftDB,
 	MedInfoDB,
 	MedLogEntryDB,
+	MedScheduleDB,
 	PillSummaryDB,
 	TakenPillsByRangeDB,
 	TotalPillsTakenDB,
@@ -12,6 +13,7 @@ import type {
 export interface LogMedBody {
 	userID: string;
 	medID: number;
+	scheduleID: number;
 	amountTaken: number;
 	action: "Taken" | "Skipped";
 	loggedAt: Date | string;
@@ -39,20 +41,37 @@ class MedicationsService {
 		this.#db = db;
 	}
 
+	async getActiveScheduleByDate(userID: string, medID: number, date: string) {
+		try {
+			const query = `SELECT * FROM get_active_schedule_by_med(
+				$1,
+				$2,
+				$3
+			)`;
+			const result = await this.#db.query(query, [userID, medID, date]);
+			const row = result?.rows?.[0] as MedScheduleDB;
+			return row as MedScheduleDB;
+		} catch (error) {
+			return error;
+		}
+	}
+
 	async logMedication(values: LogMedBody) {
 		// action: 'Taken' | 'Skipped'
-		const { userID, medID, amountTaken, action, loggedAt } = values;
+		const { userID, medID, scheduleID, amountTaken, action, loggedAt } = values;
 		try {
 			const query = `SELECT * FROM log_medication(
         $1,
         $2,
         $3,
         $4,
-        $5
+        $5,
+				$6
       )`;
 			const results = await this.#db.query(query, [
 				userID,
 				medID,
+				scheduleID,
 				loggedAt,
 				amountTaken,
 				action,

@@ -153,3 +153,30 @@ export interface DateRange {
 	startDate: Date | string;
 	endDate: Date | string;
 }
+
+export interface MedScheduleDB {
+	user_id: string;
+	med_id: number;
+	schedule_id: number;
+	start_date: string;
+	end_date: string;
+	dosage_desc: string;
+	dosage_per_interval: number;
+	frequency: string;
+	quantity: number;
+	is_active: boolean;
+	created_date: string;
+}
+export interface MedScheduleClient {
+	userID: string;
+	medID: number;
+	scheduleID: number;
+	startDate: string;
+	endDate: string;
+	dosageDesc: string;
+	dosagePerInterval: number;
+	frequency: string;
+	quantity: number;
+	isActive: boolean;
+	createdDate: string;
+}

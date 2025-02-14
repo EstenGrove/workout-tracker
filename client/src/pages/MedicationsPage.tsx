@@ -11,7 +11,6 @@ import {
 import {
 	selectIsMedLoading,
 	selectMedSummary,
-	selectSummaryByMedID,
 } from "../features/meds/medsSlice";
 import { getMedSummariesByDate } from "../features/meds/operations";
 import { formatDate } from "../utils/utils_dates";
@@ -51,16 +50,9 @@ const customCSS = {
 
 const defaultDate = new Date();
 
-fetch("https://192.168.0.203:5173/api/v1/hello")
-	.then((x) => x.text())
-	.then((data) => {
-		console.log("data", data);
-	});
-
 const MedicationsPage = () => {
 	const dispatch = useAppDispatch();
 	const { getParams, setParams } = useQueryParams();
-
 	const base = getParams("selectedDate") as string;
 	const baseDate = formatDate(base || defaultDate, "long");
 	const isLoading: boolean = useSelector(selectIsMedLoading);
@@ -68,9 +60,8 @@ const MedicationsPage = () => {
 	const medSummary: SummaryForDate = useSelector(selectMedSummary);
 	const [selectedDate, setSelectedDate] = useState<string>(baseDate);
 	const [showLogMedModal, setShowLogMedModal] = useState<boolean>(false);
-	const summary = useSelector((state: RootState) =>
-		selectSummaryByMedID(state, 1)
-	);
+	const medDetails = useSelector((state: RootState) => selectMedSummary(state));
+	const summary = medDetails.summaries[0];
 
 	const selectDate = (date: Date | string) => {
 		const dateStr = formatDate(date, "long");
@@ -86,6 +77,14 @@ const MedicationsPage = () => {
 
 	const closeLogMedModal = () => {
 		setShowLogMedModal(false);
+	};
+
+	const handleSave = async () => {
+		const promise = new Promise((res) => {
+			return res(fetchSummary());
+		});
+		await promise;
+		closeLogMedModal();
 	};
 
 	// fetch med summary info
@@ -153,13 +152,10 @@ const MedicationsPage = () => {
 			{showLogMedModal && (
 				<Modal closeModal={closeLogMedModal}>
 					<LogMedication
-						medication={{ medID: 1, name: "Buprenorphine" }}
+						medication={{ medID: 1, name: "Buprenorphine", scheduleID: 3 }}
 						logs={medSummary?.logs}
 						summary={summary as IPillSummary}
-						onSave={() => {
-							fetchSummary();
-							closeLogMedModal();
-						}}
+						onSave={handleSave}
 					/>
 				</Modal>
 			)}

@@ -20,7 +20,6 @@ const getTodaysDate = (selectedDate: Date | string = new Date()) => {
 
 const Titles = ({ selectedDate = new Date() }: Props) => {
 	const today: string = getTodaysDate(selectedDate);
-	console.log("today", today);
 	return (
 		<div className={styles.MedsHeader_main_titles}>
 			<div className={styles.MedsHeader_main_titles_today}>{today}</div>

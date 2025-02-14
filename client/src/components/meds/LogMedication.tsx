@@ -9,14 +9,15 @@ import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../../features/user/userSlice";
 import { useAppDispatch } from "../../store/store";
 import { logMedication } from "../../features/meds/operations";
+import { PillSummary } from "../../features/meds/types";
 import CounterInput from "../shared/CounterInput";
 import TimePicker from "../shared/TimePicker";
-import { PillSummary } from "../../features/meds/types";
 
 type Props = {
 	medication: {
 		name: string;
 		medID: number;
+		scheduleID: number;
 	};
 	logs: MedLogEntry[];
 	summary: PillSummary;
@@ -207,7 +208,7 @@ const TodaysMedSummary = ({ logs, summary }: TodaySummaryProps) => {
 };
 
 const LogMedication = ({
-	medication = { name: "Buphrenorphine", medID: 1 },
+	medication = { name: "Buphrenorphine", medID: 1, scheduleID: 3 },
 	logs,
 	summary,
 	onSave,

@@ -13,20 +13,29 @@ import type {
 	MedInfoDB,
 	MedLogEntryClient,
 	MedLogEntryDB,
+	MedScheduleDB,
 	PillSummaryClient,
 	PillSummaryDB,
 } from "../services/types.ts";
+import { formatDate } from "../utils/dates.ts";
 
 const app = new Hono();
 
 // Log a dose of medication being taken or skipped
 app.post("/logMedication", async (ctx: Context) => {
 	const body = await ctx.req.json<LogMedBody>();
-	console.log("body", body);
+	const { userID, medID, loggedAt } = body;
+	const targetDate = formatDate(loggedAt, "db");
+	const activeSchedule = (await medicationsService.getActiveScheduleByDate(
+		userID,
+		medID,
+		targetDate
+	)) as MedScheduleDB;
 
-	const logRecord = (await medicationsService.logMedication(
-		body
-	)) as MedLogEntryDB;
+	const logRecord = (await medicationsService.logMedication({
+		...body,
+		scheduleID: activeSchedule.schedule_id,
+	})) as MedLogEntryDB;
 
 	if (logRecord instanceof Error) {
 		const errResp = getResponseError(logRecord, {

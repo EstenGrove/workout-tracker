@@ -6,6 +6,7 @@ import { selectCurrentUser } from "../features/user/userSlice";
 import Modal from "../components/layout/Modal";
 import PageContainer from "../components/layout/PageContainer";
 import AddQuickWorkout from "../components/workouts/AddQuickWorkout";
+import { NavLink } from "react-router";
 
 const WorkoutsPage = () => {
 	const currentUser: CurrentUser = useSelector(selectCurrentUser);
@@ -26,6 +27,10 @@ const WorkoutsPage = () => {
 				<button type="button" onClick={openWorkoutModal}>
 					Add Workout
 				</button>
+				<br />
+				<br />
+				<br />
+				<NavLink to="active">Start Tracking</NavLink>
 			</div>
 
 			{showWorkoutModal && (
