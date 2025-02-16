@@ -1,0 +1,33 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutsPage {
+	width: 100%;
+
+	&_main {
+		width: 100%;
+		padding: 2rem;
+	}
+}
+
+.AddWorkoutButton {
+	padding: 0.4rem 1.6rem;
+	border-radius: 1rem;
+	font-size: 1.6rem;
+	color: #fff;
+	background-color: $foreground;
+	border: $borderLight;
+	outline: none;
+	cursor: pointer;
+}
+.StartWorkoutButton {
+	padding: 0.4rem 1.6rem;
+	border-radius: 1rem;
+	font-size: 1.6rem;
+	color: #fff;
+	background-color: $foreground;
+	border: $borderLight;
+	outline: none;
+	cursor: pointer;
+}

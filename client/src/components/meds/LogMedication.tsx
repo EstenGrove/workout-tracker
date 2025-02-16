@@ -2,7 +2,7 @@
 import { ReactNode, useState } from "react";
 import sprite from "../../assets/icons/main.svg";
 import styles from "../../css/meds/LogMedication.module.scss";
-import { formatTime } from "../../utils/utils_dates";
+import { formatDate, formatTime } from "../../utils/utils_dates";
 import { prepareMedLog } from "../../utils/utils_meds";
 import { CurrentUser } from "../../features/user/types";
 import { useSelector } from "react-redux";
@@ -12,6 +12,7 @@ import { logMedication } from "../../features/meds/operations";
 import { PillSummary } from "../../features/meds/types";
 import CounterInput from "../shared/CounterInput";
 import TimePicker from "../shared/TimePicker";
+import DatePicker from "../shared/DatePicker";
 
 type Props = {
 	medication: {
@@ -21,6 +22,7 @@ type Props = {
 	};
 	logs: MedLogEntry[];
 	summary: PillSummary;
+	selectedDate: Date | string;
 	onSave?: () => void;
 };
 
@@ -212,11 +214,13 @@ const LogMedication = ({
 	logs,
 	summary,
 	onSave,
+	selectedDate,
 }: Props) => {
 	const { name } = medication;
 	const [values, setValues] = useState({
 		dose: 0.25,
 		loggedAt: formatTime(new Date(), "long"),
+		loggedDate: formatDate(selectedDate || new Date(), "long"),
 	});
 	const dispatch = useAppDispatch();
 	const currentUser: CurrentUser = useSelector(selectCurrentUser);
@@ -227,6 +231,15 @@ const LogMedication = ({
 			[name]: value,
 		});
 	};
+
+	const handleDate = (name: string, value: Date) => {
+		const target = formatDate(value, "long");
+		setValues({
+			...values,
+			[name]: target,
+		});
+	};
+
 	const handleDose = (name: string, value: number) => {
 		setValues({
 			...values,
@@ -242,9 +255,9 @@ const LogMedication = ({
 			loggedAt: values.loggedAt,
 			dose: values.dose,
 			action: "Taken",
+			loggedDate: values.loggedDate || new Date(),
 		});
 
-		console.log("[TAKEN]:", medLog);
 		dispatch(logMedication({ userID: userID, medLog }));
 		return onSave && onSave();
 	};
@@ -256,11 +269,12 @@ const LogMedication = ({
 			medID: medication.medID,
 			loggedAt: values.loggedAt,
 			dose: values.dose,
+			loggedDate: values.loggedDate,
 			action: "Skipped",
 		});
 
 		console.log("[SKIPPED]:", medLog);
-		// dispatch(logMedication({ userID: userID, medLog }));
+		dispatch(logMedication({ userID: userID, medLog }));
 		return onSave && onSave();
 	};
 
@@ -270,13 +284,22 @@ const LogMedication = ({
 			<div className={styles.LogMedication_todaysLogs}>
 				<TodaysMedSummary logs={logs} summary={summary} medName={name} />
 			</div>
-			<div className={styles.LogMedication_takeAmount}>
+			<div className={styles.LogMedication_loggedAt}>
 				<div style={{ marginBottom: "1rem" }}>Logged At</div>
 				<TimePicker
 					name="loggedAt"
 					id="loggedAt"
 					value={values.loggedAt}
 					onChange={handleTime}
+				/>
+			</div>
+			<div className={styles.LogMedication_loggedAt}>
+				<div style={{ marginBottom: "1rem" }}>Logged Date</div>
+				<DatePicker
+					name="loggedDate"
+					id="loggedDate"
+					value={values.loggedDate}
+					onSelect={handleDate}
 				/>
 			</div>
 			<div className={styles.LogMedication_takeAmount}>

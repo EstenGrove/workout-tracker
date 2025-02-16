@@ -25,6 +25,7 @@ import LoggedMedsCard from "../components/meds/LoggedMedsCard";
 import MedsHeader from "../components/meds/MedsHeader";
 import WeeklyHeader from "../components/layout/WeeklyHeader";
 import Loader from "../components/layout/Loader";
+import { isToday } from "date-fns";
 
 const Layout = ({
 	header,
@@ -80,6 +81,12 @@ const MedicationsPage = () => {
 	};
 
 	const handleSave = async () => {
+		const notToday = !isToday(selectedDate);
+		if (notToday) {
+			alert("Are you sure you want to log for a past date?");
+			return;
+		}
+
 		const promise = new Promise((res) => {
 			return res(fetchSummary());
 		});
@@ -156,6 +163,7 @@ const MedicationsPage = () => {
 						logs={medSummary?.logs}
 						summary={summary as IPillSummary}
 						onSave={handleSave}
+						selectedDate={selectedDate}
 					/>
 				</Modal>
 			)}

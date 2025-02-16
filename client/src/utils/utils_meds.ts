@@ -109,11 +109,12 @@ interface MedLogVals {
 	dose: number;
 	action: "Taken" | "Skipped";
 	loggedAt: string;
+	loggedDate: Date | string;
 }
 
 const prepareMedLog = (values: MedLogVals): MedLogBody => {
-	const { userID, loggedAt, medID, dose } = values;
-	const takenTime = applyTimeStrToDate(loggedAt, new Date());
+	const { userID, loggedAt, medID, dose, loggedDate = new Date() } = values;
+	const takenTime = applyTimeStrToDate(loggedAt, loggedDate);
 	const takenAt = prepareTimestamp(takenTime);
 	const medLog: MedLogBody = {
 		userID: userID,

@@ -1,11 +1,12 @@
 import { createSlice } from "@reduxjs/toolkit";
 import { TStatus } from "../types";
+import { Workout } from "./types";
 
 export interface WorkoutsSlice {
 	status: TStatus;
-	workouts: Array<object>;
+	workouts: Workout[];
 	activeWorkout: {
-		record: object;
+		record: Workout;
 		startedAt: string;
 		endedAt: string | null;
 		data: Array<object>;
