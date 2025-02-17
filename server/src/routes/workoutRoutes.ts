@@ -71,7 +71,15 @@ app.get("/getWorkouts", async (ctx: Context) => {
 app.get("/getUserWorkouts", async (ctx: Context) => {
 	const { userID } = ctx.req.query();
 
+	const rawWorkouts = (await workoutService.getAllWorkouts()) as WorkoutDB[];
+	const userWorkouts = normalizeWorkouts(rawWorkouts);
+
 	// user workouts
+	const response = getResponseOk({
+		userWorkouts,
+	});
+
+	return ctx.json(response);
 });
 app.get("/getOpenWorkouts", async (ctx: Context) => {
 	const { userID } = ctx.req.query();
@@ -99,5 +107,15 @@ app.post("/logWorkout", async (ctx: Context) => {
 
 	return ctx.json(response);
 });
+app.get("/getWorkoutDetails", async (ctx: Context) => {
+	const { userID, workoutID: id } = ctx.req.query();
+	const workoutID = Number(id);
 
+	const response = getResponseOk({
+		workout: null,
+		details: null,
+	});
+
+	return ctx.json(response);
+});
 export default app;

@@ -13,7 +13,7 @@ export interface ActivityTypeClient {
 	activityID: number;
 	activityType: string;
 	activityDesc: string;
-	activityJey: string;
+	activityKey: string;
 	isActive: boolean;
 	createdDate: string;
 }

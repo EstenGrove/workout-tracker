@@ -9,7 +9,7 @@ const LoggedMedsCard = ({ pillsTakenToday, children }: Props) => {
 		<DetailsCard icon="pill" title="Today's Doses">
 			<div className={styles.LoggedMedsCard}>
 				<div className={styles.LoggedMedsCard_title}>
-					You've taken <b>{pillsTakenToday}</b> pills today
+					You've taken <b>{pillsTakenToday || "0.00"}</b> pills today
 				</div>
 				<div className={styles.LoggedMedsCard_main}>{children}</div>
 				{/*  */}

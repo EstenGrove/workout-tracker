@@ -1,0 +1,20 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutsView {
+	width: 100%;
+
+	&_filters {
+		position: sticky;
+		top: 149px;
+		width: 100%;
+		background-color: $background;
+	}
+
+	&_workouts {
+		// border: 2px solid red;
+		width: 100%;
+		height: calc(100dvh - 26rem);
+	}
+}

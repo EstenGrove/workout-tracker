@@ -1,4 +1,8 @@
 import type {
+	ActivityTypeClient,
+	ActivityTypeDB,
+} from "../services/ActivityTypesService.ts";
+import type {
 	DaysLeftClient,
 	DaysLeftDB,
 	MedInfoClient,
@@ -9,11 +13,16 @@ import type {
 	PillSummaryDB,
 	TakenPillsByRangeClient,
 	TakenPillsByRangeDB,
+	WorkoutByCategoryClient,
+	WorkoutByCategoryDB,
+	WorkoutCategoryClient,
+	WorkoutCategoryDB,
 	WorkoutHistoryClient,
 	WorkoutHistoryDB,
 } from "../services/types.ts";
 import type { UserClient, UserDB } from "../services/UserService.ts";
 import type { WorkoutClient, WorkoutDB } from "../services/WorkoutService.ts";
+import type { SharedDataDB } from "./shared.ts";
 
 const normalizeUser = (user: UserDB): UserClient => {
 	const clientUser: UserClient = {
@@ -142,6 +151,68 @@ const normalizeMedInfo = (med: MedInfoDB) => {
 
 	return clientMed;
 };
+
+const normalizeActivityType = (type: ActivityTypeDB): ActivityTypeClient => {
+	const client: ActivityTypeClient = {
+		activityID: type.activity_id,
+		activityType: type.activity_type,
+		activityDesc: type.activity_desc,
+		activityKey: type.activity_key,
+		isActive: type?.is_active ?? true,
+		createdDate: type?.created_date ?? "",
+	};
+	return client;
+};
+
+const normalizeWorkoutCategory = (
+	category: WorkoutCategoryDB
+): WorkoutCategoryClient => {
+	const client: WorkoutCategoryClient = {
+		categoryID: category.category_id,
+		categoryName: category.category_name,
+		categoryDesc: category.category_desc,
+		isActive: category.is_active,
+		createdDate: category.created_date,
+	};
+	return client;
+};
+
+const normalizeWorkoutByCategory = (byCategory: WorkoutByCategoryDB) => {
+	const client: WorkoutByCategoryClient = {
+		workoutID: byCategory.workout_id,
+		activityID: byCategory.activity_id,
+		activityType: byCategory.activity_type,
+		planID: byCategory.plan_id,
+		userID: byCategory.user_id,
+		workoutName: byCategory.workout_name,
+		workoutDesc: byCategory.workout_desc,
+		workoutMins: byCategory.workout_mins,
+		tagColor: byCategory.tag_color,
+		categoryID: byCategory.category_id,
+		categoryDesc: byCategory.category_desc,
+		categoryName: byCategory.category_name,
+	};
+
+	return client;
+};
+
+const normalizeSharedData = (sharedData: SharedDataDB) => {
+	const {
+		activityTypes: types,
+		workoutsByCategory: byCategory,
+		categories: categoryList,
+	} = sharedData;
+	const activityTypes = types.map(normalizeActivityType);
+	const workoutsByCategory = byCategory.map(normalizeWorkoutByCategory);
+	const categories = categoryList.map(normalizeWorkoutCategory);
+
+	return {
+		activityTypes,
+		workoutsByCategory,
+		categories,
+	};
+};
+
 export {
 	normalizeUser,
 	normalizeWorkout,
@@ -152,4 +223,8 @@ export {
 	normalizePillsTaken,
 	normalizeDaysLeft,
 	normalizeMedInfo,
+	normalizeWorkoutCategory,
+	normalizeWorkoutByCategory,
+	normalizeActivityType,
+	normalizeSharedData,
 };

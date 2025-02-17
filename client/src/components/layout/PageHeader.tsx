@@ -1,9 +1,11 @@
+import { ReactNode } from "react";
 import styles from "../../css/layout/PageHeader.module.scss";
 import { format } from "date-fns";
 
 type Props = {
 	title: string;
 	date?: Date | string;
+	children?: ReactNode;
 };
 
 const getTodaysDate = (date?: Date | string) => {
@@ -33,11 +35,12 @@ const Titles = ({ title, date }: TitlesProps) => {
 	);
 };
 
-const PageHeader = ({ title, date }: Props) => {
+const PageHeader = ({ title, date, children }: Props) => {
 	return (
 		<div className={styles.PageHeader}>
 			<div className={styles.PageHeader_main}>
 				<Titles title={title} date={date} />
+				<div className={styles.PageHeader_main_right}>{children}</div>
 			</div>
 		</div>
 	);

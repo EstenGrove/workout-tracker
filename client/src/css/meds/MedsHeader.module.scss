@@ -27,9 +27,20 @@
 			}
 		}
 
-		&_user {
+		&_right {
 			width: max-content;
+			margin-left: auto;
 		}
+	}
+}
+.MedSettings {
+	width: 3rem;
+	height: 3rem;
+
+	&_icon {
+		width: 3rem;
+		height: 3rem;
+		fill: $text3;
 	}
 }
 

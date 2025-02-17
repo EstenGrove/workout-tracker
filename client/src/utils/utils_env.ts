@@ -60,6 +60,11 @@ const API_ENDPOINTS = {
 		getAll: "/workouts/getAllWorkouts",
 		getOpen: "/workouts/getOpenWorkouts",
 		getUserWorkouts: "/workouts/getUserWorkouts",
+		getWorkoutDetails: "/workouts/getWorkoutDetails",
+		getCategories: "/workouts/getWorkoutCategories",
+		getWorkoutPlan: "/workouts/getWorkoutPlan",
+		getWorkoutHistory: "/workouts/getWorkoutHistory",
+		getWorkoutsAndRelated: "/workouts/getWorkoutsAndRelated",
 	},
 	meds: {
 		logMed: "/meds/logMedication",
@@ -68,9 +73,16 @@ const API_ENDPOINTS = {
 		getSummariesByDate: "/meds/getMedSummariesByDate",
 		getUserMeds: "/meds/getUserMeds",
 	},
+	shared: {
+		getSharedAppData: "/shared/getSharedAppData",
+	},
 };
 
-export const { user: userApis, workouts: workoutApis } = API_ENDPOINTS;
+export const {
+	user: userApis,
+	workouts: workoutApis,
+	shared: sharedApis,
+} = API_ENDPOINTS;
 
 export {
 	BASE_URL as baseUrl,

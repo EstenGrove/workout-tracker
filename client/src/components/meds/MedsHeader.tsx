@@ -1,3 +1,5 @@
+import { NavLink } from "react-router";
+import sprite from "../../assets/icons/calendar2.svg";
 import styles from "../../css/meds/MedsHeader.module.scss";
 import { format, isValid } from "date-fns";
 
@@ -28,11 +30,24 @@ const Titles = ({ selectedDate = new Date() }: Props) => {
 	);
 };
 
+const SettingsButton = () => {
+	return (
+		<NavLink to="settings" className={styles.MedSettings}>
+			<svg className={styles.MedSettings_icon}>
+				<use xlinkHref={`${sprite}#icon-settings`}></use>
+			</svg>
+		</NavLink>
+	);
+};
+
 const MedsHeader = ({ selectedDate = new Date() }: Props) => {
 	return (
 		<div className={styles.MedsHeader}>
 			<div className={styles.MedsHeader_main}>
 				<Titles selectedDate={selectedDate} />
+				<div className={styles.MedsHeader_main_right}>
+					<SettingsButton />
+				</div>
 			</div>
 		</div>
 	);

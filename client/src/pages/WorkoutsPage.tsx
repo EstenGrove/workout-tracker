@@ -1,13 +1,24 @@
 import styles from "../css/pages/WorkoutsPage.module.scss";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { NavLink } from "react-router";
 import { useSelector } from "react-redux";
 import { CurrentUser } from "../features/user/types";
 import { selectCurrentUser } from "../features/user/userSlice";
+import { useAppDispatch } from "../store/store";
+import { getSharedAppData } from "../features/shared/operations";
+import { getUserWorkouts } from "../features/workouts/operations";
+import { UserWorkout, WorkoutCategory } from "../features/workouts/types";
+import {
+	selectWorkoutCategories,
+	selectWorkoutsWithCategory,
+} from "../features/shared/sharedSlice";
 import Modal from "../components/layout/Modal";
-import PageContainer from "../components/layout/PageContainer";
 import AddQuickWorkout from "../components/workouts/AddQuickWorkout";
 import PageHeader from "../components/layout/PageHeader";
+import WorkoutFilters from "../components/workouts/WorkoutFilters";
+import WorkoutsList from "../components/workouts/WorkoutsList";
+import { WorkoutWithCategoryID } from "../features/shared/types";
+import WorkoutsView from "../components/workouts/WorkoutsView";
 
 type AddBtnProps = {
 	onClick: () => void;
@@ -15,24 +26,16 @@ type AddBtnProps = {
 const AddWorkoutButton = ({ onClick }: AddBtnProps) => {
 	return (
 		<button onClick={onClick} className={styles.AddWorkoutButton}>
-			Add Workout
+			New
 		</button>
-	);
-};
-const StartWorkoutButton = ({ onClick }: AddBtnProps) => {
-	return (
-		<NavLink
-			to="active"
-			onClick={onClick}
-			className={styles.StartWorkoutButton}
-		>
-			Start Workout
-		</NavLink>
 	);
 };
 
 const WorkoutsPage = () => {
+	const dispatch = useAppDispatch();
 	const currentUser: CurrentUser = useSelector(selectCurrentUser);
+	const categories: WorkoutCategory[] = useSelector(selectWorkoutCategories);
+	const workouts: UserWorkout[] = useSelector(selectWorkoutsWithCategory);
 	const [showWorkoutModal, setShowWorkoutModal] = useState<boolean>(false);
 
 	const openWorkoutModal = () => {
@@ -43,12 +46,33 @@ const WorkoutsPage = () => {
 		setShowWorkoutModal(false);
 	};
 
+	useEffect(() => {
+		let isMounted = true;
+		if (!isMounted) {
+			return;
+		}
+
+		dispatch(getSharedAppData(currentUser.userID));
+		dispatch(getUserWorkouts(currentUser.userID));
+
+		return () => {
+			isMounted = false;
+		};
+	}, [currentUser.userID, dispatch]);
+
 	return (
 		<div className={styles.WorkoutsPage}>
-			<PageHeader title="Workouts" />
+			<div className={styles.WorkoutsPage_header}>
+				<PageHeader title="Workouts">
+					<AddWorkoutButton onClick={openWorkoutModal} />
+				</PageHeader>
+			</div>
 			<div className={styles.WorkoutsPage_main}>
-				<AddWorkoutButton onClick={openWorkoutModal} />
-				<StartWorkoutButton onClick={openWorkoutModal} />
+				<WorkoutsView
+					workouts={workouts}
+					categories={categories}
+					currentUser={currentUser}
+				/>
 			</div>
 
 			{showWorkoutModal && (

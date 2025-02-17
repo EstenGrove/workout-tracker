@@ -180,3 +180,47 @@ export interface MedScheduleClient {
 	isActive: boolean;
 	createdDate: string;
 }
+
+export interface WorkoutCategoryDB {
+	category_id: number;
+	category_name: string;
+	category_desc: string;
+	is_active: boolean;
+	created_date: string;
+}
+export interface WorkoutCategoryClient {
+	categoryID: number;
+	categoryName: string;
+	categoryDesc: string;
+	isActive: boolean;
+	createdDate: string;
+}
+
+export interface WorkoutByCategoryDB {
+	workout_id: number;
+	activity_id: number;
+	activity_type: Activity;
+	plan_id: number;
+	user_id: string;
+	workout_name: string;
+	workout_desc: string;
+	workout_mins: number;
+	tag_color: string | null;
+	category_id: number;
+	category_name: string;
+	category_desc: string;
+}
+export interface WorkoutByCategoryClient {
+	workoutID: number;
+	activityID: number;
+	activityType: Activity;
+	planID: number;
+	userID: string;
+	workoutName: string;
+	workoutDesc: string;
+	workoutMins: number;
+	tagColor: string | null;
+	categoryID: number;
+	categoryName: string;
+	categoryDesc: string;
+}

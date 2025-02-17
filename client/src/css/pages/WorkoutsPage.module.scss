@@ -5,21 +5,37 @@
 .WorkoutsPage {
 	width: 100%;
 
+	&_header {
+		position: sticky;
+		top: 0;
+		width: 100%;
+		background-color: $background;
+	}
+
 	&_main {
 		width: 100%;
-		padding: 2rem;
+		padding: 0 2rem;
 	}
 }
 
 .AddWorkoutButton {
-	padding: 0.4rem 1.6rem;
-	border-radius: 1rem;
+	border-radius: 5rem;
+	width: max-content;
+	padding: 0.5rem 1rem;
 	font-size: 1.6rem;
 	color: #fff;
 	background-color: $foreground;
 	border: $borderLight;
 	outline: none;
 	cursor: pointer;
+	@include rowCenter();
+	background-color: $accentBlue;
+
+	&_icon {
+		width: 2rem;
+		height: 2rem;
+		fill: #fff;
+	}
 }
 .StartWorkoutButton {
 	padding: 0.4rem 1.6rem;

@@ -48,35 +48,6 @@ class WorkoutService {
 	constructor(db: Pool) {
 		this.#db = db;
 	}
-	async getRecentWorkoutsByDate(userID: string, params: DateRange) {
-		try {
-			const query = `SELECT * FROM get_recent_workouts(
-				$1,
-				$2,
-				$3
-			)`;
-			const results = await this.#db.query(query, [
-				userID,
-				params.startDate,
-				params.endDate,
-			]);
-			const rows = results?.rows as WorkoutHistoryDB[];
-			return rows;
-		} catch (error) {
-			return error;
-		}
-	}
-	async getOpenWorkouts(userID: string, isActive: boolean = true) {
-		try {
-			const query = `SELECT * FROM get_open_workouts($1, $2)`;
-			const results = await this.#db.query(query, [userID, isActive]);
-			const rows = results?.rows as TQueryRow<WorkoutDB>[];
-
-			return rows;
-		} catch (error) {
-			return error;
-		}
-	}
 	// get all active workouts
 	async getAllWorkouts() {
 		try {
@@ -289,6 +260,49 @@ class WorkoutService {
 			];
 			const results = await this.#db.query(query, params);
 			const row = results?.rows?.[0];
+			return row;
+		} catch (error) {
+			return error;
+		}
+	}
+	async getRecentWorkoutsByDate(userID: string, params: DateRange) {
+		try {
+			const query = `SELECT * FROM get_recent_workouts(
+				$1,
+				$2,
+				$3
+			)`;
+			const results = await this.#db.query(query, [
+				userID,
+				params.startDate,
+				params.endDate,
+			]);
+			const rows = results?.rows as WorkoutHistoryDB[];
+			return rows;
+		} catch (error) {
+			return error;
+		}
+	}
+	async getOpenWorkouts(userID: string, isActive: boolean = true) {
+		try {
+			const query = `SELECT * FROM get_open_workouts($1, $2)`;
+			const results = await this.#db.query(query, [userID, isActive]);
+			const rows = results?.rows as TQueryRow<WorkoutDB>[];
+
+			return rows;
+		} catch (error) {
+			return error;
+		}
+	}
+	async getWorkoutDetails(userID: string, workoutID: number) {
+		try {
+			const query = `SELECT * FROM get_workout_details(
+				$1,
+				$2
+			)`;
+			const results = await this.#db.query(query, [userID, workoutID]);
+			const row = results?.rows?.[0];
+
 			return row;
 		} catch (error) {
 			return error;
