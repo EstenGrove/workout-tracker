@@ -14,6 +14,9 @@ const HOST = process.env.API_HOST;
 const PORT = 3000;
 const app = new Hono().basePath("/api/v1");
 
+// const clientHost = "https://192.168.0.44:5173";
+const clientHost = `https://${process.env.CLIENT_HOST}:${process.env.CLIENT_PORT}`;
+
 const corsSettings = {
 	origin: [
 		"https://192.168.0.203:5173",
@@ -27,20 +30,12 @@ const corsSettings = {
 };
 
 app.use(logger());
-// app.use(cors());
+
 app.use(
 	cors({
-		origin: "https://192.168.0.203:5173",
+		origin: clientHost,
 	})
 );
-
-// app.use(
-// 	cors({
-// 		origin: corsSettings.origin,
-// 		allowHeaders: corsSettings.allowHeaders,
-// 		credentials: corsSettings.credentials,
-// 	})
-// );
 
 app.get("/hello", (c) => {
 	return c.text("Hello Hono!");
@@ -62,10 +57,8 @@ if (ENABLE_HTTPS) {
 		hostname: HOST,
 		createServer: createServer,
 		serverOptions: {
-			key: readFileSync("../192.168.0.203-key.pem"),
-			cert: readFileSync("../192.168.0.203.pem"),
-			// key: readFileSync("../localhost-key.pem"),
-			// cert: readFileSync("../localhost.pem"),
+			key: readFileSync("../192.168.0.44-key.pem"),
+			cert: readFileSync("../192.168.0.44.pem"),
 		},
 	});
 } else {

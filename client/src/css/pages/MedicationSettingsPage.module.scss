@@ -1,0 +1,15 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.MedicationSettingsPage {
+	width: 100%;
+
+	& h1 {
+		margin-bottom: 2rem;
+	}
+
+	&_outlet {
+		width: 100%;
+	}
+}

@@ -66,6 +66,11 @@ export interface DateRange {
 	end: Date | string;
 }
 
+export interface IDateRange {
+	startDate: string;
+	endDate: string;
+}
+
 const getMonthFromIdx = (month: number) => {
 	const months = [
 		"January",

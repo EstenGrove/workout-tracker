@@ -4,7 +4,6 @@
 
 $titleSize: 1.8rem;
 $navSize: 3rem;
-$inputBG: var(--bg200);
 
 .DatePicker {
 	width: auto;
@@ -18,7 +17,6 @@ $inputBG: var(--bg200);
 		height: 4rem;
 		border-radius: 1rem;
 		border: $borderLight;
-		// background-color: $background;
 		background-color: $inputBG;
 
 		&_input {
@@ -61,7 +59,10 @@ $inputBG: var(--bg200);
 .DatePickerCalendar {
 	display: block;
 	position: absolute;
+	left: 50%;
+	transform: translate(-50%, 0);
 	width: 100%;
+	min-width: 25rem;
 	height: 30rem;
 	border-radius: 1rem;
 	border: $borderLight;

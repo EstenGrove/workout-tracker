@@ -170,6 +170,7 @@ const WorkoutTimer = ({
 	const stop = () => {
 		const endedDetails: EndedWorkoutDetails = { info, time };
 		workoutTimer.stop();
+		workoutTimer.reset();
 		return onEnd && onEnd(endedDetails);
 	};
 	const reset = () => {

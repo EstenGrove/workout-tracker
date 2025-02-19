@@ -1,7 +1,17 @@
 import { MedSummaryParams } from "../features/meds/operations";
-import { MedLogEntry, PillSummary } from "../features/meds/types";
+import {
+	Medication,
+	MedicationSchedule,
+	MedLogEntry,
+	PillSummary,
+} from "../features/meds/types";
 import { AsyncResponse } from "../features/types";
-import { applyTimeStrToDate, prepareTimestamp } from "./utils_dates";
+import { MedDetails } from "../hooks/useMedDetails";
+import {
+	applyTimeStrToDate,
+	IDateRange,
+	prepareTimestamp,
+} from "./utils_dates";
 import { apiEndpoints, currentEnv } from "./utils_env";
 
 export interface MedLogBody {
@@ -44,7 +54,11 @@ export interface MedSummariesByDate {
 	summaries: PillSummary[];
 	logs: MedLogEntry[];
 }
-
+export interface MedLogOptions {
+	userID: string;
+	startDate: string;
+	endDate: string;
+}
 // Fetches Pill Summary for a given date, defaults to today
 const fetchMedSummaryByDate = async (
 	userID: string,
@@ -88,8 +102,9 @@ const fetchMedSummariesByDate = async (
 		return error;
 	}
 };
-
-const fetchUserMeds = async (userID: string) => {
+const fetchUserMeds = async (
+	userID: string
+): AsyncResponse<{ meds: Medication[] }> => {
 	let url = currentEnv.base + apiEndpoints.meds.getUserMeds;
 	url += "?" + new URLSearchParams({ userID });
 
@@ -97,6 +112,76 @@ const fetchUserMeds = async (userID: string) => {
 		const request = await fetch(url);
 		const response = await request.json();
 
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+const fetchMedLogsByRange = async (
+	userID: string,
+	params: Pick<MedLogOptions, "startDate" | "endDate">
+): AsyncResponse<{ logs: MedLogEntry[]; range: IDateRange }> => {
+	const { startDate, endDate } = params;
+	let url = currentEnv.base + apiEndpoints.meds.getMedLogsByRange;
+	url += "?" + new URLSearchParams({ userID });
+	url += "&" + new URLSearchParams({ startDate, endDate });
+
+	try {
+		const request = await fetch(url);
+		const response = await request.json();
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+const fetchMedDetails = async (
+	userID: string,
+	medID: number
+): AsyncResponse<MedDetails> => {
+	let url = currentEnv.base + apiEndpoints.meds.getMedDetails;
+	// let url = "https://192.168.0.44:3000/meds/getMedDetails";
+	url += "?" + new URLSearchParams({ userID, medID: String(medID) });
+
+	try {
+		const request = await fetch(url);
+		const response = await request.json();
+		return response as AsyncResponse<MedDetails>;
+	} catch (error) {
+		return error;
+	}
+};
+export interface SelectedMedParams {
+	userID: string;
+	range: IDateRange;
+	medID: number;
+	scheduleID: number;
+}
+
+export interface SelectedMedResp {
+	med: Medication;
+	logs: MedLogEntry[];
+	schedule: MedicationSchedule;
+}
+
+const fetchSelectedMed = async (
+	userID: string,
+	params: Omit<SelectedMedParams, "userID">
+): AsyncResponse<SelectedMedResp> => {
+	const { range, medID, scheduleID } = params;
+	const { startDate, endDate } = range;
+	let url = currentEnv.base + apiEndpoints.meds.getSelectedMed;
+	url += "?" + new URLSearchParams({ userID });
+	url += "&" + new URLSearchParams({ startDate, endDate });
+	url +=
+		"&" +
+		new URLSearchParams({
+			medID: String(medID),
+			scheduleID: String(scheduleID),
+		});
+
+	try {
+		const request = await fetch(url);
+		const response = await request.json();
 		return response;
 	} catch (error) {
 		return error;
@@ -143,7 +228,10 @@ export {
 	saveMedicationLog,
 	fetchMedSummaryByDate,
 	fetchMedSummariesByDate,
+	fetchMedLogsByRange,
 	fetchUserMeds,
+	fetchMedDetails,
+	fetchSelectedMed,
 	// utils
 	prepareMedLog,
 	processPillSummary,

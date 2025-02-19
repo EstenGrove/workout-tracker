@@ -248,6 +248,18 @@ class MedicationsService {
 			return error;
 		}
 	}
+
+	async getMedicationByID(medID: number) {
+		try {
+			const query = `SELECT * FROM user_medications WHERE medication_id = $1`;
+			const results = await this.#db.query(query, [medID]);
+			const row = results?.rows?.[0];
+
+			return row;
+		} catch (error) {
+			return error;
+		}
+	}
 }
 
 export { MedicationsService };

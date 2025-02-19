@@ -64,7 +64,7 @@ export interface MedScheduleSummary {
 export interface SelectedMed {
 	med: Medication;
 	logs: MedLogEntry[];
-	schedule: MedScheduleSummary;
+	schedule: MedicationSchedule;
 }
 
 export interface SummaryForDate {

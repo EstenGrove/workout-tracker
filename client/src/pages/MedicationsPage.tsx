@@ -12,7 +12,10 @@ import {
 	selectIsMedLoading,
 	selectMedSummary,
 } from "../features/meds/medsSlice";
-import { getMedSummariesByDate } from "../features/meds/operations";
+import {
+	getMedSummariesByDate,
+	getUserMeds,
+} from "../features/meds/operations";
 import { formatDate } from "../utils/utils_dates";
 import { useQueryParams } from "../hooks/useQueryParams";
 // components
@@ -51,6 +54,12 @@ const customCSS = {
 
 const defaultDate = new Date();
 
+interface CurrentMed {
+	medID: number;
+	name: string;
+	scheduleID: number;
+}
+
 const MedicationsPage = () => {
 	const dispatch = useAppDispatch();
 	const { getParams, setParams } = useQueryParams();
@@ -61,6 +70,11 @@ const MedicationsPage = () => {
 	const medSummary: SummaryForDate = useSelector(selectMedSummary);
 	const [selectedDate, setSelectedDate] = useState<string>(baseDate);
 	const [showLogMedModal, setShowLogMedModal] = useState<boolean>(false);
+	const [selectedMed, setSelectedMed] = useState<CurrentMed | null>({
+		medID: 1,
+		name: "Buprenorphine",
+		scheduleID: 3,
+	});
 	const medDetails = useSelector((state: RootState) => selectMedSummary(state));
 	const summary = medDetails.summaries[0];
 
@@ -87,12 +101,17 @@ const MedicationsPage = () => {
 			return;
 		}
 
-		const promise = new Promise((res) => {
-			return res(fetchSummary());
-		});
-		await promise;
+		fetchSummary();
 		closeLogMedModal();
 	};
+
+	const fetchMedsList = useCallback(() => {
+		const userID = currentUser.userID;
+		const params = {
+			userID: userID,
+		};
+		dispatch(getUserMeds(params));
+	}, [currentUser.userID, dispatch]);
 
 	// fetch med summary info
 	const fetchSummary = useCallback(() => {
@@ -112,12 +131,13 @@ const MedicationsPage = () => {
 
 		if (currentUser.userID && selectedDate) {
 			fetchSummary();
+			fetchMedsList();
 		}
 
 		return () => {
 			isMounted = false;
 		};
-	}, [currentUser?.userID, fetchSummary, selectedDate]);
+	}, [currentUser.userID, fetchMedsList, fetchSummary, selectedDate]);
 
 	return (
 		<div className={styles.MedicationsPage}>
@@ -140,6 +160,7 @@ const MedicationsPage = () => {
 					<div className={styles.MedicationsPage_cards}>
 						<PillSummary
 							title="Buprenorphine"
+							medID={selectedMed?.medID as number}
 							pillsLeft={summary?.pillsRemaining}
 							pillsTaken={summary?.pillsTaken}
 							totalPills={summary?.totalPills}
@@ -159,7 +180,7 @@ const MedicationsPage = () => {
 			{showLogMedModal && (
 				<Modal closeModal={closeLogMedModal}>
 					<LogMedication
-						medication={{ medID: 1, name: "Buprenorphine", scheduleID: 3 }}
+						medication={selectedMed as CurrentMed}
 						logs={medSummary?.logs}
 						summary={summary as IPillSummary}
 						onSave={handleSave}

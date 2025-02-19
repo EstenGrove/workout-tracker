@@ -57,12 +57,18 @@ const isWorkoutInProgress = (status: TimerStatus, info: ActiveTimer) => {
 };
 
 const getTotalTime = (info: ActiveTimer) => {
-	const start = info.startedAt;
-	const end = info.stoppedAt;
-	const startDate = new Date(start as string);
-	const endDate = new Date(end as string);
+	const start = info.startedAt as string;
+	const end = info.stoppedAt as string;
+	const startDate = new Date(start);
+	const endDate = new Date(end);
 
-	const distance = formatDistance(endDate, startDate);
+	console.log("start", start);
+	console.log("end", end);
+	console.log("---------------");
+	console.log("startDate", startDate);
+	console.log("endDate", endDate);
+
+	const distance = formatDistance(endDate, startDate, { includeSeconds: true });
 	return distance;
 };
 

@@ -40,7 +40,7 @@ const API_AUTH = {
 	ssl: {
 		assets: import.meta.env.VITE_SSL_API_ASSETS_URL,
 		// base: import.meta.env.VITE_SSL_API_BASE,
-		base: "https://192.168.0.203:3000/api/v1",
+		base: "https://192.168.0.44:3000/api/v1",
 		// base: "https://localhost:3000/api/v1",
 		user: import.meta.env.VITE_SSL_API_USER,
 		password: import.meta.env.VITE_SSL_API_USER_PASSWORD,
@@ -72,6 +72,9 @@ const API_ENDPOINTS = {
 		getSummaryByDate: "/meds/getMedSummaryByDate",
 		getSummariesByDate: "/meds/getMedSummariesByDate",
 		getUserMeds: "/meds/getUserMeds",
+		getMedDetails: "/meds/getMedDetails",
+		getSelectedMed: "/meds/getSelectedMed",
+		getMedLogsByRange: "/meds/getMedLogsByRange",
 	},
 	shared: {
 		getSharedAppData: "/shared/getSharedAppData",

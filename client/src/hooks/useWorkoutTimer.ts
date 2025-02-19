@@ -75,6 +75,7 @@ const useWorkoutTimer = (key: string = WORKOUT_KEY) => {
 	const stop = () => {
 		const { cache, time } = getCacheAndTime(key);
 		const newInfo: ActiveTimer = { ...cache, stoppedAt: time };
+		console.log("time", time);
 
 		storage.set(key, newInfo);
 		timer.stop();

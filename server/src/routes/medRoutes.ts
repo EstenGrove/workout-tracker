@@ -4,6 +4,7 @@ import type { LogMedBody } from "../services/MedicationsService.ts";
 import { medicationsService } from "../services/index.ts";
 import {
 	normalizeDaysLeft,
+	normalizeMed,
 	normalizeMedInfo,
 	normalizeMedLog,
 	normalizePillSummary,
@@ -150,6 +151,40 @@ app.get("/getMedSummariesByDate", async (ctx: Context) => {
 		logs: logsForDate,
 	});
 	return ctx.json(response);
+});
+app.get("/getMedDetails", async (ctx: Context) => {
+	const { userID, medID: id } = ctx.req.query();
+	const medID = Number(id);
+
+	const rawMed = await medicationsService.getMedicationByID(medID);
+
+	if (rawMed instanceof Error) {
+		const errResp = getResponseError(rawMed, {
+			med: null,
+			logs: [],
+			schedules: {
+				active: null,
+				all: [],
+			},
+		});
+		return ctx.json(errResp);
+	}
+
+	const medication = normalizeMed(rawMed);
+	const response = getResponseOk({
+		med: medication,
+		logs: [],
+		schedules: {
+			active: null,
+			all: [],
+		},
+	});
+
+	return ctx.json(response);
+});
+app.get("/getSelectedMed", async (ctx: Context) => {
+	//
+	//
 });
 
 export default app;

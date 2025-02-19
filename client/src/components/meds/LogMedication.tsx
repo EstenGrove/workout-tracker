@@ -247,7 +247,7 @@ const LogMedication = ({
 		});
 	};
 
-	const takeMed = () => {
+	const takeMed = async () => {
 		const { userID } = currentUser;
 		const medLog = prepareMedLog({
 			userID,
@@ -258,7 +258,7 @@ const LogMedication = ({
 			loggedDate: values.loggedDate || new Date(),
 		});
 
-		dispatch(logMedication({ userID: userID, medLog }));
+		await dispatch(logMedication({ userID: userID, medLog }));
 		return onSave && onSave();
 	};
 

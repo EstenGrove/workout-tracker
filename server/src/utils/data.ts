@@ -5,6 +5,8 @@ import type {
 import type {
 	DaysLeftClient,
 	DaysLeftDB,
+	MedicationClient,
+	MedicationDB,
 	MedInfoClient,
 	MedInfoDB,
 	MedLogEntryClient,
@@ -61,6 +63,21 @@ const normalizeWorkouts = (workouts: WorkoutDB[]): WorkoutClient[] => {
 	const clientWorkouts = workouts.map((record) => normalizeWorkout(record));
 
 	return clientWorkouts;
+};
+const normalizeMed = (med: MedicationDB): MedicationClient => {
+	const client: MedicationClient = {
+		userID: med.user_id,
+		medicationID: med.medication_id,
+		medName: med.med_name,
+		dosage: med.dosage,
+		quantity: med.quantity,
+		refillDate: med.refill_date,
+		refillInterval: med.refill_interval,
+		isActive: med.is_active,
+		createdDate: med.created_date,
+	};
+
+	return client;
 };
 // Normalizes a single workout history record
 const normalizeHistory = (history: WorkoutHistoryDB): WorkoutHistoryClient => {
@@ -223,6 +240,7 @@ export {
 	normalizePillsTaken,
 	normalizeDaysLeft,
 	normalizeMedInfo,
+	normalizeMed,
 	normalizeWorkoutCategory,
 	normalizeWorkoutByCategory,
 	normalizeActivityType,

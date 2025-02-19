@@ -40,6 +40,29 @@ export interface MedLogEntryClient {
 	createdDate: string;
 }
 
+export interface MedicationDB {
+	user_id: string;
+	medication_id: number;
+	med_name: string;
+	dosage: string;
+	quantity: number;
+	refill_date: string;
+	refill_interval: number;
+	created_date: string;
+	is_active: boolean;
+}
+export interface MedicationClient {
+	userID: string;
+	medicationID: number;
+	medName: string;
+	dosage: string;
+	quantity: number;
+	refillDate: string;
+	refillInterval: number;
+	createdDate: string;
+	isActive: boolean;
+}
+
 // Total taken for date range
 export interface TakenPillsByRangeDB {
 	pills_taken: number;

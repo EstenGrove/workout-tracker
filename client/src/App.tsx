@@ -39,7 +39,11 @@ function App() {
 								path="meds/settings"
 								element={<MedicationSettingsPage />}
 							/>
-							<Route path="meds/details" element={<MedicationDetailsPage />} />
+
+							<Route
+								path="meds/details/:id"
+								element={<MedicationDetailsPage />}
+							/>
 							<Route path="/" element={<AppLayout />}>
 								<Route index element={<Dashboard />} />
 								<Route path="recent" element={<AllRecentActivity />} />
