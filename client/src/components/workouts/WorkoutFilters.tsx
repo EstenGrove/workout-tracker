@@ -38,6 +38,21 @@ const AllFilter = ({
 	);
 };
 
+const getFilterCount = (
+	selectedFilters: string[],
+	filters: WorkoutCategory[]
+) => {
+	if (!selectedFilters || selectedFilters.length <= 0) {
+		const active = filters.length || 0;
+		const total = filters.length || 0;
+		return `${active} / ${total}`;
+	} else {
+		const active = selectedFilters.length || 0;
+		const total = filters.length || 0;
+		return `${active} / ${total}`;
+	}
+};
+
 const WorkoutFilters = ({
 	filters,
 	selectFilter,
@@ -48,12 +63,11 @@ const WorkoutFilters = ({
 		(x) => x.categoryName === "All"
 	) as WorkoutCategory;
 	const withoutAll = filters.filter((x) => x.categoryName !== "All");
+	const filterCount = getFilterCount(selectedFilters, filters);
 
 	return (
 		<div className={styles.WorkoutFilters}>
-			<div className={styles.WorkoutFilters_count}>
-				{selectedFilters.length || 0} / {filters.length}
-			</div>
+			<div className={styles.WorkoutFilters_count}>{filterCount}</div>
 			<div className={styles.WorkoutFilters_list}>
 				<AllFilter
 					onClick={() => selectFilter(allFilter)}

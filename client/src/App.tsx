@@ -17,6 +17,7 @@ import ActiveWorkoutPage from "./pages/ActiveWorkoutPage";
 import DemoPage from "./pages/DemoPage";
 import MedicationSettingsPage from "./pages/MedicationSettingsPage";
 import WorkoutDetailsPage from "./pages/WorkoutDetailsPage";
+import MedicationLogsView from "./views/MedicationLogsView";
 
 function App() {
 	return (
@@ -35,23 +36,22 @@ function App() {
 								path="workouts/active/:id?"
 								element={<ActiveWorkoutPage />}
 							/>
-							<Route
-								path="meds/settings"
-								element={<MedicationSettingsPage />}
-							/>
 
-							<Route
-								path="meds/details/:id"
-								element={<MedicationDetailsPage />}
-							/>
+							{/* MEDICATION-SPECIFIC ROUTES */}
+							<Route path="meds/:id" element={<MedicationDetailsPage />}>
+								<Route path="logs" element={<MedicationLogsView />} />
+							</Route>
+
 							<Route path="/" element={<AppLayout />}>
 								<Route index element={<Dashboard />} />
 								<Route path="recent" element={<AllRecentActivity />} />
 								<Route path="workouts" element={<WorkoutsPage />} />
 								<Route path="history" element={<HistoryPage />} />
-								<Route path="profile" element={<UserPage />} />
+								<Route path="profile/health" element={<UserPage />} />
 								<Route path="details" element={<DetailsPage />} />
-								<Route path="meds" element={<MedicationsPage />} />
+								<Route path="meds" element={<MedicationsPage />}>
+									<Route path="settings" element={<MedicationSettingsPage />} />
+								</Route>
 
 								<Route path="settings" element={<SettingsPage />} />
 							</Route>

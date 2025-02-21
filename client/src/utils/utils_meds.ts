@@ -56,6 +56,7 @@ export interface MedSummariesByDate {
 }
 export interface MedLogOptions {
 	userID: string;
+	medID: number;
 	startDate: string;
 	endDate: string;
 }
@@ -119,11 +120,12 @@ const fetchUserMeds = async (
 };
 const fetchMedLogsByRange = async (
 	userID: string,
-	params: Pick<MedLogOptions, "startDate" | "endDate">
+	params: Pick<MedLogOptions, "startDate" | "endDate" | "medID">
 ): AsyncResponse<{ logs: MedLogEntry[]; range: IDateRange }> => {
-	const { startDate, endDate } = params;
+	const { medID, startDate, endDate } = params;
 	let url = currentEnv.base + apiEndpoints.meds.getMedLogsByRange;
 	url += "?" + new URLSearchParams({ userID });
+	url += "&" + new URLSearchParams({ medID: String(medID) });
 	url += "&" + new URLSearchParams({ startDate, endDate });
 
 	try {

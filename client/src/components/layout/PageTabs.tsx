@@ -5,6 +5,7 @@ import { NavLink } from "react-router";
 type NavButtonProps = {
 	to: string;
 	children?: ReactNode;
+	isEnd?: boolean;
 };
 
 const isActiveRoute = ({ isActive }: { isActive: boolean }) => {
@@ -15,9 +16,9 @@ const isActiveRoute = ({ isActive }: { isActive: boolean }) => {
 	}
 };
 
-const PageTabButton = ({ to, children }: NavButtonProps) => {
+const PageTabButton = ({ to, children, isEnd = false }: NavButtonProps) => {
 	return (
-		<NavLink to={to} className={isActiveRoute}>
+		<NavLink to={to} className={isActiveRoute} end={isEnd}>
 			{children}
 		</NavLink>
 	);

@@ -186,5 +186,33 @@ app.get("/getSelectedMed", async (ctx: Context) => {
 	//
 	//
 });
+app.get("/getMedLogsByRange", async (ctx: Context) => {
+	const { userID, medID, startDate, endDate } = ctx.req.query();
+
+	const rawLogs = (await medicationsService.getLogsForMedByRange(userID, {
+		medID: Number(medID),
+		startDate,
+		endDate,
+	})) as MedLogEntryDB[];
+
+	if (rawLogs instanceof Error) {
+		const errResp = getResponseError(rawLogs, {
+			startDate,
+			endDate,
+			logs: [],
+		});
+		return ctx.json(errResp);
+	}
+
+	const logs = rawLogs.map(normalizeMedLog);
+
+	const response = getResponseOk({
+		startDate,
+		endDate,
+		logs: logs,
+	});
+
+	return ctx.json(response);
+});
 
 export default app;

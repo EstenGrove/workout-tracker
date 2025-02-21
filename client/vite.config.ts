@@ -2,8 +2,14 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import basicSsl from "@vitejs/plugin-basic-ssl";
 
-const host = "192.168.0.44";
-// const host = "192.168.0.203";
+const enableHttps = true;
+
+const HOST = "192.168.0.44";
+const PORT = 5173;
+
+const httpConfig = {
+	plugins: [react()],
+};
 
 /**
  * Enables 'HTTPS' w/ target SSL files
@@ -11,21 +17,23 @@ const host = "192.168.0.44";
 const httpsConfig = {
 	plugins: [react(), basicSsl()],
 	server: {
-		cors: true,
-		host: host, // THIS WORKS ON DESKTOP
-		port: 5173,
+		cors: true, // Allows requests from anywhere
+		host: HOST, // THIS WORKS ON DESKTOP
+		port: PORT,
 		https: {
-			// key: "../192.168.0.44-key.pem",
-			// cert: "../192.168.0.44.pem",
 			key: "../localhost-key.pem", // THIS WORKS ON DESKTOP
 			cert: "../localhost.pem", // THIS WORKS ON DESKTOP
 		},
 		watch: {
 			usePolling: true,
 		},
+		hmr: {
+			host: HOST,
+			protocol: "wss",
+		},
 	},
 };
 
 // https://vite.dev/config/
-// export default defineConfig(ENABLE_HTTPS ? httpsConfig : httpConfig);
-export default defineConfig(httpsConfig);
+const config = enableHttps ? httpsConfig : httpConfig;
+export default defineConfig(config);

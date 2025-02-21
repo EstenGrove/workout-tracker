@@ -23,9 +23,9 @@ const TypeBadge = ({ activityType }: { activityType: Activity }) => {
 	);
 };
 
-const StartButton = () => {
+const StartButton = ({ onClick }: { onClick: () => void }) => {
 	return (
-		<button className={styles.StartButton}>
+		<button type="button" onClick={onClick} className={styles.StartButton}>
 			<svg className={styles.StartButton_icon}>
 				<use xlinkHref={`${sprite}#icon-play`}></use>
 			</svg>
@@ -42,6 +42,11 @@ const Workout = ({ workout }: Props) => {
 	const goTo = () => {
 		const id = workout.workoutID;
 		navigate(`details/${id}`);
+	};
+
+	const goToStartWorkout = () => {
+		const id = workout.workoutID;
+		navigate(`active/${id}`);
 	};
 
 	return (
@@ -61,7 +66,7 @@ const Workout = ({ workout }: Props) => {
 				</div>
 			</div>
 			<div className={styles.Workout_bottom}>
-				<StartButton />
+				<StartButton onClick={goToStartWorkout} />
 			</div>
 		</div>
 	);

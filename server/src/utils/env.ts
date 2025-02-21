@@ -1,7 +1,9 @@
 import "dotenv/config";
 
+const enableHTTPS = true;
+
 const API_SETTINGS = {
-	host: process.env.API_HOST,
+	host: enableHTTPS ? process.env.API_HOST : process.env.API_HTTP_HOST,
 	port: process.env.API_PORT,
 	prefix: "http://",
 };

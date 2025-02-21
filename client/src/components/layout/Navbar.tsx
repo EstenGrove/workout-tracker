@@ -43,7 +43,7 @@ const Navbar = () => {
 					</NavLink>
 				</li>
 				<li className={styles.Navbar_list_item}>
-					<NavLink to="profile" className={isActiveRoute} viewTransition>
+					<NavLink to="profile/health" className={isActiveRoute} viewTransition>
 						<svg className={styles.Navbar_list_item_icon}>
 							<use xlinkHref={`${sprite}#icon-user`}></use>
 						</svg>

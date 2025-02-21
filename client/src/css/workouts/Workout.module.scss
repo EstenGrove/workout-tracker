@@ -68,18 +68,23 @@ $icon: calc($size - 30%);
 	}
 }
 
+$startMap: $btnMap;
+
 .StartButton {
-	width: 2rem;
-	height: 2rem;
-	background-color: transparent;
+	width: 2.5rem;
+	height: 2.5rem;
+	background-color: map-get($map: $startMap, $key: "bg");
+	border: 1px solid map-get($map: $startMap, $key: "bg");
 	border: none;
 	outline: none;
+	@include rowCenter();
+	border-radius: 50%;
 	margin-left: auto;
 	align-self: flex-end;
 
 	&_icon {
-		width: 2.5rem;
-		height: 2.5rem;
-		fill: $accent;
+		width: 2.4rem;
+		height: 2.4rem;
+		fill: map-get($map: $startMap, $key: "main");
 	}
 }

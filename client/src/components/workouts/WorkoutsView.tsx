@@ -26,6 +26,10 @@ const filterWorkouts = (
 	}
 };
 
+// ##TODOS:
+// - Fix grouping or workouts by filter type
+// - Fix UI design of workouts page??? NOT SURE HOW YET!!!
+
 const WorkoutsView = ({ categories, workouts, currentUser }: Props) => {
 	const [selectedFilters, setSelectedFilters] = useState<string[]>([]);
 	const showAll = useMemo(() => {
@@ -51,6 +55,9 @@ const WorkoutsView = ({ categories, workouts, currentUser }: Props) => {
 			setSelectedFilters((prev) => [...prev, filter.categoryName]);
 		}
 	};
+
+	console.log("currentUser", currentUser);
+
 	return (
 		<div className={styles.WorkoutsView}>
 			<div className={styles.WorkoutsView_filters}>

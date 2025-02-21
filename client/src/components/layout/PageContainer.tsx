@@ -1,10 +1,19 @@
-import { ReactNode } from "react";
+import { ComponentPropsWithoutRef, ReactNode } from "react";
 import styles from "../../css/layout/PageContainer.module.scss";
 
-type Props = { children: ReactNode };
+interface Props {
+	children: ReactNode;
+}
 
-const PageContainer = ({ children }: Props) => {
-	return <div className={styles.PageContainer}>{children}</div>;
+// @ts-expect-error: this is fine
+interface PageProps extends Props, ComponentPropsWithoutRef<"div"> {}
+
+const PageContainer = ({ children, ...rest }: PageProps) => {
+	return (
+		<div className={styles.PageContainer} {...rest}>
+			{children}
+		</div>
+	);
 };
 
 export default PageContainer;

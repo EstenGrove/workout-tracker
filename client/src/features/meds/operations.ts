@@ -85,8 +85,9 @@ const getMedSummariesByDate = createAsyncThunk(
 const getMedLogsByRange = createAsyncThunk(
 	"meds/getMedLogsByRange",
 	async (params: MedLogOptions) => {
-		const { userID, startDate, endDate } = params;
+		const { userID, medID, startDate, endDate } = params;
 		const response = (await fetchMedLogsByRange(userID, {
+			medID,
 			startDate,
 			endDate,
 		})) as AwaitedResponse<{ logs: MedLogEntry[]; range: DateRange }>;

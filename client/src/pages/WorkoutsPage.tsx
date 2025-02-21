@@ -1,6 +1,5 @@
 import styles from "../css/pages/WorkoutsPage.module.scss";
 import { useState, useEffect } from "react";
-import { NavLink } from "react-router";
 import { useSelector } from "react-redux";
 import { CurrentUser } from "../features/user/types";
 import { selectCurrentUser } from "../features/user/userSlice";
@@ -15,9 +14,6 @@ import {
 import Modal from "../components/layout/Modal";
 import AddQuickWorkout from "../components/workouts/AddQuickWorkout";
 import PageHeader from "../components/layout/PageHeader";
-import WorkoutFilters from "../components/workouts/WorkoutFilters";
-import WorkoutsList from "../components/workouts/WorkoutsList";
-import { WorkoutWithCategoryID } from "../features/shared/types";
 import WorkoutsView from "../components/workouts/WorkoutsView";
 
 type AddBtnProps = {

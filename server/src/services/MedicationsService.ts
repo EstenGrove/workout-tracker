@@ -1,6 +1,7 @@
 import type { Pool } from "pg";
 import type { TQueryRow } from "../db/db.ts";
 import type {
+	DateRange,
 	DaysLeftDB,
 	MedInfoDB,
 	MedLogEntryDB,
@@ -33,6 +34,12 @@ interface PillSummaryParams {
 interface DaysLeftParams {
 	scheduleID: number;
 	userID: string;
+}
+
+export interface LogSettingParams {
+	startDate: string;
+	endDate: string;
+	medID: number;
 }
 
 class MedicationsService {
@@ -201,6 +208,28 @@ class MedicationsService {
 			)`;
 			const results = await this.#db.query(query, [userID, targetDate]);
 			const rows = results?.rows as MedLogEntryDB[];
+			return rows;
+		} catch (error) {
+			return error;
+		}
+	}
+
+	async getLogsForMedByRange(userID: string, params: LogSettingParams) {
+		const { medID, startDate, endDate } = params;
+		try {
+			const query = `SELECT * FROM get_logged_meds_for_range(
+				$1,
+				$2,
+				$3,
+				$4
+			)`;
+			const results = await this.#db.query(query, [
+				userID,
+				medID,
+				startDate,
+				endDate,
+			]);
+			const rows = results?.rows;
 			return rows;
 		} catch (error) {
 			return error;

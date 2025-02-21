@@ -7,6 +7,7 @@ import { useState } from "react";
 import { formatTime } from "../../utils/utils_dates";
 import { getTotalTime } from "../../utils/utils_workouts";
 import WorkoutTimer from "./WorkoutTimer";
+import { useParams } from "react-router";
 
 type Props = {
 	workout: Workout;
@@ -53,13 +54,27 @@ const EndedWorkout = ({ totalTime }: EndedWorkoutProps) => {
 	);
 };
 
+const ResetButton = ({ onClick }: { onClick: () => void }) => {
+	return (
+		<button type="button" onClick={onClick} className={styles.ResetButton}>
+			<svg className={styles.ResetButton_icon}>
+				<use xlinkHref={`${sprite}#icon-time-machine`}></use>
+			</svg>
+			<span>Reset</span>
+		</button>
+	);
+};
+
 const ActiveWorkout = ({ workout, currentUser }: Props) => {
 	const [workoutDetails, setWorkoutDetails] =
 		useState<EndedWorkoutDetails | null>(null);
 	const [hasEnded, setHasEnded] = useState<boolean>(false);
+	const { id } = useParams();
+	const workoutID: number = Number(id);
 
 	const onStart = () => {
 		// fire off request w/ data
+		console.log("workoutID", workoutID);
 	};
 
 	const onPause = () => {
@@ -70,6 +85,12 @@ const ActiveWorkout = ({ workout, currentUser }: Props) => {
 		// fire off request w/ data
 		setHasEnded(true);
 		setWorkoutDetails(details);
+		console.log("FINISHED: ", workoutID);
+	};
+
+	const onReset = () => {
+		setHasEnded(false);
+		setWorkoutDetails(null);
 	};
 
 	return (
@@ -80,6 +101,7 @@ const ActiveWorkout = ({ workout, currentUser }: Props) => {
 					onStart={onStart}
 					onPause={onPause}
 					onEnd={onEnd}
+					onReset={onReset}
 				/>
 			)}
 			{hasEnded && workoutDetails && (
@@ -88,8 +110,11 @@ const ActiveWorkout = ({ workout, currentUser }: Props) => {
 					info={workoutDetails.info}
 				/>
 			)}
-			{/*  */}
-			{/*  */}
+			{hasEnded && (
+				<div className={styles.ActiveWorkout_row}>
+					<ResetButton onClick={onReset} />
+				</div>
+			)}
 		</div>
 	);
 };

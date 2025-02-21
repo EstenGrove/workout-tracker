@@ -4,6 +4,12 @@
 
 .ActiveWorkout {
 	width: 100%;
+
+	&_row {
+		width: 100%;
+		@include rowCenter();
+		margin-top: 4rem;
+	}
 }
 
 .EndedWorkout {
@@ -40,5 +46,25 @@
 	}
 	&_when {
 		color: $text3;
+	}
+}
+
+.ResetButton {
+	width: max-content;
+	height: 4rem;
+	padding: 0.5rem 1rem;
+	border-radius: 5rem;
+	@include rowCenter();
+	gap: 0 0.2rem;
+	background-color: transparent;
+	border: $borderLight;
+	outline: none;
+	font-size: 1.8rem;
+	color: $text3;
+
+	&_icon {
+		width: 2.2rem;
+		height: 2.2rem;
+		fill: $text3;
 	}
 }

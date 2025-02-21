@@ -1,0 +1,34 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.SelectDateRangeBy {
+	width: 100%;
+
+	&_group {
+		display: block;
+	}
+
+	&_label {
+		font-size: 1.5rem;
+		color: $text2;
+		margin-bottom: 1rem;
+		padding-left: 3rem;
+	}
+
+	&_types {
+		width: 100%;
+		@include flex_row(flex-start, flex-start, wrap);
+		@include flex_row(center, flex-start, wrap);
+		gap: 2rem;
+	}
+}
+
+.RangeType {
+	padding: 0.7rem 1.6rem;
+	border-radius: 0.5rem;
+	border: $borderLight;
+	background-color: $foreground;
+	color: #fff;
+	font-size: 1.6rem;
+}

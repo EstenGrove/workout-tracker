@@ -10,7 +10,7 @@ import { createServer } from "node:https";
 
 const ENABLE_HTTPS = true;
 
-const HOST = process.env.API_HOST;
+const HOST = ENABLE_HTTPS ? process.env.API_HOST : process.env.API_HTTP_HOST;
 const PORT = 3000;
 const app = new Hono().basePath("/api/v1");
 
@@ -31,11 +31,12 @@ const corsSettings = {
 
 app.use(logger());
 
-app.use(
-	cors({
-		origin: clientHost,
-	})
-);
+app.use(cors());
+// app.use(
+// 	cors({
+// 		origin: clientHost,
+// 	})
+// );
 
 app.get("/hello", (c) => {
 	return c.text("Hello Hono!");

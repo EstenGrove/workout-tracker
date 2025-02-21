@@ -21,3 +21,26 @@ $accentRed: var(--accent-red);
 $increaseAccent: var(--increase-accent);
 $decreaseAccent: var(--decrease-accent);
 $inputBG: var(--bg200);
+
+// PAIRED COLOR MAPS:
+
+$blueMap: (
+	main: $accentBlue,
+	bg: rgba(0, 124, 255, 0.2),
+);
+$redMap: (
+	main: $accentRed,
+	bg: rgba(255, 51, 61, 0.2),
+);
+$greenMap: (
+	main: $accentGreen,
+	bg: rgba(0, 226, 189, 0.2),
+);
+$purpleMap: (
+	main: $accentPurple,
+	bg: rgba(105, 25, 255, 0.2),
+);
+$btnMap: (
+	main: #fff,
+	bg: $accentBlue,
+);

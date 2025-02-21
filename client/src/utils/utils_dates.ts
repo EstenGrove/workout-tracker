@@ -1,14 +1,22 @@
 import {
-	endOfMonth,
-	endOfWeek,
-	endOfYear,
 	format,
 	formatDistanceToNow,
 	parse,
 	set,
-	startOfMonth,
+	startOfDay,
+	endOfDay,
 	startOfWeek,
+	endOfWeek,
+	startOfMonth,
+	endOfMonth,
+	startOfQuarter,
+	endOfQuarter,
 	startOfYear,
+	endOfYear,
+	subMonths,
+	subYears,
+	subQuarters,
+	subWeeks,
 } from "date-fns";
 
 export type WeekDay =
@@ -125,6 +133,9 @@ export interface DateFormats {
 		twoLetter: string; // 'Mo', 'Tu' etc
 		letter: string; // 'M', 'T', 'W', 'T' etc
 	};
+	custom: {
+		monthAndDay: string;
+	};
 }
 
 const FORMAT_TOKENS: DateFormats = {
@@ -160,12 +171,16 @@ const FORMAT_TOKENS: DateFormats = {
 		twoLetter: "EEEEEE",
 		letter: "EEEEE",
 	},
+	custom: {
+		monthAndDay: "EEE, MMM do",
+	},
 };
 const {
 	date: DATE_TOKENS,
 	time: TIME_TOKENS,
 	datetime: DATETIME_TOKENS,
 	weekday: WEEKDAY_TOKENS,
+	custom: CUSTOM_TOKENS,
 } = FORMAT_TOKENS;
 
 const formatDate = (
@@ -201,6 +216,16 @@ const formatDateTime = (
 	return formatted;
 };
 
+const formatCustomDate = (
+	date: Date | string,
+	formatToken: keyof DateFormats["custom"] = "monthAndDay"
+) => {
+	if (!date) return "";
+	const token = CUSTOM_TOKENS[formatToken];
+	const formatted = format(date, token);
+	return formatted;
+};
+
 const parseDate = (
 	dateStr: string,
 	formatToken: keyof DateFormats["date"] = "db"
@@ -220,6 +245,13 @@ const parseDateTime = (
 	const parsedDate = parse(dateStr, token, new Date());
 
 	return parsedDate;
+};
+
+const fromBackendFormat = (date: string) => {
+	if (!date) return "";
+	const str = new Date(date).toString();
+
+	return str;
 };
 
 // ##TODOS:
@@ -293,6 +325,116 @@ const prepareTimestamp = (date: Date | string) => {
 	return base.toISOString();
 };
 
+export type DateRangeType = "Day" | "Week" | "Month" | "Quarter" | "Year";
+
+export type DateRangePreset =
+	| "This Week"
+	| "This Month"
+	| "This Year"
+	| "This Quarter"
+	| "Today"
+	| "Last Month"
+	| "Last Week"
+	| "Last Quarter"
+	| "Last Year";
+
+export interface RangeValues {
+	startDate: string;
+	endDate: string;
+}
+
+const getRangeFromPreset = (preset: DateRangePreset): RangeValues => {
+	switch (preset) {
+		case "This Week": {
+			const start = startOfWeek(new Date());
+			const end = startOfWeek(new Date());
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		case "This Month": {
+			const start = startOfMonth(new Date());
+			const end = endOfMonth(new Date());
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		case "This Quarter": {
+			const start = startOfQuarter(new Date());
+			const end = endOfQuarter(new Date());
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		case "This Year": {
+			const start = startOfYear(new Date());
+			const end = endOfYear(new Date());
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		case "Today": {
+			const start = startOfDay(new Date());
+			const end = endOfDay(new Date());
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		case "Last Month": {
+			const last = subMonths(new Date(), 1);
+			const start = startOfMonth(last);
+			const end = endOfMonth(last);
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		case "Last Week": {
+			const last = subWeeks(new Date(), 1);
+			const start = startOfWeek(last);
+			const end = endOfWeek(last);
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		case "Last Quarter": {
+			const last = subQuarters(new Date(), 1);
+			const start = startOfQuarter(last);
+			const end = endOfQuarter(last);
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		case "Last Year": {
+			const last = subYears(new Date(), 1);
+			const start = startOfYear(last);
+			const end = endOfYear(last);
+
+			return {
+				startDate: formatDate(start, "long"),
+				endDate: formatDate(end, "long"),
+			};
+		}
+		default:
+			throw new Error("Invalid range type: " + preset);
+	}
+};
+
 export {
 	MONTHS,
 	WEEK_DAYS,
@@ -307,15 +449,18 @@ export {
 	formatDate,
 	formatTime,
 	formatDateTime,
+	formatCustomDate,
 	parseDateTime,
 	parseTime,
 	parseDate,
+	fromBackendFormat,
 	applyTimeStrToDate,
 	getDistanceToNow,
 	formatDateAsWeekDay,
 	getWeekStartAndEnd,
 	getMonthStartAndEnd,
 	getYearStartAndEnd,
+	getRangeFromPreset,
 	// parsing & preparing utils
 	prepareTimestamp,
 };
