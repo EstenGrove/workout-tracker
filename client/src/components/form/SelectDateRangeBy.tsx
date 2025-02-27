@@ -2,6 +2,9 @@ import { useState } from "react";
 import styles from "../../css/form/SelectDateRangeBy.module.scss";
 import DatePicker from "../shared/DatePicker";
 import Checkbox from "../shared/Checkbox";
+import MonthPicker from "../shared/MonthPicker";
+import QuarterPicker from "../shared/QuarterPicker";
+import YearPicker from "../shared/YearPicker";
 
 type DateRangeType =
 	| "Day"
@@ -89,8 +92,20 @@ const SelectDateRangeBy = ({ rangeOptions = defaultRangeBy }: Props) => {
 				)}
 				{rangeBy === "Month" && (
 					<div className={styles.SelectDateRangeBy_options_row}>
-						<label htmlFor="byDay">By Day</label>
-						{/* <Checkbox /> */}
+						<label htmlFor="byMonth">By Month</label>
+						<MonthPicker />
+					</div>
+				)}
+				{rangeBy === "Quarter" && (
+					<div className={styles.SelectDateRangeBy_options_row}>
+						<label htmlFor="byQuarter">By Quarter</label>
+						<QuarterPicker />
+					</div>
+				)}
+				{rangeBy === "Year" && (
+					<div className={styles.SelectDateRangeBy_options_row}>
+						<label htmlFor="byYear">By Year</label>
+						<YearPicker />
 					</div>
 				)}
 				{/*  */}

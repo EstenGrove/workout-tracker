@@ -1,0 +1,59 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutWeekPage {
+	width: 100%;
+
+	&_header {
+		width: 100%;
+		position: sticky;
+		top: 0;
+	}
+	&_main {
+		width: 100%;
+		height: 50rem;
+		padding: 2rem 2rem;
+		margin-top: 1rem;
+		overflow-y: auto;
+		// @include colCenter();
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		align-items: center;
+		gap: 3rem 0;
+	}
+}
+
+.ShowAll {
+	@include flex_row(flex-end, flex-start);
+	background-color: transparent;
+	border: none;
+	outline: none;
+	color: $accentBlue;
+	font-size: 1.4rem;
+	text-decoration: none;
+	padding: 4px 0;
+	& > a {
+		text-decoration: none;
+	}
+}
+
+.CardsSection {
+	width: 100%;
+
+	&_header {
+		width: 100%;
+		padding-left: 0.5rem;
+		padding-bottom: 0.5rem;
+		@include flex_row(space-between, center);
+
+		& h4 {
+			font-size: 1.8rem;
+			color: $text3;
+		}
+	}
+	&_body {
+		width: 100%;
+	}
+}

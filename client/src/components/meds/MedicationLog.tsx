@@ -1,4 +1,3 @@
-import { format, parseISO } from "date-fns";
 import styles from "../../css/meds/MedicationLog.module.scss";
 import { MedLogEntry } from "../../features/meds/types";
 import {
@@ -6,7 +5,6 @@ import {
 	formatDate,
 	fromBackendFormat,
 	parseDate,
-	parseDateTime,
 } from "../../utils/utils_dates";
 import MedLogItem from "./MedLogItem";
 
@@ -91,9 +89,8 @@ const MedicationLog = ({ logs }: Props) => {
 		<div className={styles.MedicationLog}>
 			<ul className={styles.MedicationLog_logs}>
 				{dates &&
-					dates.map((date) => {
+					dates.map((date: string) => {
 						const logsForDate = logsByDate[date as keyof object];
-
 						return (
 							<LogsByDate
 								key={date}

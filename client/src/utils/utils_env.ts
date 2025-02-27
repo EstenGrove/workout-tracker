@@ -57,14 +57,17 @@ const API_ENDPOINTS = {
 		getByID: "/user/getUserByID",
 	},
 	workouts: {
+		logWorkout: "/workouts/logWorkout",
 		getAll: "/workouts/getAllWorkouts",
 		getOpen: "/workouts/getOpenWorkouts",
 		getUserWorkouts: "/workouts/getUserWorkouts",
+		getUserWorkoutsByDate: "/workouts/getUserWorkoutsByDate",
 		getWorkoutDetails: "/workouts/getWorkoutDetails",
 		getCategories: "/workouts/getWorkoutCategories",
 		getWorkoutPlan: "/workouts/getWorkoutPlan",
 		getWorkoutHistory: "/workouts/getWorkoutHistory",
 		getWorkoutsAndRelated: "/workouts/getWorkoutsAndRelated",
+		getWorkoutSummaryByDate: "/workouts/getWorkoutSummaryByDate",
 	},
 	meds: {
 		logMed: "/meds/logMedication",

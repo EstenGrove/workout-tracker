@@ -1,8 +1,18 @@
 import { Hono, type Context } from "hono";
 import { workoutService } from "../services/index.ts";
 import { getResponseError, getResponseOk } from "../utils/api.ts";
-import { normalizeHistory, normalizeWorkouts } from "../utils/data.ts";
-import type { WorkoutDB } from "../services/WorkoutService.ts";
+import {
+	normalizeHistory,
+	normalizeStreakDay,
+	normalizeTotalMins,
+	normalizeWorkouts,
+	normalizeWorkoutSummary,
+} from "../utils/data.ts";
+import type {
+	LogWorkoutBody,
+	WeekSummaryResp,
+	WorkoutDB,
+} from "../services/WorkoutService.ts";
 import { logWorkout } from "../utils/workouts.ts";
 import type {
 	Activity,
@@ -14,18 +24,7 @@ const app = new Hono();
 
 interface LogWorkoutVals {
 	userID: string;
-	activityType: Activity;
-	workoutID: number;
-	workoutDate: string;
-	startTime: string;
-	endTime: string;
-	recordedEffort: string;
-	recordedMins: number;
-	recordedWeight: number;
-	recordedReps: number;
-	recordedSets: number;
-	recordedSteps: number;
-	recordedMiles: number;
+	newLog: LogWorkoutBody;
 }
 
 app.get("/getRecentWorkouts", async (ctx: Context) => {
@@ -88,9 +87,9 @@ app.get("/getOpenWorkouts", async (ctx: Context) => {
 });
 app.post("/logWorkout", async (ctx: Context) => {
 	const body = await ctx.req.json<LogWorkoutVals>();
-	const { userID } = body;
+	const { userID, newLog } = body;
 
-	const newHistory = (await logWorkout(userID, body)) as WorkoutHistoryDB;
+	const newHistory = (await logWorkout(userID, newLog)) as WorkoutHistoryDB;
 
 	if (newHistory instanceof Error) {
 		const errResp = getResponseError(newHistory, {
@@ -115,6 +114,33 @@ app.get("/getWorkoutDetails", async (ctx: Context) => {
 		workout: null,
 		details: null,
 	});
+
+	return ctx.json(response);
+});
+app.get("/getWorkoutSummaryByDate", async (ctx: Context) => {
+	const { userID, startDate, endDate } = ctx.req.query();
+
+	const data = (await workoutService.getWorkoutSummary(
+		userID,
+		startDate
+	)) as WeekSummaryResp;
+	console.log("data", data);
+
+	if (data instanceof Error) {
+		const errResp = getResponseError(data, {
+			weeklyStreak: [],
+			summary: null,
+		});
+		return ctx.json(errResp);
+	}
+
+	const summary = normalizeWorkoutSummary({
+		total_mins: data.total_mins[0],
+		total_calories: data.total_calories[0],
+		total_workouts: data.total_workouts[0],
+		weekly_streak: data.weekly_streak,
+	});
+	const response = getResponseOk(summary);
 
 	return ctx.json(response);
 });

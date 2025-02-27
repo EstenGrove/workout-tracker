@@ -23,11 +23,12 @@ const MedicationDetailsPage = () => {
 	// console.log("medDetails", medDetails);
 
 	return (
-		// <PageContainer style={{ backgroundColor: "var(--bg-body)" }}>
 		<div className={styles.MedicationDetailsPage}>
 			<div className={styles.MedicationDetailsPage_header}>
 				<NavArrows onBack={() => navigate("/meds")} />
-				<h1>{medication?.medName}</h1>
+				<h1 className={styles.MedicationDetailsPage_header_title}>
+					{medication?.medName}
+				</h1>
 				<div className={styles.MedicationDetailsPage_header_nav}>
 					<PageTabs>
 						<PageTabButton to={pathname} isEnd>
@@ -43,7 +44,6 @@ const MedicationDetailsPage = () => {
 				<Outlet />
 			</div>
 		</div>
-		// </PageContainer>
 	);
 };
 

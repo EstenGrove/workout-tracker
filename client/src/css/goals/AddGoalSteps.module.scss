@@ -1,0 +1,235 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.StepHeader {
+	width: 100%;
+	text-align: center;
+
+	&_title {
+		font-size: 1.7rem;
+		color: $text1;
+		margin-bottom: 2rem;
+	}
+}
+.TargetHeader {
+	width: 100%;
+	@include rowCenter();
+	gap: 0 1rem;
+	$wrapper: 4rem;
+
+	&_wrapper {
+		width: $wrapper;
+		height: $wrapper;
+		min-width: $wrapper;
+		min-height: $wrapper;
+		border-radius: 50%;
+		@include rowCenter();
+		background-color: var(--blueGrey900);
+		margin-bottom: 2rem;
+
+		&_icon {
+			width: calc($wrapper - 1.7rem);
+			height: calc($wrapper - 1.7rem);
+			fill: $accentYellow;
+		}
+	}
+}
+.GoalTypesStep {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	overflow-y: auto;
+}
+.AboutGoalStep {
+	width: 100%;
+	padding: 0 1rem;
+
+	&_about {
+		width: 100%;
+		margin-bottom: 2rem;
+	}
+}
+.GoalScheduleStep {
+	width: 100%;
+	padding: 1rem 1rem;
+	padding-top: 0;
+
+	&_freq {
+		width: 100%;
+		margin-bottom: 2rem;
+		margin-top: 3rem;
+	}
+	&_range {
+		width: 100%;
+		margin-bottom: 2rem;
+	}
+}
+.GoalTargetStep {
+	width: 100%;
+	padding: 0 1rem;
+}
+.CaloriesTarget {
+	width: 100%;
+	@include colCenter();
+
+	& label {
+		display: block;
+		padding-left: 5rem;
+		margin-bottom: 1rem;
+	}
+	&_top {
+		width: 100%;
+	}
+	&_input {
+		width: 100%;
+		padding-left: 5rem;
+	}
+	&_repeat {
+		width: 100%;
+		margin-top: 4rem;
+	}
+}
+.MinsTarget {
+	width: 100%;
+	$wrapper: 4rem;
+
+	&_top {
+		width: 100%;
+		@include rowCenter();
+		gap: 0 1rem;
+	}
+
+	&_input {
+		width: 100%;
+		padding-left: 5rem;
+	}
+
+	& label {
+		display: block;
+		padding-left: 5rem;
+		padding-bottom: 0.5rem;
+	}
+
+	&_repeat {
+		width: 100%;
+		margin-top: 4rem;
+	}
+}
+.RepsTarget {
+	width: 100%;
+	@include colCenter();
+
+	&_wrapper {
+		width: 6rem;
+		height: 6rem;
+		border-radius: 50%;
+		@include rowCenter();
+		background-color: var(--blueGrey900);
+		margin-bottom: 2rem;
+
+		&_icon {
+			width: 4rem;
+			height: 4rem;
+			fill: $accentRed;
+		}
+	}
+}
+.StepsTarget {
+	width: 100%;
+
+	& label {
+		display: block;
+		padding-left: 5rem;
+		margin-bottom: 1rem;
+	}
+
+	&_top {
+		width: 100%;
+	}
+
+	&_input {
+		padding-left: 5rem;
+	}
+	&_repeat {
+		width: 100%;
+		margin-top: 4rem;
+	}
+}
+.GoalSummaryStep {
+	width: 100%;
+
+	&_main {
+		width: 100%;
+		padding: 0 2rem;
+		padding-top: 4rem;
+
+		&_item {
+			width: 100%;
+			@include flex_row(flex-start, center, wrap);
+			font-size: 1.5rem;
+			margin: 1rem 0;
+			text-wrap: wrap;
+
+			&_icon {
+				width: 1.5rem;
+				height: 1.5rem;
+				fill: $text2;
+			}
+
+			& b {
+				color: $accentBlue;
+				margin-left: 0.5rem;
+			}
+		}
+	}
+}
+.RowItem {
+	width: 100%;
+	@include flex_row(flex-start, center, wrap);
+	font-size: 1.5rem;
+	margin: 1rem 0;
+	text-wrap: wrap;
+	padding-left: 2rem;
+	color: $text2;
+
+	&_icon {
+		width: 1.5rem;
+		height: 1.5rem;
+		fill: $text2;
+		margin-right: 0.3rem;
+	}
+
+	& b {
+		color: $accentBlue;
+		margin: 0 0.2rem;
+	}
+}
+
+.GoalTypeSummary {
+	width: 100%;
+
+	&_title {
+		width: 100%;
+		@include flex_row(flex-start, center);
+		gap: 0 1rem;
+		font-size: 1.8rem;
+		font-weight: 700;
+		margin-bottom: 2rem;
+	}
+	&_desc {
+		font-size: 1.5rem;
+		color: $text3;
+	}
+
+	&_icon {
+		width: 2rem;
+		height: 2rem;
+		fill: #fff;
+	}
+}
+
+label {
+	font-size: 1.5rem;
+}

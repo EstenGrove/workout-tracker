@@ -1,4 +1,10 @@
-import { ChangeEvent, useMemo, useRef, useState } from "react";
+import {
+	ChangeEvent,
+	ComponentPropsWithoutRef,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import sprite from "../../assets/icons/calendar2.svg";
 import styles from "../../css/shared/DatePicker.module.scss";
 import {
@@ -15,13 +21,14 @@ import {
 import { useOutsideClick } from "../../hooks/useOutsideClick";
 import { formatDate, WEEK_DAYS } from "../../utils/utils_dates";
 
-type Props = {
+interface DatePickerProps {
 	name: string;
 	id?: string;
 	value: Date | string;
 	onChange?: (name: string, value: string) => void;
 	onSelect: (name: string, value: Date) => void;
-};
+	enableFocusMode?: boolean;
+}
 type CalendarProps = {
 	dates: Date[];
 	selectedDate: string;
@@ -31,6 +38,7 @@ type CalendarProps = {
 	selectDay: (day: Date) => void;
 	goToPrev: () => void;
 	goToNext: () => void;
+	focusMode: boolean;
 };
 type CalendarDateProps = {
 	day: number;
@@ -160,12 +168,21 @@ const DatePickerCalendar = ({
 	goToPrev,
 	goToNext,
 	selectedDate,
+	focusMode = true,
 }: CalendarProps) => {
 	const calendarRef = useRef<HTMLDivElement>(null);
 	useOutsideClick(calendarRef, close);
+
 	const weekDayHeaders = WEEK_DAYS.map((day) => day.slice(0, 2));
 	return (
-		<div ref={calendarRef} className={styles.DatePickerCalendar}>
+		<div
+			ref={calendarRef}
+			className={
+				focusMode
+					? `${styles.DatePickerCalendar} ${styles.focusMode}`
+					: styles.DatePickerCalendar
+			}
+		>
 			<div className={styles.DatePickerCalendar_header}>
 				<CurrentMonthAndYear
 					currentMonth={currentMonth}
@@ -206,12 +223,17 @@ const DatePickerCalendar = ({
 	);
 };
 
+// @ts-expect-error: this is fine
+interface Props extends DatePickerProps, ComponentPropsWithoutRef<"input"> {}
+
 const DatePicker = ({
 	name,
 	id,
 	value = new Date(),
 	onSelect,
 	onChange,
+	enableFocusMode = true,
+	...rest
 }: Props) => {
 	const [showCalendar, setShowCalendar] = useState<boolean>(false);
 	const selectedDate = useMemo(() => {
@@ -263,7 +285,7 @@ const DatePicker = ({
 
 	return (
 		<div className={styles.DatePicker}>
-			<div className={styles.DatePicker_inputWrapper}>
+			<div className={styles.DatePicker_inputWrapper} {...rest}>
 				<input
 					type="text"
 					name={name}
@@ -271,6 +293,7 @@ const DatePicker = ({
 					value={selectedDate}
 					onChange={handleDateChange}
 					className={styles.DatePicker_inputWrapper_input}
+					{...rest}
 				/>
 				<button
 					type="button"
@@ -292,6 +315,7 @@ const DatePicker = ({
 						close={closeCalendar}
 						currentYear={currentYear}
 						currentMonth={currentMonth}
+						focusMode={enableFocusMode}
 					/>
 				)}
 			</div>

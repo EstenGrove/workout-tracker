@@ -1,0 +1,102 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WeeklyStreak {
+	width: 100%;
+	height: 100%;
+	padding: 2rem 3rem;
+}
+
+.StreakDate {
+	height: 100%;
+}
+
+.WeeksStreak {
+	width: 100%;
+
+	&_days {
+		width: 100%;
+		@include flex_row(center, center);
+		gap: 0 0.5rem;
+	}
+	&_headers {
+		width: 100%;
+		@include flex_row(center, center);
+		gap: 0 1rem;
+	}
+}
+
+.StreakGoal {
+	width: calc(100% / 7);
+	height: 100%;
+	@include colCenter();
+	$icon: 18px;
+
+	&_circle {
+		width: max-content;
+		height: max-content;
+		position: relative;
+		z-index: 5;
+
+		&_badge {
+			display: block;
+			position: absolute;
+			width: 2.7rem;
+			height: 2.7rem;
+			min-width: 2.7rem;
+			min-height: 2.7rem;
+			max-width: 2.7rem;
+			max-height: 2.7rem;
+			border-radius: 50%;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%, -50%);
+			background-color: $accentBlue;
+			z-index: -1;
+			@include rowCenter();
+
+			&_icon {
+				width: $icon;
+				height: $icon;
+				min-width: $icon;
+				min-height: $icon;
+				fill: #fff;
+				margin-top: -0.7px;
+			}
+		}
+	}
+}
+
+.DayLabel {
+	@include rowCenter();
+	color: $text3;
+}
+
+.GoalReached {
+	$icon: 18px;
+	display: block;
+	position: absolute;
+	width: 2.7rem;
+	height: 2.7rem;
+	min-width: 2.7rem;
+	min-height: 2.7rem;
+	max-width: 2.7rem;
+	max-height: 2.7rem;
+	border-radius: 50%;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	background-color: $accentBlue;
+	z-index: -1;
+	@include rowCenter();
+
+	&_icon {
+		width: $icon;
+		height: $icon;
+		min-width: $icon;
+		min-height: $icon;
+		fill: #fff;
+		margin-top: -0.7px;
+	}
+}

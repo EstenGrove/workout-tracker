@@ -5,9 +5,9 @@ import { CurrentUser } from "../../features/user/types";
 import { ActiveTimer } from "../../hooks/useWorkoutTimer";
 import { useState } from "react";
 import { formatTime } from "../../utils/utils_dates";
+import { useParams } from "react-router";
 import { getTotalTime } from "../../utils/utils_workouts";
 import WorkoutTimer from "./WorkoutTimer";
-import { useParams } from "react-router";
 
 type Props = {
 	workout: Workout;

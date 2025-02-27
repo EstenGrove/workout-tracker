@@ -11,9 +11,6 @@ const WorkoutsList = ({ workouts }: Props) => {
 		<div className={styles.WorkoutsList}>
 			{workouts &&
 				workouts.map((workout, idx) => <Workout key={idx} workout={workout} />)}
-			{/*  */}
-			{/*  */}
-			{/*  */}
 		</div>
 	);
 };

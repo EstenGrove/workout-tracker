@@ -17,4 +17,16 @@ const formatHeight = (feet: number, inches: number) => {
 	return `${feet}'${inches}"`;
 };
 
-export { inchesToFeet, feetToInches, formatHeight };
+// Me: 28.22 inches
+const calculateStrideLength = (heightFt: number, heightInches: number = 0) => {
+	const heightInInches = feetToInches(heightFt, heightInches);
+	const factors = {
+		women: 0.413,
+		men: 0.415,
+	};
+	const stride = heightInInches * factors.men;
+
+	return stride;
+};
+
+export { inchesToFeet, feetToInches, formatHeight, calculateStrideLength };

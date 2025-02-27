@@ -1,12 +1,20 @@
-import { useState } from "react";
 import styles from "../../css/workouts/AddQuickWorkout.module.scss";
+import { useState } from "react";
 import { CurrentUser } from "../../features/user/types";
-import ActivityTypes from "../activity/ActivityTypes";
 import { Activity } from "../../features/activity/types";
+import ActivityTypes from "../activity/ActivityTypes";
 import TextInput from "../shared/TextInput";
 import TextArea from "../shared/TextArea";
+import MultiStepModal, { StepItem } from "../shared/MultiStepModal";
+import MinutesSelector from "../shared/MinutesSelector";
+import WorkoutTypes from "../activity/WorkoutTypes";
+import RecurringOptions from "../form/RecurringOptions";
+import { RepeatType } from "../../utils/utils_recurring";
 
-type Props = { currentUser: CurrentUser };
+type Props = {
+	currentUser: CurrentUser;
+	onClose: () => void;
+};
 
 interface QuickWorkoutValues {
 	name: string;
@@ -14,51 +22,136 @@ interface QuickWorkoutValues {
 	length: number | string;
 	activityType: Activity | string;
 	workoutDate: Date | string;
+	workoutMins: number;
 }
 
-type LengthOptsProps = {
-	values: QuickWorkoutValues;
-	selectLength: (length: number | string) => void;
-};
+type RepeatLabel = "day" | "week" | "month" | "year" | "Never" | "Custom";
 
 const lengthPresets = [5, 10, 15, 20, 25, 30, 45, 60, "None"];
 
-const isSelected = (
-	preset: number | string,
-	selectedPreset: number | string
-): boolean => {
-	return preset === selectedPreset;
+type StepProps = {
+	values: QuickWorkoutValues;
+	onChange: (name: string, value: string | number) => void;
+	onSelect: (name: string, value: string | Date) => void;
 };
 
-const LengthOptions = ({ values, selectLength }: LengthOptsProps) => {
+const StepHeader = ({ title }: { title: string }) => {
 	return (
-		<div className={styles.LengthOptions}>
-			{lengthPresets &&
-				lengthPresets.map((preset) => (
-					<button
-						key={preset}
-						type="button"
-						onClick={() => selectLength(preset)}
-						className={styles.LengthOptions_preset}
-						data-selected={isSelected(preset, values.length)}
-					>
-						{typeof preset === "number" ? preset + "m" : preset}
-					</button>
-				))}
+		<div className={styles.StepHeader}>
+			<h2 className={styles.StepHeader_title}>{title}</h2>
 		</div>
 	);
 };
 
-const AddQuickWorkout = ({ currentUser }: Props) => {
+const ActivityStep = ({ values, onSelect }: StepProps) => {
+	return (
+		<div className={styles.ActivityStep}>
+			<StepHeader title="What kind of exercise?" />
+			<div className={styles.ActivityStep_main}>
+				<WorkoutTypes
+					name="activityType"
+					selectedType={values.activityType as Activity}
+					onSelect={onSelect}
+				/>
+			</div>
+		</div>
+	);
+};
+
+const WorkoutNameStep = ({ values, onChange }: StepProps) => {
+	return (
+		<div className={styles.WorkoutNameStep}>
+			<StepHeader title="What's this workout called?" />
+			<div className={styles.WorkoutNameStep_main}>
+				<div className={styles.WorkoutNameStep_main_row}>
+					<TextInput
+						name="name"
+						id="name"
+						value={values.name}
+						onChange={onChange}
+					/>
+				</div>
+				<div className={styles.WorkoutNameStep_main_row}>
+					<label htmlFor="desc">Add a description (optional)</label>
+					<TextArea
+						name="desc"
+						id="desc"
+						value={values.desc}
+						onChange={onChange}
+					/>
+				</div>
+			</div>
+		</div>
+	);
+};
+
+const DurationStep = ({ values, onChange }: StepProps) => {
+	return (
+		<div className={styles.DurationStep}>
+			<StepHeader title="How long is this workout?" />
+			<div className={styles.DurationStep_main}>
+				<MinutesSelector
+					name="workoutMins"
+					minutes={values.workoutMins}
+					onSelect={onChange}
+				/>
+			</div>
+		</div>
+	);
+};
+const ScheduleStep = ({ values, onChange, onSelect }: StepProps) => {
+	return (
+		<div className={styles.ScheduleStep}>
+			<StepHeader title="When should this workout occur?" />
+			<div className={styles.ScheduleStep_main}>
+				<RecurringOptions
+					values={values}
+					onChange={onChange}
+					onSelect={onSelect}
+				/>
+				{/*  */}
+				{/*  */}
+				{/*  */}
+			</div>
+		</div>
+	);
+};
+const StepTemplate = ({ values, onChange, onSelect }: StepProps) => {
+	return (
+		<div className={styles.WorkoutNameStep}>
+			<StepHeader title="What's this workout called?" />
+			<div className={styles.WorkoutNameStep_main}>
+				{/*  */}
+				{/*  */}
+				{/*  */}
+			</div>
+		</div>
+	);
+};
+
+const AddQuickWorkout = ({ currentUser, onClose }: Props) => {
 	const [newWorkout, setNewWorkout] = useState<QuickWorkoutValues>({
-		name: "Untitled",
+		name: "Untitled Workout",
 		desc: "",
 		length: "None", // mins
 		activityType: "",
 		workoutDate: new Date(),
+		workoutMins: 0,
+		// additional
+		byDay: [],
+		byMonth: 0,
+		byMonthDay: 0,
+		interval: 1,
+		frequency: "day",
 	});
 
-	const handleChange = (name: string, value: string) => {
+	const onChange = (name: string, value: string | number) => {
+		setNewWorkout({
+			...newWorkout,
+			[name]: value,
+		});
+	};
+	const onSelect = (name: string, value: Date | string) => {
 		setNewWorkout({
 			...newWorkout,
 			[name]: value,
@@ -79,63 +172,72 @@ const AddQuickWorkout = ({ currentUser }: Props) => {
 		}
 	};
 
-	const selectLength = (preset: number | string) => {
-		if (newWorkout.length === preset) {
-			setNewWorkout({
-				...newWorkout,
-				length: 0,
-			});
-		} else {
-			setNewWorkout({
-				...newWorkout,
-				length: preset,
-			});
-		}
-	};
+	const steps: StepItem[] = [
+		{
+			id: 1,
+			title: "Activity Type",
+			content: (
+				<ActivityStep
+					values={newWorkout}
+					onChange={onChange}
+					onSelect={onSelect}
+				/>
+			),
+			next: 2,
+			// validate: () => !!newWorkout.activityType,
+			validate: () => true,
+		},
+		{
+			id: 2,
+			title: "Workout Name & Desc",
+			content: (
+				<WorkoutNameStep
+					values={newWorkout}
+					onChange={onChange}
+					onSelect={onSelect}
+				/>
+			),
+			prev: 1,
+			next: 3,
+			// validate: () => !!newWorkout.activityType,
+			validate: () => true,
+		},
+		{
+			id: 3,
+			title: "Duration Step",
+			content: (
+				<DurationStep
+					values={newWorkout}
+					onChange={onChange}
+					onSelect={onSelect}
+				/>
+			),
+			prev: 2,
+			next: 4,
+			// validate: () => !!newWorkout.activityType,
+			validate: () => true,
+		},
+		{
+			id: 4,
+			title: "Schedule Step",
+			content: (
+				<ScheduleStep
+					values={newWorkout}
+					onChange={onChange}
+					onSelect={onSelect}
+				/>
+			),
+			prev: 3,
+			next: 5,
+			// validate: () => !!newWorkout.activityType,
+			validate: () => true,
+		},
+	];
 
 	return (
-		<div className={styles.AddQuickWorkout}>
-			<header className={styles.AddQuickWorkout_header}>
-				<h2>Add a Workout</h2>
-			</header>
-			<div className={styles.AddQuickWorkout_types}>
-				<label htmlFor="activityType">Select an activity</label>
-				<ActivityTypes selectActivity={selectActivity} />
-			</div>
-			<div className={styles.AddQuickWorkout_about}>
-				<div className={styles.AddQuickWorkout_about_field}>
-					<label htmlFor="name">What's this workout called?</label>
-					<TextInput
-						name="name"
-						id="name"
-						value={newWorkout.name}
-						onChange={handleChange}
-						onFocus={(ref) => ref.currentTarget.select()}
-					/>
-				</div>
-				<div className={styles.AddQuickWorkout_about_field}>
-					<label htmlFor="desc">
-						Add a description <span>(optional)</span>
-					</label>
-					<TextArea
-						name="desc"
-						id="desc"
-						value={newWorkout.desc}
-						onChange={handleChange}
-					/>
-				</div>
-			</div>
-			<div className={styles.AddQuickWorkout_mins}>
-				<label htmlFor="length">
-					Workout Length <span>(optional)</span>
-				</label>
-				<LengthOptions values={newWorkout} selectLength={selectLength} />
-			</div>
-
-			{/*  */}
-			{/*  */}
-			{/*  */}
-		</div>
+		<>
+			<MultiStepModal steps={steps} onClose={onClose} />
+		</>
 	);
 };
 

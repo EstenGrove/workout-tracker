@@ -1,7 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TStatus } from "../types";
-import { Workout, WorkoutCategory } from "./types";
-import { getUserWorkouts } from "./operations";
+import { Workout, WorkoutCategory, WorkoutSummaryForDate } from "./types";
+import {
+	getUserWorkouts,
+	getUserWorkoutsByDate,
+	getWorkoutSummaryByDate,
+} from "./operations";
 import { formatDate } from "../../utils/utils_dates";
 import { RootState } from "../../store/store";
 
@@ -9,6 +13,7 @@ export interface WorkoutsSlice {
 	status: TStatus;
 	workouts: Workout[];
 	categories: WorkoutCategory[];
+	summary: WorkoutSummaryForDate | null;
 	activeWorkout: {
 		record: Workout | null;
 		startedAt: string;
@@ -21,6 +26,7 @@ const initialState: WorkoutsSlice = {
 	status: "IDLE",
 	workouts: [],
 	categories: [],
+	summary: null,
 	activeWorkout: {
 		record: null,
 		startedAt: formatDate(new Date(), "long"),
@@ -47,6 +53,34 @@ const workoutsSlice = createSlice({
 				(state: WorkoutsSlice, action: PayloadAction<Workout[]>) => {
 					state.status = "FULFILLED";
 					state.workouts = action.payload;
+				}
+			);
+
+		// Fetch workouts by date
+		builder
+			.addCase(getUserWorkoutsByDate.pending, (state: WorkoutsSlice) => {
+				state.status = "PENDING";
+			})
+			.addCase(
+				getUserWorkoutsByDate.fulfilled,
+				(state: WorkoutsSlice, action: PayloadAction<Workout[]>) => {
+					state.status = "FULFILLED";
+					state.workouts = action.payload;
+				}
+			);
+		// Fetch summary for a given date
+		builder
+			.addCase(getWorkoutSummaryByDate.pending, (state: WorkoutsSlice) => {
+				state.status = "PENDING";
+			})
+			.addCase(
+				getWorkoutSummaryByDate.fulfilled,
+				(
+					state: WorkoutsSlice,
+					action: PayloadAction<WorkoutSummaryForDate>
+				) => {
+					state.status = "FULFILLED";
+					state.summary = action.payload;
 				}
 			);
 	},

@@ -15,6 +15,8 @@ import Modal from "../components/layout/Modal";
 import AddQuickWorkout from "../components/workouts/AddQuickWorkout";
 import PageHeader from "../components/layout/PageHeader";
 import WorkoutsView from "../components/workouts/WorkoutsView";
+import NavArrows from "../components/layout/NavArrows";
+import AddWorkoutWithPlan from "../components/workouts/AddWorkoutWithPlan";
 
 type AddBtnProps = {
 	onClick: () => void;
@@ -59,7 +61,10 @@ const WorkoutsPage = () => {
 	return (
 		<div className={styles.WorkoutsPage}>
 			<div className={styles.WorkoutsPage_header}>
-				<PageHeader title="Workouts">
+				<div className={styles.WorkoutsPage_header_nav}>
+					<NavArrows />
+				</div>
+				<PageHeader title="All Workouts">
 					<AddWorkoutButton onClick={openWorkoutModal} />
 				</PageHeader>
 			</div>
@@ -72,9 +77,10 @@ const WorkoutsPage = () => {
 			</div>
 
 			{showWorkoutModal && (
-				<Modal closeModal={closeWorkoutModal}>
-					<AddQuickWorkout currentUser={currentUser} />
-				</Modal>
+				<AddWorkoutWithPlan
+					currentUser={currentUser}
+					onClose={closeWorkoutModal}
+				/>
 			)}
 		</div>
 	);

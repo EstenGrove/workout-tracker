@@ -1,0 +1,51 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.InputWithSuffix {
+	width: max-content;
+	height: max-content;
+	border-radius: 1rem;
+	@include flex_row(flex-start, center);
+	border: $borderLight;
+	background-color: $foreground;
+	padding: 0 0.5rem;
+	&:hover {
+		border-color: $accent;
+	}
+	&:focus-within {
+		border-color: $accent;
+	}
+
+	&_iconWrapper {
+		width: 2.5rem;
+		height: 2.5rem;
+		@include rowCenter();
+
+		&_icon {
+			width: 2rem;
+			height: 2rem;
+			fill: $text2;
+		}
+	}
+
+	&_input {
+		width: max-content;
+		height: 3.5rem;
+		border: none;
+		outline: none;
+		border-radius: 1rem;
+		padding-left: 0.5rem;
+		font-size: 1.6rem;
+		color: #fff;
+		background-color: $foreground;
+		user-select: none;
+	}
+	&_suffix {
+		font-size: 1.3rem;
+		color: $text3;
+		align-self: center;
+		// align-self: flex-end;
+		// padding-bottom: 0.7rem;
+	}
+}

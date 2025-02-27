@@ -1,0 +1,17 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutGoalsPage {
+	width: 100%;
+
+	&_header {
+		width: 100%;
+		@include flex_row(flex-start, center);
+
+		& h1 {
+			font-size: 3rem;
+			text-align: center;
+		}
+	}
+}

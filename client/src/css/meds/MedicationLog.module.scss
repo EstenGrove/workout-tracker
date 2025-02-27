@@ -31,4 +31,9 @@
 			margin-left: auto;
 		}
 	}
+	&_logs {
+		width: 100%;
+		@include colCenter();
+		gap: 0.5rem 0;
+	}
 }

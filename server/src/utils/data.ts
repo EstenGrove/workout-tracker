@@ -13,14 +13,24 @@ import type {
 	MedLogEntryDB,
 	PillSummaryClient,
 	PillSummaryDB,
+	StreakDayClient,
+	StreakDayDB,
 	TakenPillsByRangeClient,
 	TakenPillsByRangeDB,
+	TotalCaloriesClient,
+	TotalCaloriesDB,
+	TotalMinsClient,
+	TotalMinsDB,
+	TotalWorkoutsClient,
+	TotalWorkoutsDB,
 	WorkoutByCategoryClient,
 	WorkoutByCategoryDB,
 	WorkoutCategoryClient,
 	WorkoutCategoryDB,
 	WorkoutHistoryClient,
 	WorkoutHistoryDB,
+	WorkoutSummaryClient,
+	WorkoutSummaryDB,
 } from "../services/types.ts";
 import type { UserClient, UserDB } from "../services/UserService.ts";
 import type { WorkoutClient, WorkoutDB } from "../services/WorkoutService.ts";
@@ -230,6 +240,69 @@ const normalizeSharedData = (sharedData: SharedDataDB) => {
 	};
 };
 
+// Workout Summary
+
+const normalizeTotalMins = (data: TotalMinsDB): TotalMinsClient => {
+	const client: TotalMinsClient = {
+		totalMins: data.total_mins,
+		startDate: data.start_date,
+		endDate: data.end_date,
+	};
+	return client;
+};
+
+const normalizeStreakDay = (streakDay: StreakDayDB): StreakDayClient => {
+	const client: StreakDayClient = {
+		goal: streakDay.goal,
+		mins: streakDay.mins,
+		date: streakDay.date,
+		weekDay: streakDay.week_day.trim(),
+	};
+	return client;
+};
+
+const normalizeTotalCalories = (
+	total: TotalCaloriesDB
+): TotalCaloriesClient => {
+	const client: TotalCaloriesClient = {
+		startDate: total.start_date,
+		endDate: total.end_date,
+		totalCalories: total.total_calories,
+	};
+	return client;
+};
+const normalizeTotalWorkouts = (
+	total: TotalWorkoutsDB
+): TotalWorkoutsClient => {
+	const client: TotalWorkoutsClient = {
+		startDate: total.start_date,
+		endDate: total.end_date,
+		totalWorkouts: total.total_workouts,
+	};
+	return client;
+};
+
+// total_mins: object
+// weekly_streak: array
+// total_calories: object
+// total_workouts: object
+const normalizeWorkoutSummary = (
+	summary: WorkoutSummaryDB
+): WorkoutSummaryClient => {
+	const totalMins = normalizeTotalMins(summary.total_mins);
+	const totalCalories = normalizeTotalCalories(summary.total_calories);
+	const totalWorkouts = normalizeTotalWorkouts(summary.total_workouts);
+	const weeklyStreak = summary.weekly_streak.map(normalizeStreakDay);
+	const client: WorkoutSummaryClient = {
+		totalMins,
+		totalCalories,
+		totalWorkouts,
+		weeklyStreak,
+	};
+
+	return client;
+};
+
 export {
 	normalizeUser,
 	normalizeWorkout,
@@ -245,4 +318,9 @@ export {
 	normalizeWorkoutByCategory,
 	normalizeActivityType,
 	normalizeSharedData,
+	normalizeTotalMins,
+	normalizeTotalCalories,
+	normalizeTotalWorkouts,
+	normalizeStreakDay,
+	normalizeWorkoutSummary,
 };

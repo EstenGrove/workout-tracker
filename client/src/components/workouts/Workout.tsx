@@ -41,12 +41,12 @@ const Workout = ({ workout }: Props) => {
 
 	const goTo = () => {
 		const id = workout.workoutID;
-		navigate(`details/${id}`);
+		navigate(id);
 	};
 
 	const goToStartWorkout = () => {
 		const id = workout.workoutID;
-		navigate(`active/${id}`);
+		navigate(`/workouts/active/${id}`);
 	};
 
 	return (

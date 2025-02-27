@@ -4,7 +4,7 @@
 
 .MedicationLogsView {
 	width: 100%;
-	padding-top: 1rem;
+	background-color: var(--bg-body);
 
 	&_filter {
 		width: 100%;
@@ -13,6 +13,13 @@
 		position: sticky;
 		top: 178px;
 		background-color: var(--bg-body);
+	}
+	&_logs {
+		width: 100%;
+
+		&_list {
+			padding-top: 6rem;
+		}
 	}
 }
 

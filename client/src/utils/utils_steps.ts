@@ -115,6 +115,18 @@ const convertMilesTo = (miles: number, to: MilesTo = "steps") => {
 	}
 };
 
+const convertStepsToMiles = (stepsInInches: number, strideInInches: number) => {
+	const miles = (stepsInInches * strideInInches) / 63360;
+
+	return miles;
+};
+
+const convertMilesToSteps = (miles: number, strideInInches: number) => {
+	const steps = (miles * 63360) / strideInInches;
+
+	return steps;
+};
+
 export {
 	strideLengths,
 	toRadians,
@@ -122,4 +134,6 @@ export {
 	getDistanceFromCoords,
 	convertMilesTo,
 	isValidCoords,
+	convertStepsToMiles,
+	convertMilesToSteps,
 };

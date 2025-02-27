@@ -10,6 +10,13 @@
 		top: 0;
 		width: 100%;
 		background-color: $background;
+
+		&_nav {
+			width: 100%;
+			padding-top: 1rem;
+			padding-left: 2rem;
+			margin-bottom: -2rem;
+		}
 	}
 
 	&_main {

@@ -23,9 +23,9 @@ const HistoryPage = () => {
 				<Button onClick={openLogWorkoutModal}>Log Workout</Button>
 
 				{showLogWorkoutModal && (
-					<Modal closeModal={closeLogWorkoutModal}>
-						<LogWorkout />
-					</Modal>
+					// <Modal closeModal={closeLogWorkoutModal}>
+					<LogWorkout onClose={closeLogWorkoutModal} />
+					// </Modal>
 				)}
 			</div>
 		</PageContainer>

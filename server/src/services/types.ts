@@ -247,3 +247,61 @@ export interface WorkoutByCategoryClient {
 	categoryName: string;
 	categoryDesc: string;
 }
+
+export interface TotalMinsDB {
+	total_mins: number;
+	start_date: string;
+	end_date: string;
+}
+export interface TotalMinsClient {
+	totalMins: number;
+	startDate: string;
+	endDate: string;
+}
+
+export interface StreakDayDB {
+	date: string;
+	goal: number;
+	mins: number;
+	week_day: string;
+}
+export interface StreakDayClient {
+	date: string;
+	goal: number;
+	mins: number;
+	weekDay: string;
+}
+
+export interface TotalCaloriesDB {
+	total_calories: number;
+	start_date: string;
+	end_date: string;
+}
+export interface TotalCaloriesClient {
+	totalCalories: number;
+	startDate: string;
+	endDate: string;
+}
+export interface TotalWorkoutsDB {
+	total_workouts: number;
+	start_date: string;
+	end_date: string;
+}
+export interface TotalWorkoutsClient {
+	totalWorkouts: number;
+	startDate: string;
+	endDate: string;
+}
+
+export interface WorkoutSummaryDB {
+	total_mins: TotalMinsDB;
+	total_calories: TotalCaloriesDB;
+	total_workouts: TotalWorkoutsDB;
+	weekly_streak: StreakDayDB[];
+}
+export interface WorkoutSummaryClient {
+	totalMins: TotalMinsClient;
+	totalCalories: TotalCaloriesClient;
+	totalWorkouts: TotalWorkoutsClient;
+	weeklyStreak: StreakDayClient[];
+}

@@ -9,14 +9,11 @@ interface CardProps {
 	cardRef?: Ref<HTMLDivElement>;
 	children?: ReactNode;
 }
-
 interface Props extends CardProps, ComponentPropsWithoutRef<"div"> {}
-
 type CardHeaderProps = {
 	to?: string;
 	children?: ReactNode;
 };
-
 type GoToProps = {
 	to: string;
 	onClick?: () => void;

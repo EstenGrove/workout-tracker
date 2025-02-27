@@ -1,14 +1,18 @@
+import { ComponentPropsWithoutRef } from "react";
 import sprite from "../../assets/icons/calendar2.svg";
 import styles from "../../css/activity/ActivityType.module.scss";
 import { Activity } from "../../features/activity/types";
 import { getActivityStyles } from "../../utils/utils_activity";
 
-type Props = {
+interface ActivityProps {
 	type: Activity;
 	onClick?: () => void;
-};
+}
 
-const ActivityType = ({ type, onClick }: Props) => {
+// @ts-expect-error: this is fine
+interface Props extends ActivityProps, ComponentPropsWithoutRef<"div"> {}
+
+const ActivityType = ({ type, onClick, ...rest }: Props) => {
 	const { icon, color } = getActivityStyles(type);
 
 	const handleClick = () => {
@@ -19,6 +23,7 @@ const ActivityType = ({ type, onClick }: Props) => {
 		<div
 			onClick={handleClick}
 			className={styles.ActivityType}
+			{...rest}
 			style={{ backgroundColor: color }}
 		>
 			<svg className={styles.ActivityType_icon}>

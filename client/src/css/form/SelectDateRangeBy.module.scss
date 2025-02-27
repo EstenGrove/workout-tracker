@@ -5,6 +5,16 @@
 .SelectDateRangeBy {
 	width: 100%;
 
+	&_options {
+		width: 100%;
+		padding: 1rem 3rem;
+
+		&_row {
+			width: 100%;
+			margin: 2rem 0;
+		}
+	}
+
 	&_group {
 		display: block;
 	}

@@ -1,4 +1,4 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, ComponentPropsWithoutRef } from "react";
 import styles from "../../css/shared/Select.module.scss";
 
 interface SelectOption {
@@ -6,15 +6,18 @@ interface SelectOption {
 	label: string;
 }
 
-type Props = {
+interface SelectProps {
 	name: string;
 	id: string;
 	value: string;
 	options: SelectOption[];
 	onChange: (name: string, value: string) => void;
-};
+}
 
-const Select = ({ name, id, value, options, onChange }: Props) => {
+// @ts-expect-error: this is fine
+interface Props extends SelectProps, ComponentPropsWithoutRef<"div"> {}
+
+const Select = ({ name, id, value, options, onChange, ...rest }: Props) => {
 	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = e.target;
 		return onChange && onChange(name, value);
@@ -23,7 +26,7 @@ const Select = ({ name, id, value, options, onChange }: Props) => {
 	console.log("value", value);
 
 	return (
-		<div className={styles.Select}>
+		<div className={styles.Select} {...rest}>
 			<select
 				name={name}
 				id={id}
@@ -38,8 +41,6 @@ const Select = ({ name, id, value, options, onChange }: Props) => {
 						</option>
 					))}
 			</select>
-			{/*  */}
-			{/*  */}
 		</div>
 	);
 };

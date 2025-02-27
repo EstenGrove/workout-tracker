@@ -254,6 +254,13 @@ const fromBackendFormat = (date: string) => {
 	return str;
 };
 
+const toBackendFormat = (date: Date | string) => {
+	if (!date) return "";
+	const str = new Date(date).toISOString();
+	const newStr = formatDateTime(str, "db");
+	return newStr;
+};
+
 // ##TODOS:
 // - Use this for 'parseTime' later on!!!
 export interface TimeParseDeps {
@@ -453,6 +460,7 @@ export {
 	parseDateTime,
 	parseTime,
 	parseDate,
+	toBackendFormat,
 	fromBackendFormat,
 	applyTimeStrToDate,
 	getDistanceToNow,
