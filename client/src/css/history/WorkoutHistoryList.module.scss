@@ -1,0 +1,24 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutHistoryList {
+	width: 100%;
+	@include colCenter();
+	gap: 1rem 0;
+	padding: 2rem 0;
+}
+.NoHistoryFound {
+	width: 100%;
+	min-height: 20rem;
+	@include colCenter();
+	font-size: 1.7rem;
+	color: $text3;
+	font-weight: 600;
+
+	&_icon {
+		width: 3.2rem;
+		height: 3.2rem;
+		fill: $text3;
+	}
+}

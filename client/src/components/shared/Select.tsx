@@ -1,7 +1,7 @@
 import { ChangeEvent, ComponentPropsWithoutRef } from "react";
 import styles from "../../css/shared/Select.module.scss";
 
-interface SelectOption {
+export interface SelectOption {
 	value: string;
 	label: string;
 }

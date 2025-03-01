@@ -45,6 +45,7 @@ app.get("/hello", (c) => {
 app.route("/user", allRoutes.user);
 app.route("/meds", allRoutes.meds);
 app.route("/shared", allRoutes.shared);
+app.route("/history", allRoutes.history);
 app.route("/workouts", allRoutes.workouts);
 
 // Log env info:

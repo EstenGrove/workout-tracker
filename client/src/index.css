@@ -28,6 +28,9 @@
 	--greenBG: rgba(0, 226, 189, 0.3);
 	--pinkBG: rgba(255, 0, 102, 0.3);
 
+	/* darker accent bgs */
+	--accent-blue-bg: rgba(0, 124, 255, 0.1);
+
 	--decrease-accent: #ff333d;
 	--increase-accent: var(--accent-green);
 

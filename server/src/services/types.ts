@@ -139,37 +139,35 @@ export interface MedInfoClient {
 
 export interface WorkoutHistoryDB {
 	history_id: number;
-	activity_id: number;
 	workout_id: number;
-	plan_id: number;
-	user_id: string;
+	activity_type: Activity;
+	workout_name: string;
 	workout_date: string;
-	start_time: string;
-	end_time: string;
 	recorded_effort: string;
+	target_mins: number;
 	recorded_mins: number;
 	recorded_weight: number;
 	recorded_reps: number;
 	recorded_steps: number;
 	recorded_miles: number;
-	created_date: string;
+	start_time: string;
+	end_time: string;
 }
 export interface WorkoutHistoryClient {
 	historyID: number;
-	activityID: number;
+	activityType: Activity;
 	workoutID: number;
-	planID: number;
-	userID: string;
 	workoutDate: string;
+	workoutName: string;
 	startTime: string;
 	endTime: string;
+	targetMins: number;
 	recordedEffort: string;
 	recordedMins: number;
 	recordedWeight: number;
 	recordedReps: number;
 	recordedSteps: number;
 	recordedMiles: number;
-	createdDate: string;
 }
 
 export interface DateRange {

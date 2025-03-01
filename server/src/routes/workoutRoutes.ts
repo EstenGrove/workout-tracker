@@ -144,4 +144,5 @@ app.get("/getWorkoutSummaryByDate", async (ctx: Context) => {
 
 	return ctx.json(response);
 });
+
 export default app;

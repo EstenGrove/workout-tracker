@@ -68,6 +68,7 @@
 	font-size: 1.6rem;
 	@include flex_row(flex-start, center);
 	gap: 0 0.5rem;
+	margin-bottom: 2rem;
 
 	& > b {
 		color: var(--blue500);
@@ -76,13 +77,15 @@
 .YearlyOptions {
 	display: block;
 	// padding: 0 2rem;
+	margin-top: 2rem;
+	margin-bottom: 2rem;
 
 	&_months {
 		width: 100%;
 		@include flex_row(flex-start, baseline, wrap);
 		font-size: 1.6rem;
 		gap: 1rem;
-		margin-bottom: 1rem;
+		margin-bottom: 2rem;
 
 		& > span {
 			@include flex_row(flex-start, center);

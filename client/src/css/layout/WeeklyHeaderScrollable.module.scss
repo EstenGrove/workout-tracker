@@ -1,0 +1,64 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WeeklyHeaderScrollable {
+	width: 100%;
+	display: flex;
+	overflow-x: auto;
+	scroll-snap-type: x mandatory;
+	scroll-behavior: smooth;
+	white-space: nowrap;
+	@include flex_row(space-between, center);
+}
+
+.Week {
+	width: 100%;
+	height: 100%;
+	padding: 0 1rem;
+	scroll-snap-align: center;
+	@include flex_row(space-between, center);
+	// @include flex_row(center, center);
+	gap: 0 3px;
+
+	&:last-of-type {
+		padding-right: 1.5rem;
+	}
+}
+
+.WeekDay {
+	width: 5rem;
+	height: 5rem;
+	min-width: 5rem;
+	min-height: 5rem;
+	max-width: 5rem;
+	max-height: 5rem;
+	border: $borderLight;
+	border: none;
+	outline: none;
+	border-radius: 1.5rem;
+	@include colCenter();
+	background-color: transparent;
+	// margin: 0 1px;
+
+	&_day {
+		width: 5rem;
+		font-size: 1.4rem;
+		color: $text3;
+	}
+	&_date {
+		font-size: 1.7rem;
+		color: $text1;
+	}
+}
+
+.isSelected {
+	border: 1px solid $accentBlue;
+	color: $accentBlue;
+}
+
+@media only screen and (max-width: 600px) {
+	.WeekDay:last-of-type {
+		padding-right: 2.5rem;
+	}
+}

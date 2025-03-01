@@ -19,7 +19,7 @@
 		appearance: none;
 		background: transparent;
 		cursor: pointer;
-		width: 15rem;
+		width: 20rem;
 	}
 
 	&_output {
@@ -44,10 +44,10 @@ input[type="range"]::-moz-range-track {
 input[type="range"]::-webkit-slider-thumb {
 	-webkit-appearance: none; /* Override default look */
 	appearance: none;
-	margin-top: -6px; /* Centers thumb on the track */
+	margin-top: -9.5px; /* Centers thumb on the track */
 	background-color: $accentBlue;
-	height: 1.7rem;
-	width: 1.7rem;
+	height: 2.5rem;
+	width: 2.5rem;
 	// border-radius: 1rem;
 	border-radius: 5rem;
 }

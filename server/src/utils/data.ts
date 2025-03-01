@@ -92,24 +92,24 @@ const normalizeMed = (med: MedicationDB): MedicationClient => {
 // Normalizes a single workout history record
 const normalizeHistory = (history: WorkoutHistoryDB): WorkoutHistoryClient => {
 	const client: WorkoutHistoryClient = {
-		userID: history.user_id,
 		historyID: history.history_id,
-		activityID: history.activity_id,
 		workoutID: history.workout_id,
-		planID: history.plan_id,
+		activityType: history.activity_type,
+		workoutName: history.workout_name,
 		workoutDate: history.workout_date,
 		startTime: history.start_time,
 		endTime: history.end_time,
+		targetMins: history.target_mins,
 		recordedEffort: history.recorded_effort,
 		recordedMins: history.recorded_mins,
 		recordedWeight: history.recorded_weight,
 		recordedReps: history.recorded_reps,
 		recordedSteps: history.recorded_steps,
 		recordedMiles: history.recorded_miles,
-		createdDate: history.created_date,
 	};
 	return client;
 };
+
 const normalizeMedLog = (log: MedLogEntryDB): MedLogEntryClient => {
 	const clientLog: MedLogEntryClient = {
 		logID: log.log_id,

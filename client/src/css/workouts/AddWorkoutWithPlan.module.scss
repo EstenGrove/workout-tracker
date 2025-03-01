@@ -96,7 +96,7 @@
 
 	&_main {
 		width: 100%;
-		height: 25rem;
+		height: 28rem;
 		overflow-y: auto;
 		padding: 0 1rem;
 
@@ -131,7 +131,7 @@
 	&_row {
 		width: 100%;
 		@include colCenter();
-		margin: 2rem 0;
+		margin: 3rem 0;
 	}
 }
 

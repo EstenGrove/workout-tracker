@@ -10,6 +10,7 @@ type Props = {
 	id?: string;
 	value: Date | string;
 	onSelect: (name: string, value: Date) => void;
+	enableFocusMode?: boolean;
 };
 type CurrentDisplayProps = {
 	currentYear: number;
@@ -21,6 +22,7 @@ type MonthsDropdownProps = {
 	goToPrev: () => void;
 	goToNext: () => void;
 	close: () => void;
+	focusMode: boolean;
 };
 type MonthOptionProps = {
 	month: string;
@@ -100,11 +102,15 @@ const MonthsDropdown = ({
 	goToNext,
 	goToPrev,
 	close,
+	focusMode = true,
 }: MonthsDropdownProps) => {
 	const optionsRef = useRef<HTMLDivElement>(null);
 	useOutsideClick(optionsRef, close);
 	return (
-		<div ref={optionsRef} className={styles.MonthsDropdown}>
+		<div
+			ref={optionsRef}
+			className={`${styles.MonthsDropdown} ${focusMode && styles.focusMode}`}
+		>
 			<div className={styles.MonthsDropdown_header}>
 				<CurrentYear currentYear={currentYear} />
 				<PickerNavButtons goToNext={goToNext} goToPrev={goToPrev} />
@@ -142,7 +148,13 @@ const createBaseDate = (state: PickerState) => {
 	return date;
 };
 
-const MonthPicker = ({ name, id, value = new Date(), onSelect }: Props) => {
+const MonthPicker = ({
+	name,
+	id,
+	value = new Date(),
+	onSelect,
+	enableFocusMode = true,
+}: Props) => {
 	const [showDropdown, setShowDropdown] = useState(false);
 	// month is zero-based
 	const [selection, setSelection] = useState<SelectedState>({
@@ -222,6 +234,7 @@ const MonthPicker = ({ name, id, value = new Date(), onSelect }: Props) => {
 						selectMonth={selectMonth}
 						currentYear={selection.year}
 						currentMonth={selection.month}
+						focusMode={enableFocusMode}
 					/>
 				)}
 			</div>

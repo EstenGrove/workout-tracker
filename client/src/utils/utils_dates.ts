@@ -17,7 +17,9 @@ import {
 	subYears,
 	subQuarters,
 	subWeeks,
+	subDays,
 } from "date-fns";
+import { RepeatType } from "./utils_recurring";
 
 export type WeekDay =
 	| "Sunday"
@@ -27,6 +29,23 @@ export type WeekDay =
 	| "Thursday"
 	| "Friday"
 	| "Saturday";
+
+export type RangePreset =
+	| "Today"
+	| "Yesterday"
+	| "This Week"
+	| "This Month"
+	| "Last Week"
+	| "Last Month"
+	| "None";
+
+export type CustomRangeType = Omit<RepeatType, "Never">;
+
+export type CustomRange = {
+	type: CustomRangeType;
+	startDate: Date | string;
+	endDate: Date | string;
+};
 
 const WEEK_DAYS: WeekDay[] = [
 	"Sunday",
@@ -111,6 +130,7 @@ export interface DateFormats {
 		shortMonth: string;
 		month: string;
 		url: string;
+		clean: string;
 	};
 	time: {
 		noTod: string;
@@ -135,6 +155,7 @@ export interface DateFormats {
 	};
 	custom: {
 		monthAndDay: string;
+		range: string;
 	};
 }
 
@@ -149,6 +170,7 @@ const FORMAT_TOKENS: DateFormats = {
 		shortMonth: "MMM do, yyyy",
 		month: "MMM",
 		url: "MM-dd-yyyy",
+		clean: "M/d/yyyy",
 	},
 	time: {
 		noTod: "hh:mm",
@@ -173,6 +195,7 @@ const FORMAT_TOKENS: DateFormats = {
 	},
 	custom: {
 		monthAndDay: "EEE, MMM do",
+		range: "MMM do",
 	},
 };
 const {
@@ -442,6 +465,76 @@ const getRangeFromPreset = (preset: DateRangePreset): RangeValues => {
 	}
 };
 
+const getDateRangeFromPreset = (preset: RangePreset) => {
+	const now = new Date();
+
+	switch (preset) {
+		case "Today": {
+			const startDate = formatDate(now, "long");
+			const endDate = formatDate(now, "long");
+
+			return {
+				startDate: startDate,
+				endDate: endDate,
+			};
+		}
+		case "Yesterday": {
+			const base = subDays(now, 1);
+			const startDate = formatDate(base, "long");
+			const endDate = formatDate(base, "long");
+
+			return {
+				startDate: startDate,
+				endDate: endDate,
+			};
+		}
+		case "This Week": {
+			const startDate = formatDate(startOfWeek(now), "long");
+			const endDate = formatDate(endOfWeek(now), "long");
+
+			return {
+				startDate,
+				endDate,
+			};
+		}
+		case "This Month": {
+			const startDate = formatDate(startOfMonth(now), "long");
+			const endDate = formatDate(endOfMonth(now), "long");
+
+			return {
+				startDate,
+				endDate,
+			};
+		}
+		case "Last Week": {
+			const weekBase = subWeeks(now, 1);
+			const startDate = formatDate(startOfWeek(weekBase), "long");
+			const endDate = formatDate(endOfWeek(weekBase), "long");
+
+			return {
+				startDate,
+				endDate,
+			};
+		}
+		case "Last Month": {
+			const monthBase = subMonths(now, 1);
+			const startDate = formatDate(startOfMonth(monthBase), "long");
+			const endDate = formatDate(endOfMonth(monthBase), "long");
+
+			return {
+				startDate,
+				endDate,
+			};
+		}
+
+		// None
+		default:
+			return {
+				startDate: formatDate(now, "long"),
+				endDate: formatDate(now, "long"),
+			};
+	}
+};
 export {
 	MONTHS,
 	WEEK_DAYS,
@@ -468,6 +561,7 @@ export {
 	getWeekStartAndEnd,
 	getMonthStartAndEnd,
 	getYearStartAndEnd,
+	getDateRangeFromPreset,
 	getRangeFromPreset,
 	// parsing & preparing utils
 	prepareTimestamp,

@@ -105,7 +105,7 @@ const WalkFields = ({ values, onChange }: StepProps) => {
 						display: "flex",
 						justifyContent: "center",
 						fontSize: "1.6rem",
-						marginBottom: "1rem",
+						marginBottom: "2rem",
 						fontWeight: "600",
 					}}
 				>

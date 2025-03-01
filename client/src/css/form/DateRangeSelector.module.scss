@@ -1,0 +1,71 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.DateRangeSelector {
+	$width: max-content;
+	width: $width;
+	min-width: $width;
+	height: max-content;
+	padding-right: 1.5rem;
+	position: relative;
+	@include flex_row(center, center);
+	gap: 0 0.3rem;
+
+	&_icon {
+		width: 1.5rem;
+		height: 1.5rem;
+		fill: $text3;
+		margin-right: auto;
+	}
+
+	&_text {
+		margin: 0 auto;
+		color: $text3;
+	}
+}
+
+.Menu {
+	position: absolute;
+	top: 3.5rem;
+	right: 1.3rem;
+	width: 15rem;
+	height: 20rem;
+	padding: 1rem 1rem;
+	border-radius: 1rem;
+	border: $borderLight;
+	background-color: $background;
+	-webkit-box-shadow: -7px 7px 43px -1px rgba(0, 0, 0, 0.75);
+	-moz-box-shadow: -7px 7px 43px -1px rgba(0, 0, 0, 0.75);
+	box-shadow: -7px 7px 43px -1px rgba(0, 0, 0, 0.75);
+	z-index: 9999;
+
+	&_label {
+		font-size: 1.5rem;
+		color: var(--blueGrey700);
+		margin-bottom: 1rem;
+	}
+
+	&_list {
+		width: 100%;
+		height: 90%;
+		list-style: none;
+		@include flex_col(flex-start, flex-start);
+		gap: 1rem 0;
+		overflow-y: auto;
+	}
+}
+
+.MenuItem {
+	width: 100%;
+	@include flex_row(flex-start, center);
+	padding: 0.5rem 0.6rem;
+	// border-top: $borderLight;
+	// border-bottom: $borderLight;
+	font-size: 1.5rem;
+	color: $text3;
+}
+
+.isSelected {
+	color: $accentBlue;
+}

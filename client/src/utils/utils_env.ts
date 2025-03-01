@@ -69,6 +69,10 @@ const API_ENDPOINTS = {
 		getWorkoutsAndRelated: "/workouts/getWorkoutsAndRelated",
 		getWorkoutSummaryByDate: "/workouts/getWorkoutSummaryByDate",
 	},
+	history: {
+		getByDate: "/history/getWorkoutHistoryByDate",
+		getByRange: "/history/getWorkoutHistoryByRange",
+	},
 	meds: {
 		logMed: "/meds/logMedication",
 		getPillSummaryByDate: "/meds/getPillSummary",
@@ -88,6 +92,7 @@ export const {
 	user: userApis,
 	workouts: workoutApis,
 	shared: sharedApis,
+	history: historyApis,
 } = API_ENDPOINTS;
 
 export {

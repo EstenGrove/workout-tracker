@@ -9,7 +9,7 @@ import {
 	WorkoutSummaryResp,
 } from "../features/workouts/types";
 import { Activity } from "../features/activity/types";
-import { DateRange, formatDateTime, toBackendFormat } from "./utils_dates";
+import { toBackendFormat } from "./utils_dates";
 
 export type Effort = "Easy" | "Moderate" | "Hard" | "Strenuous" | "None";
 

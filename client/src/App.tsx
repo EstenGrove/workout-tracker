@@ -20,6 +20,9 @@ import WorkoutDetailsPage from "./pages/WorkoutDetailsPage";
 import MedicationLogsView from "./views/MedicationLogsView";
 import WorkoutWeekPage from "./pages/WorkoutWeekPage";
 import WorkoutGoalsPage from "./pages/WorkoutGoalsPage";
+import WorkoutSettingsPage from "./pages/WorkoutSettingsPage";
+import WorkoutPlansView from "./views/WorkoutPlansView";
+import WorkoutSettings from "./views/WorkoutSettings";
 
 function App() {
 	return (
@@ -45,6 +48,13 @@ function App() {
 								<Route index element={<Dashboard />} />
 								<Route path="recent" element={<AllRecentActivity />} />
 								<Route path="workouts" element={<WorkoutWeekPage />} />
+								<Route
+									path="workouts/settings"
+									element={<WorkoutSettingsPage />}
+								>
+									<Route path="" element={<WorkoutSettings />} />
+									<Route path="plans" element={<WorkoutPlansView />} />
+								</Route>
 								<Route path="workouts/list" element={<WorkoutsPage />} />
 								<Route
 									path="workouts/list/:id"
@@ -56,7 +66,6 @@ function App() {
 								<Route path="meds" element={<MedicationsPage />}>
 									<Route path="settings" element={<MedicationSettingsPage />} />
 								</Route>
-
 								<Route path="settings" element={<SettingsPage />} />
 							</Route>
 						</Routes>

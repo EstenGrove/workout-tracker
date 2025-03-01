@@ -6,8 +6,8 @@ type Props = {
 	id: string;
 	value: boolean;
 	label: string;
-	onChange: (name: string, value: boolean) => void;
-	onGroupChange: (name: string, value: boolean) => void;
+	onChange?: (name: string, value: boolean) => void;
+	onGroupChange?: (name: string, value: string) => void;
 };
 
 const RadioButton = ({
@@ -19,15 +19,13 @@ const RadioButton = ({
 	onGroupChange,
 }: Props) => {
 	const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-		const { name, checked } = e.target;
+		const { id, name, checked } = e.target;
 
-		return onChange(name, checked);
-	};
-
-	const handleGroupSelection = () => {
 		if (onGroupChange) {
-			return onGroupChange(name, true);
+			return onGroupChange(name, id);
 		}
+
+		return onChange && onChange(name, checked);
 	};
 
 	return (
@@ -36,9 +34,9 @@ const RadioButton = ({
 				type="radio"
 				name={name}
 				id={id}
-				checked={value}
+				value={String(value)}
 				onChange={handleChange}
-				onClick={handleGroupSelection}
+				// onClick={handleGroupSelection}
 				className={styles.RadioButton_input}
 			/>
 			<label htmlFor={id} className={styles.RadioButton_label}>
