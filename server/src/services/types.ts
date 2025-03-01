@@ -40,6 +40,29 @@ export interface MedLogEntryClient {
 	createdDate: string;
 }
 
+export interface MedicationDB {
+	user_id: string;
+	medication_id: number;
+	med_name: string;
+	dosage: string;
+	quantity: number;
+	refill_date: string;
+	refill_interval: number;
+	created_date: string;
+	is_active: boolean;
+}
+export interface MedicationClient {
+	userID: string;
+	medicationID: number;
+	medName: string;
+	dosage: string;
+	quantity: number;
+	refillDate: string;
+	refillInterval: number;
+	createdDate: string;
+	isActive: boolean;
+}
+
 // Total taken for date range
 export interface TakenPillsByRangeDB {
 	pills_taken: number;
@@ -116,40 +139,167 @@ export interface MedInfoClient {
 
 export interface WorkoutHistoryDB {
 	history_id: number;
-	activity_id: number;
 	workout_id: number;
-	plan_id: number;
-	user_id: string;
+	activity_type: Activity;
+	workout_name: string;
 	workout_date: string;
-	start_time: string;
-	end_time: string;
 	recorded_effort: string;
+	target_mins: number;
 	recorded_mins: number;
 	recorded_weight: number;
 	recorded_reps: number;
 	recorded_steps: number;
 	recorded_miles: number;
-	created_date: string;
+	start_time: string;
+	end_time: string;
 }
 export interface WorkoutHistoryClient {
 	historyID: number;
-	activityID: number;
+	activityType: Activity;
 	workoutID: number;
-	planID: number;
-	userID: string;
 	workoutDate: string;
+	workoutName: string;
 	startTime: string;
 	endTime: string;
+	targetMins: number;
 	recordedEffort: string;
 	recordedMins: number;
 	recordedWeight: number;
 	recordedReps: number;
 	recordedSteps: number;
 	recordedMiles: number;
-	createdDate: string;
 }
 
 export interface DateRange {
 	startDate: Date | string;
 	endDate: Date | string;
+}
+
+export interface MedScheduleDB {
+	user_id: string;
+	med_id: number;
+	schedule_id: number;
+	start_date: string;
+	end_date: string;
+	dosage_desc: string;
+	dosage_per_interval: number;
+	frequency: string;
+	quantity: number;
+	is_active: boolean;
+	created_date: string;
+}
+export interface MedScheduleClient {
+	userID: string;
+	medID: number;
+	scheduleID: number;
+	startDate: string;
+	endDate: string;
+	dosageDesc: string;
+	dosagePerInterval: number;
+	frequency: string;
+	quantity: number;
+	isActive: boolean;
+	createdDate: string;
+}
+
+export interface WorkoutCategoryDB {
+	category_id: number;
+	category_name: string;
+	category_desc: string;
+	is_active: boolean;
+	created_date: string;
+}
+export interface WorkoutCategoryClient {
+	categoryID: number;
+	categoryName: string;
+	categoryDesc: string;
+	isActive: boolean;
+	createdDate: string;
+}
+
+export interface WorkoutByCategoryDB {
+	workout_id: number;
+	activity_id: number;
+	activity_type: Activity;
+	plan_id: number;
+	user_id: string;
+	workout_name: string;
+	workout_desc: string;
+	workout_mins: number;
+	tag_color: string | null;
+	category_id: number;
+	category_name: string;
+	category_desc: string;
+}
+export interface WorkoutByCategoryClient {
+	workoutID: number;
+	activityID: number;
+	activityType: Activity;
+	planID: number;
+	userID: string;
+	workoutName: string;
+	workoutDesc: string;
+	workoutMins: number;
+	tagColor: string | null;
+	categoryID: number;
+	categoryName: string;
+	categoryDesc: string;
+}
+
+export interface TotalMinsDB {
+	total_mins: number;
+	start_date: string;
+	end_date: string;
+}
+export interface TotalMinsClient {
+	totalMins: number;
+	startDate: string;
+	endDate: string;
+}
+
+export interface StreakDayDB {
+	date: string;
+	goal: number;
+	mins: number;
+	week_day: string;
+}
+export interface StreakDayClient {
+	date: string;
+	goal: number;
+	mins: number;
+	weekDay: string;
+}
+
+export interface TotalCaloriesDB {
+	total_calories: number;
+	start_date: string;
+	end_date: string;
+}
+export interface TotalCaloriesClient {
+	totalCalories: number;
+	startDate: string;
+	endDate: string;
+}
+export interface TotalWorkoutsDB {
+	total_workouts: number;
+	start_date: string;
+	end_date: string;
+}
+export interface TotalWorkoutsClient {
+	totalWorkouts: number;
+	startDate: string;
+	endDate: string;
+}
+
+export interface WorkoutSummaryDB {
+	total_mins: TotalMinsDB;
+	total_calories: TotalCaloriesDB;
+	total_workouts: TotalWorkoutsDB;
+	weekly_streak: StreakDayDB[];
+}
+export interface WorkoutSummaryClient {
+	totalMins: TotalMinsClient;
+	totalCalories: TotalCaloriesClient;
+	totalWorkouts: TotalWorkoutsClient;
+	weeklyStreak: StreakDayClient[];
 }

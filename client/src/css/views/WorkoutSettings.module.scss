@@ -1,0 +1,11 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutSettingsView {
+	width: 100%;
+
+	&_section {
+		padding: 2rem 0;
+	}
+}

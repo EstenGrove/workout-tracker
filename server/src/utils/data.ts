@@ -1,19 +1,40 @@
 import type {
+	ActivityTypeClient,
+	ActivityTypeDB,
+} from "../services/ActivityTypesService.ts";
+import type {
 	DaysLeftClient,
 	DaysLeftDB,
+	MedicationClient,
+	MedicationDB,
 	MedInfoClient,
 	MedInfoDB,
 	MedLogEntryClient,
 	MedLogEntryDB,
 	PillSummaryClient,
 	PillSummaryDB,
+	StreakDayClient,
+	StreakDayDB,
 	TakenPillsByRangeClient,
 	TakenPillsByRangeDB,
+	TotalCaloriesClient,
+	TotalCaloriesDB,
+	TotalMinsClient,
+	TotalMinsDB,
+	TotalWorkoutsClient,
+	TotalWorkoutsDB,
+	WorkoutByCategoryClient,
+	WorkoutByCategoryDB,
+	WorkoutCategoryClient,
+	WorkoutCategoryDB,
 	WorkoutHistoryClient,
 	WorkoutHistoryDB,
+	WorkoutSummaryClient,
+	WorkoutSummaryDB,
 } from "../services/types.ts";
 import type { UserClient, UserDB } from "../services/UserService.ts";
 import type { WorkoutClient, WorkoutDB } from "../services/WorkoutService.ts";
+import type { SharedDataDB } from "./shared.ts";
 
 const normalizeUser = (user: UserDB): UserClient => {
 	const clientUser: UserClient = {
@@ -53,27 +74,42 @@ const normalizeWorkouts = (workouts: WorkoutDB[]): WorkoutClient[] => {
 
 	return clientWorkouts;
 };
+const normalizeMed = (med: MedicationDB): MedicationClient => {
+	const client: MedicationClient = {
+		userID: med.user_id,
+		medicationID: med.medication_id,
+		medName: med.med_name,
+		dosage: med.dosage,
+		quantity: med.quantity,
+		refillDate: med.refill_date,
+		refillInterval: med.refill_interval,
+		isActive: med.is_active,
+		createdDate: med.created_date,
+	};
+
+	return client;
+};
 // Normalizes a single workout history record
 const normalizeHistory = (history: WorkoutHistoryDB): WorkoutHistoryClient => {
 	const client: WorkoutHistoryClient = {
-		userID: history.user_id,
 		historyID: history.history_id,
-		activityID: history.activity_id,
 		workoutID: history.workout_id,
-		planID: history.plan_id,
+		activityType: history.activity_type,
+		workoutName: history.workout_name,
 		workoutDate: history.workout_date,
 		startTime: history.start_time,
 		endTime: history.end_time,
+		targetMins: history.target_mins,
 		recordedEffort: history.recorded_effort,
 		recordedMins: history.recorded_mins,
 		recordedWeight: history.recorded_weight,
 		recordedReps: history.recorded_reps,
 		recordedSteps: history.recorded_steps,
 		recordedMiles: history.recorded_miles,
-		createdDate: history.created_date,
 	};
 	return client;
 };
+
 const normalizeMedLog = (log: MedLogEntryDB): MedLogEntryClient => {
 	const clientLog: MedLogEntryClient = {
 		logID: log.log_id,
@@ -142,6 +178,131 @@ const normalizeMedInfo = (med: MedInfoDB) => {
 
 	return clientMed;
 };
+
+const normalizeActivityType = (type: ActivityTypeDB): ActivityTypeClient => {
+	const client: ActivityTypeClient = {
+		activityID: type.activity_id,
+		activityType: type.activity_type,
+		activityDesc: type.activity_desc,
+		activityKey: type.activity_key,
+		isActive: type?.is_active ?? true,
+		createdDate: type?.created_date ?? "",
+	};
+	return client;
+};
+
+const normalizeWorkoutCategory = (
+	category: WorkoutCategoryDB
+): WorkoutCategoryClient => {
+	const client: WorkoutCategoryClient = {
+		categoryID: category.category_id,
+		categoryName: category.category_name,
+		categoryDesc: category.category_desc,
+		isActive: category.is_active,
+		createdDate: category.created_date,
+	};
+	return client;
+};
+
+const normalizeWorkoutByCategory = (byCategory: WorkoutByCategoryDB) => {
+	const client: WorkoutByCategoryClient = {
+		workoutID: byCategory.workout_id,
+		activityID: byCategory.activity_id,
+		activityType: byCategory.activity_type,
+		planID: byCategory.plan_id,
+		userID: byCategory.user_id,
+		workoutName: byCategory.workout_name,
+		workoutDesc: byCategory.workout_desc,
+		workoutMins: byCategory.workout_mins,
+		tagColor: byCategory.tag_color,
+		categoryID: byCategory.category_id,
+		categoryDesc: byCategory.category_desc,
+		categoryName: byCategory.category_name,
+	};
+
+	return client;
+};
+
+const normalizeSharedData = (sharedData: SharedDataDB) => {
+	const {
+		activityTypes: types,
+		workoutsByCategory: byCategory,
+		categories: categoryList,
+	} = sharedData;
+	const activityTypes = types.map(normalizeActivityType);
+	const workoutsByCategory = byCategory.map(normalizeWorkoutByCategory);
+	const categories = categoryList.map(normalizeWorkoutCategory);
+
+	return {
+		activityTypes,
+		workoutsByCategory,
+		categories,
+	};
+};
+
+// Workout Summary
+
+const normalizeTotalMins = (data: TotalMinsDB): TotalMinsClient => {
+	const client: TotalMinsClient = {
+		totalMins: data.total_mins,
+		startDate: data.start_date,
+		endDate: data.end_date,
+	};
+	return client;
+};
+
+const normalizeStreakDay = (streakDay: StreakDayDB): StreakDayClient => {
+	const client: StreakDayClient = {
+		goal: streakDay.goal,
+		mins: streakDay.mins,
+		date: streakDay.date,
+		weekDay: streakDay.week_day.trim(),
+	};
+	return client;
+};
+
+const normalizeTotalCalories = (
+	total: TotalCaloriesDB
+): TotalCaloriesClient => {
+	const client: TotalCaloriesClient = {
+		startDate: total.start_date,
+		endDate: total.end_date,
+		totalCalories: total.total_calories,
+	};
+	return client;
+};
+const normalizeTotalWorkouts = (
+	total: TotalWorkoutsDB
+): TotalWorkoutsClient => {
+	const client: TotalWorkoutsClient = {
+		startDate: total.start_date,
+		endDate: total.end_date,
+		totalWorkouts: total.total_workouts,
+	};
+	return client;
+};
+
+// total_mins: object
+// weekly_streak: array
+// total_calories: object
+// total_workouts: object
+const normalizeWorkoutSummary = (
+	summary: WorkoutSummaryDB
+): WorkoutSummaryClient => {
+	const totalMins = normalizeTotalMins(summary.total_mins);
+	const totalCalories = normalizeTotalCalories(summary.total_calories);
+	const totalWorkouts = normalizeTotalWorkouts(summary.total_workouts);
+	const weeklyStreak = summary.weekly_streak.map(normalizeStreakDay);
+	const client: WorkoutSummaryClient = {
+		totalMins,
+		totalCalories,
+		totalWorkouts,
+		weeklyStreak,
+	};
+
+	return client;
+};
+
 export {
 	normalizeUser,
 	normalizeWorkout,
@@ -152,4 +313,14 @@ export {
 	normalizePillsTaken,
 	normalizeDaysLeft,
 	normalizeMedInfo,
+	normalizeMed,
+	normalizeWorkoutCategory,
+	normalizeWorkoutByCategory,
+	normalizeActivityType,
+	normalizeSharedData,
+	normalizeTotalMins,
+	normalizeTotalCalories,
+	normalizeTotalWorkouts,
+	normalizeStreakDay,
+	normalizeWorkoutSummary,
 };

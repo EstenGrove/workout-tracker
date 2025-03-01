@@ -45,7 +45,7 @@ const Dashboard = () => {
 			<WeeklyHeader
 				baseDate={baseDate}
 				onSelect={selectDate}
-				selectedDate={selectedDate}
+				selectedDate={selectedDate as string}
 			/>
 			<div className={styles.Dashboard_main}>
 				<div className={styles.Dashboard_main_row}>

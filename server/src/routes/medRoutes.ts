@@ -4,6 +4,7 @@ import type { LogMedBody } from "../services/MedicationsService.ts";
 import { medicationsService } from "../services/index.ts";
 import {
 	normalizeDaysLeft,
+	normalizeMed,
 	normalizeMedInfo,
 	normalizeMedLog,
 	normalizePillSummary,
@@ -13,20 +14,29 @@ import type {
 	MedInfoDB,
 	MedLogEntryClient,
 	MedLogEntryDB,
+	MedScheduleDB,
 	PillSummaryClient,
 	PillSummaryDB,
 } from "../services/types.ts";
+import { formatDate } from "../utils/dates.ts";
 
 const app = new Hono();
 
 // Log a dose of medication being taken or skipped
 app.post("/logMedication", async (ctx: Context) => {
 	const body = await ctx.req.json<LogMedBody>();
-	console.log("body", body);
+	const { userID, medID, loggedAt } = body;
+	const targetDate = formatDate(loggedAt, "db");
+	const activeSchedule = (await medicationsService.getActiveScheduleByDate(
+		userID,
+		medID,
+		targetDate
+	)) as MedScheduleDB;
 
-	const logRecord = (await medicationsService.logMedication(
-		body
-	)) as MedLogEntryDB;
+	const logRecord = (await medicationsService.logMedication({
+		...body,
+		scheduleID: activeSchedule.schedule_id,
+	})) as MedLogEntryDB;
 
 	if (logRecord instanceof Error) {
 		const errResp = getResponseError(logRecord, {
@@ -139,6 +149,67 @@ app.get("/getMedSummariesByDate", async (ctx: Context) => {
 		date: targetDate,
 		summaries: pillSummaries,
 		logs: logsForDate,
+	});
+	return ctx.json(response);
+});
+app.get("/getMedDetails", async (ctx: Context) => {
+	const { userID, medID: id } = ctx.req.query();
+	const medID = Number(id);
+
+	const rawMed = await medicationsService.getMedicationByID(medID);
+
+	if (rawMed instanceof Error) {
+		const errResp = getResponseError(rawMed, {
+			med: null,
+			logs: [],
+			schedules: {
+				active: null,
+				all: [],
+			},
+		});
+		return ctx.json(errResp);
+	}
+
+	const medication = normalizeMed(rawMed);
+	const response = getResponseOk({
+		med: medication,
+		logs: [],
+		schedules: {
+			active: null,
+			all: [],
+		},
+	});
+
+	return ctx.json(response);
+});
+app.get("/getSelectedMed", async (ctx: Context) => {
+	//
+	//
+});
+app.get("/getMedLogsByRange", async (ctx: Context) => {
+	const { userID, medID, startDate, endDate } = ctx.req.query();
+
+	const rawLogs = (await medicationsService.getLogsForMedByRange(userID, {
+		medID: Number(medID),
+		startDate,
+		endDate,
+	})) as MedLogEntryDB[];
+
+	if (rawLogs instanceof Error) {
+		const errResp = getResponseError(rawLogs, {
+			startDate,
+			endDate,
+			logs: [],
+		});
+		return ctx.json(errResp);
+	}
+
+	const logs = rawLogs.map(normalizeMedLog);
+
+	const response = getResponseOk({
+		startDate,
+		endDate,
+		logs: logs,
 	});
 
 	return ctx.json(response);

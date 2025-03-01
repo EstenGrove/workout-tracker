@@ -1,13 +1,20 @@
 import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
+	fetchMedLogsByRange,
 	fetchMedSummariesByDate,
 	fetchMedSummaryByDate,
+	fetchSelectedMed,
+	fetchUserMeds,
 	MedLogBody,
+	MedLogOptions,
 	MedSummaryByDate,
 	saveMedicationLog,
+	SelectedMedParams,
+	SelectedMedResp,
 } from "../../utils/utils_meds";
 import { AwaitedResponse } from "../types";
-import { MedLogEntry } from "./types";
+import { Medication, MedLogEntry } from "./types";
+import { DateRange } from "../../utils/utils_dates";
 
 interface MedLogParams {
 	userID: string;
@@ -33,6 +40,22 @@ export interface MedSummaryParams {
 	targetDate: string;
 }
 
+export interface UserMedsParams {
+	userID: string;
+}
+
+const getUserMeds = createAsyncThunk(
+	"meds/getUserMeds",
+	async (params: UserMedsParams) => {
+		const { userID } = params;
+		const response = (await fetchUserMeds(userID)) as AwaitedResponse<{
+			meds: Medication[];
+		}>;
+		const data = response.Data;
+
+		return data.meds as Medication[];
+	}
+);
 const getMedSummaryByDate = createAsyncThunk(
 	"medications/getMedSummaryByDate",
 	async (params: MedSummaryParams) => {
@@ -59,5 +82,40 @@ const getMedSummariesByDate = createAsyncThunk(
 		return data as MedSummaryByDate;
 	}
 );
+const getMedLogsByRange = createAsyncThunk(
+	"meds/getMedLogsByRange",
+	async (params: MedLogOptions) => {
+		const { userID, medID, startDate, endDate } = params;
+		const response = (await fetchMedLogsByRange(userID, {
+			medID,
+			startDate,
+			endDate,
+		})) as AwaitedResponse<{ logs: MedLogEntry[]; range: DateRange }>;
+		const data = response.Data;
 
-export { logMedication, getMedSummaryByDate, getMedSummariesByDate };
+		return data as { logs: MedLogEntry[]; range: DateRange };
+	}
+);
+const getSelectedMed = createAsyncThunk(
+	"meds/getSelectedMed",
+	async (params: SelectedMedParams) => {
+		const { userID, range, medID, scheduleID } = params;
+		const response = (await fetchSelectedMed(userID, {
+			range,
+			medID,
+			scheduleID,
+		})) as AwaitedResponse<SelectedMedResp>;
+		const data = response.Data;
+
+		return data as SelectedMedResp;
+	}
+);
+
+export {
+	logMedication,
+	getUserMeds,
+	getMedSummaryByDate,
+	getMedSummariesByDate,
+	getMedLogsByRange,
+	getSelectedMed,
+};

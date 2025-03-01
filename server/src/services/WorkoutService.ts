@@ -1,6 +1,14 @@
 import type { Pool } from "pg";
 import type { TQueryRow } from "../db/db.ts";
-import type { Activity, DateRange, WorkoutHistoryDB } from "./types.ts";
+import type {
+	Activity,
+	DateRange,
+	StreakDayDB,
+	TotalCaloriesDB,
+	TotalMinsDB,
+	TotalWorkoutsDB,
+	WorkoutHistoryDB,
+} from "./types.ts";
 
 export interface WorkoutDB {
 	workout_id: number;
@@ -42,40 +50,33 @@ export interface LogWorkoutVals {
 	recordedSteps: number;
 	recordedMiles: number;
 }
+export interface LogWorkoutBody {
+	userID: string;
+	activityType: Activity;
+	workoutID: number;
+	workoutDate: string;
+	startTime: string;
+	endTime: string;
+	recordedEffort: string;
+	recordedMins: number;
+	recordedWeight: number;
+	recordedReps: number;
+	recordedSets: number;
+	recordedSteps: number;
+	recordedMiles: number;
+}
+
+export interface WeekSummaryResp {
+	weekly_streak: StreakDayDB[];
+	total_mins: TotalMinsDB[];
+	total_calories: TotalCaloriesDB[];
+	total_workouts: TotalWorkoutsDB[];
+}
 
 class WorkoutService {
 	#db: Pool;
 	constructor(db: Pool) {
 		this.#db = db;
-	}
-	async getRecentWorkoutsByDate(userID: string, params: DateRange) {
-		try {
-			const query = `SELECT * FROM get_recent_workouts(
-				$1,
-				$2,
-				$3
-			)`;
-			const results = await this.#db.query(query, [
-				userID,
-				params.startDate,
-				params.endDate,
-			]);
-			const rows = results?.rows as WorkoutHistoryDB[];
-			return rows;
-		} catch (error) {
-			return error;
-		}
-	}
-	async getOpenWorkouts(userID: string, isActive: boolean = true) {
-		try {
-			const query = `SELECT * FROM get_open_workouts($1, $2)`;
-			const results = await this.#db.query(query, [userID, isActive]);
-			const rows = results?.rows as TQueryRow<WorkoutDB>[];
-
-			return rows;
-		} catch (error) {
-			return error;
-		}
 	}
 	// get all active workouts
 	async getAllWorkouts() {
@@ -290,6 +291,73 @@ class WorkoutService {
 			const results = await this.#db.query(query, params);
 			const row = results?.rows?.[0];
 			return row;
+		} catch (error) {
+			return error;
+		}
+	}
+	async getRecentWorkoutsByDate(userID: string, params: DateRange) {
+		try {
+			const query = `SELECT * FROM get_recent_workouts(
+				$1,
+				$2,
+				$3
+			)`;
+			const results = await this.#db.query(query, [
+				userID,
+				params.startDate,
+				params.endDate,
+			]);
+			const rows = results?.rows as WorkoutHistoryDB[];
+			return rows;
+		} catch (error) {
+			return error;
+		}
+	}
+	async getOpenWorkouts(userID: string, isActive: boolean = true) {
+		try {
+			const query = `SELECT * FROM get_open_workouts($1, $2)`;
+			const results = await this.#db.query(query, [userID, isActive]);
+			const rows = results?.rows as TQueryRow<WorkoutDB>[];
+
+			return rows;
+		} catch (error) {
+			return error;
+		}
+	}
+	async getWorkoutDetails(userID: string, workoutID: number) {
+		try {
+			const query = `SELECT * FROM get_workout_details(
+				$1,
+				$2
+			)`;
+			const results = await this.#db.query(query, [userID, workoutID]);
+			const row = results?.rows?.[0];
+
+			return row;
+		} catch (error) {
+			return error;
+		}
+	}
+	async getWorkoutSummary(
+		userID: string,
+		targetDate: string
+	): Promise<WeekSummaryResp | unknown> {
+		try {
+			const query = `SELECT * FROM get_workout_summary_for_date(
+				$1,
+				$2
+			)`;
+			// const query = `SELECT * FROM get_workout_summary_json(
+			// 	$1,
+			// 	$2
+			// )`;
+			const results = await this.#db.query(query, [userID, targetDate]);
+			console.log("results", results);
+			const row = results?.rows?.[0];
+			const data = row.get_workout_summary_for_date;
+			console.log("row", row);
+			console.log("data", data);
+			return data;
 		} catch (error) {
 			return error;
 		}

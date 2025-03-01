@@ -1,0 +1,33 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutTypes {
+	width: 100%;
+	width: 100%;
+	@include flex_row(center, center, wrap);
+	gap: 1rem 2rem;
+
+	&_item {
+		font-size: 1.3rem;
+		@include colCenter();
+		color: $text2;
+	}
+}
+
+.WorkoutType {
+	width: 7rem;
+	height: 5rem;
+	border-radius: 1rem;
+	border: $borderLight;
+	background-color: $foreground;
+	font-size: 1.4rem;
+	outline: none;
+	@include colCenter();
+
+	&_icon {
+		width: 2.5rem;
+		height: 2.5rem;
+		fill: $text3;
+	}
+}

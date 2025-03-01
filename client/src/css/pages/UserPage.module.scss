@@ -1,0 +1,40 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.UserPage {
+	width: 100%;
+
+	&_nav {
+		width: 100%;
+		@include rowCenter();
+	}
+
+	&_header {
+		width: 100%;
+		margin-top: 4rem;
+		@include colCenter();
+		gap: 2rem 0;
+
+		& h1 {
+			font-size: 3rem;
+		}
+	}
+	&_main {
+		@include fill_container;
+	}
+}
+
+$badgeSize: 8rem;
+$badgeFont: calc($badgeSize / 2.5);
+
+.UserBadge {
+	width: $badgeSize;
+	height: $badgeSize;
+	border-radius: 50%;
+	background-color: rgba(105, 25, 255, 0.2);
+	color: #fff;
+	font-size: $badgeFont;
+	font-weight: 700;
+	@include rowCenter();
+}

@@ -1,0 +1,56 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutFilters {
+	width: 100%;
+	max-width: 100%;
+	@include flex_row(flex-start, center);
+
+	&_count {
+		width: 10%;
+		font-size: 1.2rem;
+		color: $text3;
+		// border-right: $borderLight;
+		margin-right: 2px;
+	}
+
+	&_list {
+		overflow-x: auto;
+		padding: 0.5rem 0;
+		height: auto;
+		@include flex_row(flex-start, center);
+		gap: 0 0.7rem;
+		width: 90%;
+		height: auto;
+	}
+}
+
+.CategoryFilter {
+	width: max-content;
+	min-width: max-content;
+	padding: 0.5rem 1.5rem;
+	border-radius: 5rem;
+	border: $borderLight;
+	font-size: 1.5rem;
+	color: $text3;
+	background-color: $foreground;
+	outline: none;
+}
+.AllFilter {
+	width: max-content;
+	min-width: max-content;
+	padding: 0.5rem 1.5rem;
+	border-radius: 5rem;
+	border: $borderLight;
+	font-size: 1.5rem;
+	color: $text3;
+	background-color: $foreground;
+	outline: none;
+}
+
+.isSelected {
+	background-color: $accentBlue;
+	background-color: var(--blueGrey800);
+	color: #fff;
+}

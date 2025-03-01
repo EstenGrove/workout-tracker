@@ -82,6 +82,8 @@ const isSelectedDate = (
 const WeeklyHeader = ({ baseDate, onSelect, selectedDate }: Props) => {
 	const daysInWeek = getDaysInWeek(baseDate);
 
+	console.log("baseDate", baseDate);
+
 	return (
 		<div className={styles.WeeklyHeader}>
 			<div className={styles.WeeklyHeader_week}>

@@ -5,6 +5,7 @@ import DetailsCard from "../layout/DetailsCard";
 
 type Props = {
 	title: string;
+	medID: number;
 	totalPills: number;
 	pillsTaken: number;
 	pillsLeft: number;
@@ -94,11 +95,13 @@ const getExtraPills = (pillCounts: PillsAndDaysLeft) => {
 
 const PillSummary = ({
 	title = "Medication",
+	medID,
 	totalPills = 60,
 	pillsTaken = 47,
 	pillsLeft = 13,
 	daysLeft = 11,
 }: Props) => {
+	const to = String(medID);
 	const newTitle = addEllipsis(title, 15);
 	const pillLeftCss = getPillsLeftColor({
 		pillsLeft,
@@ -106,7 +109,7 @@ const PillSummary = ({
 	});
 	return (
 		<DetailsCard
-			to="details"
+			to={to}
 			icon="pill"
 			title={newTitle}
 			color="var(--accent-blue)"

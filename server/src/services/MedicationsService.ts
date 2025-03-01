@@ -1,9 +1,11 @@
 import type { Pool } from "pg";
 import type { TQueryRow } from "../db/db.ts";
 import type {
+	DateRange,
 	DaysLeftDB,
 	MedInfoDB,
 	MedLogEntryDB,
+	MedScheduleDB,
 	PillSummaryDB,
 	TakenPillsByRangeDB,
 	TotalPillsTakenDB,
@@ -12,6 +14,7 @@ import type {
 export interface LogMedBody {
 	userID: string;
 	medID: number;
+	scheduleID: number;
 	amountTaken: number;
 	action: "Taken" | "Skipped";
 	loggedAt: Date | string;
@@ -33,26 +36,49 @@ interface DaysLeftParams {
 	userID: string;
 }
 
+export interface LogSettingParams {
+	startDate: string;
+	endDate: string;
+	medID: number;
+}
+
 class MedicationsService {
 	#db: Pool;
 	constructor(db: Pool) {
 		this.#db = db;
 	}
 
+	async getActiveScheduleByDate(userID: string, medID: number, date: string) {
+		try {
+			const query = `SELECT * FROM get_active_schedule_by_med(
+				$1,
+				$2,
+				$3
+			)`;
+			const result = await this.#db.query(query, [userID, medID, date]);
+			const row = result?.rows?.[0] as MedScheduleDB;
+			return row as MedScheduleDB;
+		} catch (error) {
+			return error;
+		}
+	}
+
 	async logMedication(values: LogMedBody) {
 		// action: 'Taken' | 'Skipped'
-		const { userID, medID, amountTaken, action, loggedAt } = values;
+		const { userID, medID, scheduleID, amountTaken, action, loggedAt } = values;
 		try {
 			const query = `SELECT * FROM log_medication(
         $1,
         $2,
         $3,
         $4,
-        $5
+        $5,
+				$6
       )`;
 			const results = await this.#db.query(query, [
 				userID,
 				medID,
+				scheduleID,
 				loggedAt,
 				amountTaken,
 				action,
@@ -188,6 +214,28 @@ class MedicationsService {
 		}
 	}
 
+	async getLogsForMedByRange(userID: string, params: LogSettingParams) {
+		const { medID, startDate, endDate } = params;
+		try {
+			const query = `SELECT * FROM get_logged_meds_for_range(
+				$1,
+				$2,
+				$3,
+				$4
+			)`;
+			const results = await this.#db.query(query, [
+				userID,
+				medID,
+				startDate,
+				endDate,
+			]);
+			const rows = results?.rows;
+			return rows;
+		} catch (error) {
+			return error;
+		}
+	}
+
 	// Get all logs for a given date
 	async getLogsForMedByDate(
 		userID: string,
@@ -223,6 +271,18 @@ class MedicationsService {
 			)`;
 			const results = await this.#db.query(query, [userID, scheduleID]);
 			const row = results?.rows?.[0] as TotalPillsTakenDB;
+
+			return row;
+		} catch (error) {
+			return error;
+		}
+	}
+
+	async getMedicationByID(medID: number) {
+		try {
+			const query = `SELECT * FROM user_medications WHERE medication_id = $1`;
+			const results = await this.#db.query(query, [medID]);
+			const row = results?.rows?.[0];
 
 			return row;
 		} catch (error) {

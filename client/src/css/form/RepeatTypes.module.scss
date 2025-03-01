@@ -1,0 +1,20 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.RepeatType {
+	padding: 0.6rem 1.6rem;
+	border-radius: 5rem;
+	border: $borderLight;
+	font-size: 1.5rem;
+	outline: none;
+	color: $text3;
+	background-color: $foreground;
+}
+
+.RepeatTypes {
+	width: 100%;
+	@include flex_row(flex-start, flex-start, wrap);
+	gap: 1rem;
+	padding-left: 4rem;
+}

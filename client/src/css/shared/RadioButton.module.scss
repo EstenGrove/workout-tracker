@@ -1,0 +1,51 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+$localAccent: $accentBlue;
+
+.RadioButton {
+	width: -webkit-max-content;
+	width: -moz-max-content;
+	width: max-content;
+	height: -webkit-max-content;
+	height: -moz-max-content;
+	height: max-content;
+	@include flex_row(flex-start, center);
+	gap: 0 0.5rem;
+
+	&_input {
+		width: 2rem;
+		height: 2rem;
+		border-radius: 50%;
+		-webkit-appearance: none;
+		appearance: none;
+		border: 1px solid $accentBlue;
+	}
+	&_label {
+		position: relative;
+		font-size: 1.6rem;
+
+		&::after {
+			display: none;
+			content: "";
+			position: absolute;
+			top: 3.6px;
+			// left: -1.9rem;
+			left: -2.2rem;
+			width: 1.4rem;
+			height: 1.4rem;
+			border-radius: 50%;
+			// background-color: pink;
+		}
+	}
+}
+
+input[type="radio"]:checked + label::after {
+	display: block;
+	background-color: $localAccent;
+}
+input[type="radio"]:not(:checked) + label::after {
+	display: none;
+	background-color: transparent;
+}

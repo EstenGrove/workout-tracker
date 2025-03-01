@@ -1,0 +1,29 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.LogWorkout {
+	width: 100%;
+	@include colCenter();
+	gap: 2rem 0;
+	font-size: 2rem;
+}
+.SharedFields,
+.StrengthFields,
+.WalkFields {
+	width: 100%;
+	@include colCenter();
+	gap: 2rem 0;
+
+	&_row {
+		width: 100%;
+		@include colCenter();
+		gap: 0.3rem 0;
+		// margin: 2rem 0;
+	}
+	&_splitRow {
+		width: 100%;
+		@include flex_row(center, center);
+		gap: 0 1rem;
+	}
+}

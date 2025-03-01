@@ -1,0 +1,12 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.DemoPage {
+	width: 100%;
+	font-size: 1.6rem;
+
+	& div {
+		margin: 1rem 0;
+	}
+}

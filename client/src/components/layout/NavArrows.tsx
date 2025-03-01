@@ -5,13 +5,28 @@ import { useNavigate } from "react-router";
 type Props = {
 	showBack?: boolean;
 	showForward?: boolean;
+	onBack?: () => void;
+	onForward?: () => void;
 };
 
-const NavArrows = ({ showBack = true, showForward }: Props) => {
+const NavArrows = ({
+	showBack = true,
+	showForward,
+	onBack,
+	onForward,
+}: Props) => {
 	const navigate = useNavigate();
 
-	const goBack = () => navigate(-1);
-	const goForward = () => navigate(1);
+	const goBack = () => {
+		if (!onBack) return navigate(-1);
+
+		return onBack && onBack();
+	};
+	const goForward = () => {
+		if (!onForward) return navigate(1);
+
+		return onForward && onForward();
+	};
 
 	return (
 		<div className={styles.NavArrows}>

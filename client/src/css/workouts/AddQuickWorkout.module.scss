@@ -5,37 +5,72 @@
 .AddQuickWorkout {
 	width: 100%;
 	height: auto;
+	padding: 0 1rem;
+}
 
-	&_header {
-		width: 100%;
-		height: auto;
+.StepHeader {
+	width: 100%;
+	text-align: center;
+	margin-bottom: 3rem;
+
+	&_title {
 		font-size: 1.7rem;
-		text-align: center;
-		margin-bottom: 2rem;
+		color: $text1;
 	}
+}
 
-	&_types {
+.WorkoutNameStep {
+	width: 100%;
+
+	&_main {
 		width: 100%;
-		margin-bottom: 2rem;
-	}
+		padding: 0 2rem;
 
-	&_about {
-		width: 100%;
-
-		&_field {
+		&_row {
 			width: 100%;
-			margin-bottom: 2rem;
-
-			& label {
-				font-size: 1.6rem;
-				color: $text3;
-			}
+			margin: 2rem 0;
+			margin-bottom: 3rem;
+		}
+		label {
+			font-size: 1.5rem;
+			color: $text3;
 		}
 	}
-	&_mins {
+}
+.DurationStep {
+	width: 100%;
+
+	&_main {
 		width: 100%;
-		display: block;
-		margin-top: 4rem;
+		padding: 0 2rem;
+
+		&_row {
+			width: 100%;
+			margin: 2rem 0;
+			margin-bottom: 3rem;
+		}
+		label {
+			font-size: 1.5rem;
+			color: $text3;
+		}
+	}
+}
+.ActivityStep {
+	width: 100%;
+
+	&_main {
+		width: 100%;
+		padding: 0 2rem;
+
+		&_row {
+			width: 100%;
+			margin: 2rem 0;
+			margin-bottom: 3rem;
+		}
+		label {
+			font-size: 1.5rem;
+			color: $text3;
+		}
 	}
 }
 
@@ -62,13 +97,4 @@
 [data-selected="true"] {
 	background-color: $accentBlue;
 	color: #fff;
-}
-
-label {
-	font-size: 1.6rem;
-	color: $text3;
-
-	& > span {
-		color: $text2;
-	}
 }

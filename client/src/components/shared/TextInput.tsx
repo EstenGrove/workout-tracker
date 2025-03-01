@@ -27,6 +27,8 @@ const TextInput = ({ name, id, value, onChange, inputRef, ...rest }: Props) => {
 				id={id}
 				value={value}
 				onChange={handleChange}
+				onContextMenu={(e) => e.preventDefault()}
+				onFocus={(ref) => ref.currentTarget.select()}
 				className={styles.TextInput_input}
 				autoComplete="on"
 				{...rest}

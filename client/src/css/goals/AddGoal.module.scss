@@ -1,0 +1,32 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.AddGoal {
+	width: 100%;
+	padding: 0 1rem;
+
+	&_header {
+		width: 100%;
+
+		&_title {
+			font-size: 2rem;
+			text-align: center;
+		}
+	}
+	&_main {
+		width: 100%;
+		height: auto;
+		padding-top: 4rem;
+
+		&_row {
+			width: 100%;
+			margin-bottom: 2rem;
+
+			&_item {
+				width: 100%;
+				// @include rowCenter();
+			}
+		}
+	}
+}

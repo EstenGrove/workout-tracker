@@ -1,5 +1,5 @@
 import { workoutService } from "../services/index.ts";
-import type { WorkoutHistoryDB } from "../services/types.ts";
+import type { Activity, WorkoutHistoryDB } from "../services/types.ts";
 import type { LogWorkoutVals } from "../services/WorkoutService.ts";
 
 const logWorkout = async (

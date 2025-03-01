@@ -2,12 +2,15 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TStatus } from "../types";
 import { Medication, MedLogEntry, SelectedMed, SummaryForDate } from "./types";
 import {
+	getMedLogsByRange,
 	getMedSummariesByDate,
 	getMedSummaryByDate,
+	getSelectedMed,
+	getUserMeds,
 	logMedication,
 } from "./operations";
-import { MedSummaryByDate } from "../../utils/utils_meds";
-import { formatDate } from "../../utils/utils_dates";
+import { MedSummaryByDate, SelectedMedResp } from "../../utils/utils_meds";
+import { DateRange, formatDate } from "../../utils/utils_dates";
 import { RootState } from "../../store/store";
 
 interface MedicationsSlice {
@@ -40,8 +43,27 @@ const medicationsSlice = createSlice({
 		) {
 			state.selectedMed = action.payload;
 		},
+		resetSelectedMed(state: MedicationsSlice) {
+			state.selectedMed = null;
+		},
+		resetMedLogs(state: MedicationsSlice) {
+			state.logs = [];
+		},
 	},
 	extraReducers(builder) {
+		// Fetch all user meds
+		builder
+			.addCase(getUserMeds.pending, (state: MedicationsSlice) => {
+				state.status = "PENDING";
+			})
+			.addCase(
+				getUserMeds.fulfilled,
+				(state: MedicationsSlice, action: PayloadAction<Medication[]>) => {
+					state.status = "FULFILLED";
+					state.meds = action.payload;
+				}
+			);
+
 		builder
 			.addCase(logMedication.pending, (state: MedicationsSlice) => {
 				state.status = "PENDING";
@@ -86,6 +108,35 @@ const medicationsSlice = createSlice({
 						summaries,
 						logs,
 					};
+				}
+			);
+
+		// Fetch logs for a given range
+		builder
+			.addCase(getMedLogsByRange.pending, (state: MedicationsSlice) => {
+				state.status = "PENDING";
+			})
+			.addCase(
+				getMedLogsByRange.fulfilled,
+				(
+					state: MedicationsSlice,
+					action: PayloadAction<{ logs: MedLogEntry[]; range: DateRange }>
+				) => {
+					state.status = "FULFILLED";
+					state.logs = action.payload.logs;
+				}
+			);
+
+		// Fetch selected med details
+		builder
+			.addCase(getSelectedMed.pending, (state: MedicationsSlice) => {
+				state.status = "PENDING";
+			})
+			.addCase(
+				getSelectedMed.fulfilled,
+				(state: MedicationsSlice, action: PayloadAction<SelectedMedResp>) => {
+					state.status = "FULFILLED";
+					state.selectedMed = action.payload;
 				}
 			);
 	},

@@ -1,0 +1,161 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutTimer {
+	width: 100%;
+	border-radius: 5rem 5rem 0 0;
+	border-top: $borderLight;
+	padding: 0.3rem 0;
+
+	&_title {
+		font-size: 2rem;
+		color: $text3;
+		font-weight: 800;
+		text-align: center;
+		margin: 2rem 0;
+	}
+	&_controls {
+		width: 100%;
+		margin-top: 3rem;
+	}
+}
+
+// Timer display: 00:00
+.TimerDisplay {
+	width: 100%;
+	@include colCenter();
+	gap: 0.3rem 0;
+	margin-top: 2rem;
+
+	&_startedAt {
+		height: 2.5rem;
+		font-size: 1.3rem;
+		color: $text2;
+		color: var(--blueGrey700);
+		// text-align: left;
+	}
+	&_time {
+		font-size: 5.5rem;
+		font-weight: 800;
+		text-align: center;
+	}
+}
+
+// Play, pause, stop & reset
+.TimerControls {
+	width: 100%;
+	@include flex_row(center, center);
+	gap: 0 1.5rem;
+}
+
+.PauseButton {
+	width: 4rem;
+	height: 4rem;
+	border-radius: 1rem;
+	background-color: var(--blueGrey800);
+	border: 1px solid var(--blueGrey800);
+	outline: none;
+
+	&_icon {
+		width: 2.5rem;
+		height: 2.5rem;
+		fill: #fff;
+	}
+
+	&:disabled {
+		cursor: pointer;
+		opacity: 0.4;
+	}
+}
+.StartButton {
+	padding: 0.5rem 2.5rem;
+	height: 4rem;
+	border-radius: 1rem;
+	border: none;
+	outline: none;
+	background-color: $accentBlue;
+	@include rowCenter();
+	gap: 0 0.2rem;
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: $text1;
+
+	&_icon {
+		width: 2.5rem;
+		height: 2.5rem;
+		fill: $text1;
+	}
+	&:disabled {
+		cursor: pointer;
+		opacity: 0.4;
+	}
+}
+.EndButton {
+	padding: 0.5rem 2.5rem;
+	height: 4rem;
+	border-radius: 1rem;
+	border: none;
+	outline: none;
+	background-color: $accentRed;
+	@include rowCenter();
+	gap: 0 0.2rem;
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: $text1;
+
+	&_icon {
+		width: 2.5rem;
+		height: 2.5rem;
+		fill: $text1;
+	}
+	&:disabled {
+		cursor: pointer;
+		opacity: 0.4;
+	}
+}
+.ResumeButton {
+	padding: 0.5rem 2.5rem;
+	height: 4rem;
+	border-radius: 1rem;
+	border: none;
+	outline: none;
+	background-color: $accentGreen;
+	@include rowCenter();
+	gap: 0 0.2rem;
+	font-size: 1.6rem;
+	font-weight: 700;
+	color: #fff;
+
+	&_icon {
+		width: 2.5rem;
+		height: 2.5rem;
+		fill: $text1;
+	}
+	&:disabled {
+		cursor: pointer;
+		opacity: 0.4;
+	}
+}
+
+.EndedWorkout {
+	@include colCenter();
+	gap: 0.3rem 0;
+	color: #fff;
+	margin-top: 3rem;
+
+	&_title {
+		font-size: 2.5rem;
+	}
+
+	&_info {
+		font-size: 1.6rem;
+		color: $text3;
+	}
+
+	&_icon {
+		width: 4.5rem;
+		height: 4.5rem;
+		fill: $accentGreen;
+	}
+}

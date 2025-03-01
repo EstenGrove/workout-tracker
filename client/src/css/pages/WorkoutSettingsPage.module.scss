@@ -1,0 +1,12 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.WorkoutSettingsPage {
+	width: 100%;
+
+	&_nav {
+		width: 100%;
+		margin-top: 2rem;
+	}
+}

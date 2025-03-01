@@ -30,6 +30,13 @@ export interface Medication {
 	createdDate: Date | string;
 }
 
+export interface ActiveMedicationInfo {
+	medication: Medication;
+	schedules: MedicationSchedule[];
+	activeSchedule: MedicationSchedule;
+	logs?: MedLogEntry[];
+}
+
 // Full Schedule record
 export interface MedicationSchedule {
 	userID: string;
@@ -57,7 +64,7 @@ export interface MedScheduleSummary {
 export interface SelectedMed {
 	med: Medication;
 	logs: MedLogEntry[];
-	schedule: MedScheduleSummary;
+	schedule: MedicationSchedule;
 }
 
 export interface SummaryForDate {
