@@ -55,6 +55,7 @@ const normalizeWorkout = (workout: WorkoutDB): WorkoutClient => {
 	const clientWorkout: WorkoutClient = {
 		workoutID: workout.workout_id,
 		activityID: workout.activity_id,
+		activityType: workout?.activity_type,
 		planID: workout.plan_id,
 		userID: workout.user_id,
 		workoutName: workout.workout_name,

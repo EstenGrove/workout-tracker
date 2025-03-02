@@ -1,11 +1,7 @@
 import { useState } from "react";
-import styles from "../../css/workouts/LogWorkout.module.scss";
+// import styles from "../../css/workouts/LogWorkout.module.scss";
 import { CurrentUser } from "../../features/user/types";
-import DatePicker from "../shared/DatePicker";
-import TimePicker from "../shared/TimePicker";
 import { formatDate, formatTime } from "../../utils/utils_dates";
-import Select from "../shared/Select";
-import CounterInput from "../shared/CounterInput";
 import {
 	LogWorkoutValues,
 	prepareWorkoutHistory,
@@ -14,13 +10,15 @@ import {
 	ActivityStep,
 	DetailsByTypeStep,
 	EffortStep,
+	SelectWorkoutStep,
 	WorkoutDateStep,
 	WorkoutSummaryStep,
 } from "./LogWorkoutSteps";
 import MultiStepModal, { StepItem } from "../shared/MultiStepModal";
 import { useAppDispatch } from "../../store/store";
 import { saveWorkoutHistory } from "../../features/workouts/operations";
-import { addMinutes, differenceInMinutes } from "date-fns";
+import { useSelector } from "react-redux";
+import { selectUserWorkouts } from "../../features/workouts/workoutsSlice";
 
 type Props = {
 	currentUser: CurrentUser;
@@ -52,7 +50,10 @@ const initialState: LogWorkoutValues = {
 
 const LogWorkout = ({ currentUser, onClose }: Props) => {
 	const dispatch = useAppDispatch();
+	const workouts = useSelector(selectUserWorkouts);
 	const [values, setValues] = useState<LogWorkoutValues>(initialState);
+
+	console.log("workouts", workouts);
 
 	const onChange = (name: string, value: string | number) => {
 		setValues({
@@ -65,18 +66,6 @@ const LogWorkout = ({ currentUser, onClose }: Props) => {
 			...values,
 			[name]: value,
 		});
-	};
-
-	const onDateTimeSelect = (name: string, value: Date | string | number) => {
-		if (name === "endTime") {
-			const diff = differenceInMinutes(value, values.startTime);
-			onSelect(name, value);
-			onSelect("workoutMins", diff);
-		} else if (name === "workoutMins") {
-			const end = addMinutes(values.startTime, Number(value));
-			onSelect(name, value);
-			onSelect("endTime", end);
-		}
 	};
 
 	// get prev step when clicking 'Back' from Workout Summary step
@@ -97,19 +86,19 @@ const LogWorkout = ({ currentUser, onClose }: Props) => {
 		// types not requiring more details (eg. should skip Details step)
 		const skipDetailsTypes = ["Timed", "Cardio", "Other"];
 		if (skipDetailsTypes.includes(activityType)) {
-			return 5;
+			return 6;
 		} else {
-			return 4;
+			return 5;
 		}
 	};
 
 	const saveWorkoutLog = () => {
 		const { userID } = currentUser;
-		const newValues = prepareWorkoutHistory(values);
+		const withUser = { ...values, userID };
+		const newValues = prepareWorkoutHistory(withUser, workouts);
 		const params = { userID, newLog: newValues };
 
-		console.log("params", params);
-		// dispatch(saveWorkoutHistory(params));
+		dispatch(saveWorkoutHistory(params));
 		return onClose();
 	};
 
@@ -125,13 +114,12 @@ const LogWorkout = ({ currentUser, onClose }: Props) => {
 		},
 		{
 			id: 2,
-			title: "When was this workout?",
+			title: "Which Workout?",
 			content: (
-				<WorkoutDateStep
+				<SelectWorkoutStep
 					values={values}
 					onChange={onChange}
 					onSelect={onSelect}
-					// onSelect={onDateTimeSelect}
 				/>
 			),
 			prev: 1,
@@ -139,15 +127,28 @@ const LogWorkout = ({ currentUser, onClose }: Props) => {
 		},
 		{
 			id: 3,
+			title: "When was this workout?",
+			content: (
+				<WorkoutDateStep
+					values={values}
+					onChange={onChange}
+					onSelect={onSelect}
+				/>
+			),
+			prev: 2,
+			next: 4,
+		},
+		{
+			id: 4,
 			title: "Effort for this workout?",
 			content: (
 				<EffortStep values={values} onChange={onChange} onSelect={onSelect} />
 			),
-			prev: 2,
+			prev: 3,
 			next: getNextStep(),
 		},
 		{
-			id: 4,
+			id: 5,
 			title: "Workout Details",
 			content: (
 				<DetailsByTypeStep
@@ -156,11 +157,11 @@ const LogWorkout = ({ currentUser, onClose }: Props) => {
 					onSelect={onSelect}
 				/>
 			),
-			prev: 3,
-			next: 5,
+			prev: 4,
+			next: 6,
 		},
 		{
-			id: 5,
+			id: 6,
 			title: "Workout Summary",
 			content: (
 				<WorkoutSummaryStep

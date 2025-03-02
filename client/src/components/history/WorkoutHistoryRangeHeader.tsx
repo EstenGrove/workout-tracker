@@ -3,7 +3,6 @@ import { ReactNode } from "react";
 import { format } from "date-fns";
 import {
 	formatCustomDate,
-	formatDate,
 	getDateRangeFromPreset,
 	RangePreset,
 } from "../../utils/utils_dates";

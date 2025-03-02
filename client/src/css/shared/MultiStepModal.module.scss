@@ -32,8 +32,8 @@
 
 	&_main {
 		width: 100%;
-		height: auto;
-		height: 48rem;
+		height: 36rem;
+		// height: 48rem;
 		padding: 2rem;
 		@include scrollbar();
 		overflow-y: auto;

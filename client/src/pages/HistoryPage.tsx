@@ -21,6 +21,7 @@ import LogWorkout from "../components/workouts/LogWorkout";
 import WorkoutHistoryHeader from "../components/history/WorkoutHistoryHeader";
 import WorkoutHistoryList from "../components/history/WorkoutHistoryList";
 import WorkoutHistoryRangeHeader from "../components/history/WorkoutHistoryRangeHeader";
+import { getUserWorkouts } from "../features/workouts/operations";
 
 const HistoryPage = () => {
 	const dispatch = useAppDispatch();
@@ -95,6 +96,19 @@ const HistoryPage = () => {
 			isMounted = false;
 		};
 	}, [getHistoryData, rangePreset]);
+
+	useEffect(() => {
+		let isMounted = true;
+		if (!isMounted) return;
+
+		if (currentUser.userID) {
+			dispatch(getUserWorkouts(currentUser.userID));
+		}
+
+		return () => {
+			isMounted = false;
+		};
+	}, [currentUser.userID, dispatch]);
 
 	return (
 		<div className={styles.HistoryPage}>

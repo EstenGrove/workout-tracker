@@ -11,16 +11,6 @@ type Props = {
 	activityData: object;
 };
 
-const NoData = () => {
-	return (
-		<div className="NoData">
-			<svg className="NoData_icon">
-				<use xlinkHref={`${sprite}#icon-`}></use>
-			</svg>
-		</div>
-	);
-};
-
 const getDetailsUrl = (type: Activity, date: string) => {
 	const basePath =
 		"/recent?" +
@@ -33,13 +23,12 @@ const getDetailsUrl = (type: Activity, date: string) => {
 };
 
 const RecentActivity = ({
-	title = "Recent Steps",
+	title = "Recent Mins.",
 	icon = "recentActivity",
 	activityData = {},
 }: Props) => {
 	// based off activity type & date
 	const detailsUrl = getDetailsUrl("Walk", new Date().toString());
-	console.log("activityData", activityData);
 
 	return (
 		<div className={styles.RecentActivity}>

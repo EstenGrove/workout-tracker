@@ -88,8 +88,16 @@ app.get("/getOpenWorkouts", async (ctx: Context) => {
 app.post("/logWorkout", async (ctx: Context) => {
 	const body = await ctx.req.json<LogWorkoutVals>();
 	const { userID, newLog } = body;
+	console.log("body", body);
+	console.log("newLog", newLog);
+	console.log("activityType", newLog.activityType);
 
-	const newHistory = (await logWorkout(userID, newLog)) as WorkoutHistoryDB;
+	const newHistory = (await logWorkout(userID, {
+		...newLog,
+		workoutID: newLog.workoutID,
+	})) as WorkoutHistoryDB;
+
+	console.log("newHistory", newHistory);
 
 	if (newHistory instanceof Error) {
 		const errResp = getResponseError(newHistory, {

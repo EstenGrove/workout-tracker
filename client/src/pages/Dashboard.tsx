@@ -49,7 +49,7 @@ const Dashboard = () => {
 			/>
 			<div className={styles.Dashboard_main}>
 				<div className={styles.Dashboard_main_row}>
-					<RecentActivity />
+					<RecentActivity title="Recent Mins." />
 				</div>
 				<div className={styles.Dashboard_main_row}>
 					<ActivityCard title="Steps" icon="badge" color="var(--accent-green)">

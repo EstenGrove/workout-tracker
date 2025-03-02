@@ -2,17 +2,28 @@ import styles from "../../css/workouts/LogWorkoutSteps.module.scss";
 import sprite from "../../assets/icons/main2.svg";
 import { Activity } from "../../features/activity/types";
 import { ACTIVITIES as activityTypes } from "../../utils/utils_activity";
-import { Effort, LogWorkoutValues } from "../../utils/utils_workouts";
-import { ComponentPropsWithoutRef } from "react";
+import {
+	calculateEndTimeFromDuration,
+	Effort,
+	LogWorkoutValues,
+} from "../../utils/utils_workouts";
+import {
+	ComponentPropsWithoutRef,
+	useCallback,
+	useEffect,
+	useMemo,
+} from "react";
+import { formatDate, formatTime } from "../../utils/utils_dates";
+import { useSelector } from "react-redux";
+import { selectUserWorkouts } from "../../features/workouts/workoutsSlice";
 import DatePicker from "../shared/DatePicker";
 import TimePicker from "../shared/TimePicker";
-import Select from "../shared/Select";
+import Select, { SelectOption } from "../shared/Select";
 import CounterInput from "../shared/CounterInput";
 import MinutesSelector from "../shared/MinutesSelector";
 import RangeInput from "../shared/RangeInput";
 import TimerInput from "../shared/TimerInput";
 import ActivityType from "../activity/ActivityType";
-import { formatDate } from "../../utils/utils_dates";
 
 type StepProps = {
 	values: LogWorkoutValues;
@@ -278,13 +289,71 @@ const ActivityStep = ({ values, onSelect }: StepProps) => {
 		</div>
 	);
 };
+const SelectWorkoutStep = ({ values, onSelect }: StepProps) => {
+	const { activityType } = values;
+	const workouts = useSelector(selectUserWorkouts);
+	const workoutsForType: SelectOption[] = useMemo(() => {
+		if (!activityType) {
+			return workouts.map((option) => ({
+				label: option.workoutName,
+				value: option.workoutName,
+			}));
+		}
+
+		return workouts
+			.filter((workout) => workout.activityType === activityType)
+			.map((option) => ({
+				label: option.workoutName,
+				value: option.workoutName,
+			}));
+	}, [activityType, workouts]);
+
+	// auto-select the workout by activity type, if only one exists!
+	const autoSelect = useCallback(() => {
+		if (workoutsForType.length === 1) {
+			const name = workoutsForType[0].value;
+			onSelect("workout", name);
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, []);
+
+	useEffect(() => {
+		let isMounted = true;
+		if (!isMounted) return;
+		if (activityType && workoutsForType) {
+			autoSelect();
+		}
+
+		return () => {
+			isMounted = false;
+		};
+	}, [activityType, autoSelect, workoutsForType]);
+
+	return (
+		<div className={styles.SelectWorkoutStep}>
+			<StepHeader title="Which workout?" />
+			<div className={styles.SelectWorkoutStep_main}>
+				<Select
+					name="workout"
+					id="workout"
+					value={(values.workout as string) || workoutsForType[0].value}
+					onChange={onSelect}
+					options={workoutsForType}
+					style={{ width: "100%" }}
+				/>
+			</div>
+		</div>
+	);
+};
+
+const showStartAndEnd = false;
+
 const WorkoutDateStep = ({ values, onSelect }: StepProps) => {
 	return (
 		<div className={styles.WorkoutDateStep}>
 			<StepHeader title="When did this workout occur?" />
 			<div className={styles.WorkoutDateStep_main}>
 				<div className={styles.WorkoutDateStep_main_field}>
-					{/* <label htmlFor="workoutDate">Workout date</label> */}
 					<DatePicker
 						id="workoutDate"
 						name="workoutDate"
@@ -293,26 +362,42 @@ const WorkoutDateStep = ({ values, onSelect }: StepProps) => {
 					/>
 				</div>
 
-				<div className={styles.WorkoutDateStep_main_split}>
-					<div className={styles.WorkoutDateStep_main_split_item}>
+				{showStartAndEnd && (
+					<div className={styles.WorkoutDateStep_main_split}>
+						<div className={styles.WorkoutDateStep_main_split_item}>
+							<div>Start time</div>
+							<TimePicker
+								id="startTime"
+								name="startTime"
+								onChange={onSelect}
+								value={values.startTime as string}
+							/>
+						</div>
+						<div className={styles.WorkoutDateStep_main_split_item}>
+							<div>End time</div>
+							<TimePicker
+								id="endTime"
+								name="endTime"
+								onChange={onSelect}
+								value={values.endTime as string}
+							/>
+						</div>
+					</div>
+				)}
+
+				{!showStartAndEnd && (
+					<div className={styles.WorkoutDateStep_main_field}>
 						<div>Start time</div>
 						<TimePicker
 							id="startTime"
 							name="startTime"
 							onChange={onSelect}
 							value={values.startTime as string}
+							style={{ width: "100%" }}
 						/>
 					</div>
-					<div className={styles.WorkoutDateStep_main_split_item}>
-						<div>End time</div>
-						<TimePicker
-							id="endTime"
-							name="endTime"
-							onChange={onSelect}
-							value={values.endTime as string}
-						/>
-					</div>
-				</div>
+				)}
+
 				<div className={styles.WorkoutDateStep_main_minsfield}>
 					<label htmlFor="workoutMins">How long was this workout?</label>
 					<div className={styles.WorkoutDateStep_main_minsfield_mins}>
@@ -428,7 +513,14 @@ const StrengthSummary = ({ values }: StepProps) => {
 	);
 };
 const TimeDetailsSummary = ({ values }: StepProps) => {
-	const { workoutMins, workoutDate } = values;
+	const { startTime: rawStart, workoutMins, workoutDate } = values;
+	const startTime = rawStart as string;
+	const endTime = calculateEndTimeFromDuration({
+		startTime: startTime,
+		date: workoutDate,
+		mins: workoutMins,
+	});
+	const endStr = formatTime(endTime, "short");
 	return (
 		<div className={styles.TimeDetailsSummary}>
 			<div className={styles.TimeDetailsSummary_item}>
@@ -445,6 +537,9 @@ const TimeDetailsSummary = ({ values }: StepProps) => {
 				</svg>
 				<span>
 					Duration: <b>{workoutMins}mins</b>
+					<span>
+						{"  "}({startTime} to {endStr})
+					</span>
 				</span>
 			</div>
 		</div>
@@ -495,6 +590,7 @@ export {
 	ActivityStep,
 	WorkoutDateStep,
 	EffortStep,
+	SelectWorkoutStep,
 	DetailsByTypeStep,
 	WorkoutSummaryStep,
 };

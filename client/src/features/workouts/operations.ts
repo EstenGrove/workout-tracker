@@ -3,7 +3,7 @@ import {
 	fetchUserWorkouts,
 	fetchUserWorkoutsByDate,
 	fetchUserWorkoutSummaryByDate,
-	LogWorkoutValues,
+	LogWorkoutPayload,
 	saveWorkoutHistoryLog,
 } from "../../utils/utils_workouts";
 import { AwaitedResponse } from "../types";
@@ -78,7 +78,7 @@ const getWorkoutSummaryByDate = createAsyncThunk(
 
 interface LogWorkoutParams {
 	userID: string;
-	newLog: LogWorkoutValues;
+	newLog: LogWorkoutPayload;
 }
 
 // Records a single workout history entry for a historical workout
