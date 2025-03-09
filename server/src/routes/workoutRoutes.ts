@@ -152,5 +152,14 @@ app.get("/getWorkoutSummaryByDate", async (ctx: Context) => {
 
 	return ctx.json(response);
 });
+app.get("/getUserWorkoutsByDate", async (ctx: Context) => {
+	const { userID, targetDate } = ctx.req.query();
+
+	const response = getResponseOk({
+		userWorkouts: [],
+	});
+
+	return ctx.json(response);
+});
 
 export default app;

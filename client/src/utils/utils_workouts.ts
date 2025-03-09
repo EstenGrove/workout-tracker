@@ -214,8 +214,12 @@ const prepareWorkoutHistory = (
 	workouts: Workout[]
 ): LogWorkoutPayload => {
 	const newTimes = prepareStartAndEndDuration(values);
-	const workoutID = workouts.find((w) => w.workoutName === values.workout)
-		?.workoutID as number;
+	const matchingWorkout = workouts.find((w) => {
+		return (
+			w.workoutName === values.workout && w.activityType === values.activityType
+		);
+	});
+	const workoutID = matchingWorkout?.workoutID ?? (10 as number);
 
 	return {
 		userID: values.userID,

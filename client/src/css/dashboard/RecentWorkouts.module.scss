@@ -4,6 +4,7 @@
 
 .RecentWorkouts {
 	width: 100%;
+	height: auto;
 	margin-top: 2rem;
 
 	&_header {
@@ -12,19 +13,30 @@
 		color: $text3;
 		padding-left: 0.5rem;
 		@include flex_row(flex-start, flex-start);
+		gap: 0 1rem;
 
 		& i {
 			font-style: normal;
 			font-size: 1.6rem;
 			color: $text2;
+			align-self: flex-end;
+		}
+
+		& a {
+			font-size: 1.4rem;
+			color: $accentBlue;
 			margin-left: auto;
+			align-self: flex-end;
+			text-decoration: none;
 		}
 	}
 
 	&_list {
 		margin-top: -2rem;
 		width: 100%;
+		// border: 1px solid red;
 		height: 40rem;
+		max-height: auto;
 		overflow-y: scroll;
 		list-style: none;
 		@include colCenter();

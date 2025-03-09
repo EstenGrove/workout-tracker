@@ -86,6 +86,9 @@ const API_ENDPOINTS = {
 	shared: {
 		getSharedAppData: "/shared/getSharedAppData",
 	},
+	dashboard: {
+		getSummary: "/dashboard/getDashboardSummary",
+	},
 };
 
 export const {
@@ -93,6 +96,7 @@ export const {
 	workouts: workoutApis,
 	shared: sharedApis,
 	history: historyApis,
+	dashboard: dashboardApis,
 } = API_ENDPOINTS;
 
 export {

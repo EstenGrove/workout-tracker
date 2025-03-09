@@ -1,14 +1,15 @@
 import styles from "../../css/dashboard/RecentActivity.module.scss";
-import sprite from "../../assets/icons/main.svg";
 import { iconsMap } from "../../utils/utils_icons";
 import DetailsCard from "../layout/DetailsCard";
 import { NavLink } from "react-router";
 import { Activity } from "../../features/activity/types";
+import RecentMinsForWeek from "./RecentMinsForWeek";
+import { WeeklyMinsByDate } from "../../features/dashboard/types";
 
 type Props = {
 	title: string;
-	icon: keyof typeof iconsMap;
-	activityData: object;
+	icon?: keyof typeof iconsMap;
+	activityData: WeeklyMinsByDate[];
 };
 
 const getDetailsUrl = (type: Activity, date: string) => {
@@ -25,7 +26,7 @@ const getDetailsUrl = (type: Activity, date: string) => {
 const RecentActivity = ({
 	title = "Recent Mins.",
 	icon = "recentActivity",
-	activityData = {},
+	activityData = [],
 }: Props) => {
 	// based off activity type & date
 	const detailsUrl = getDetailsUrl("Walk", new Date().toString());
@@ -45,8 +46,7 @@ const RecentActivity = ({
 					icon={icon}
 					color="var(--accent-blue)"
 				>
-					{/* SOME UI HERE */}
-					{/* SOME UI HERE */}
+					<RecentMinsForWeek recentMins={activityData} />
 				</DetailsCard>
 			</div>
 		</div>

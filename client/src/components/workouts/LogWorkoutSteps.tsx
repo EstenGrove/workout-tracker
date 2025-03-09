@@ -331,14 +331,18 @@ const SelectWorkoutStep = ({ values, onSelect }: StepProps) => {
 
 	return (
 		<div className={styles.SelectWorkoutStep}>
-			<StepHeader title="Which workout?" />
+			<StepHeader title="Which workout?" />{" "}
 			<div className={styles.SelectWorkoutStep_main}>
 				<Select
 					name="workout"
 					id="workout"
-					value={(values.workout as string) || workoutsForType[0].value}
+					value={values.workout as string}
 					onChange={onSelect}
-					options={workoutsForType}
+					defaultValue="--Select--"
+					options={[
+						{ value: "Select", label: "--Select--" },
+						...workoutsForType,
+					]}
 					style={{ width: "100%" }}
 				/>
 			</div>

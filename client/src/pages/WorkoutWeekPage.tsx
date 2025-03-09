@@ -1,7 +1,7 @@
 import { useEffect, useCallback, useState } from "react";
 import styles from "../css/pages/WorkoutWeekPage.module.scss";
 import { useQueryParams } from "../hooks/useQueryParams";
-import { useAppDispatch } from "../store/store";
+import { RootState, useAppDispatch } from "../store/store";
 import { formatDate } from "../utils/utils_dates";
 import { useSelector } from "react-redux";
 import { selectCurrentUser } from "../features/user/userSlice";
@@ -16,22 +16,32 @@ import { StreakDay } from "../features/workouts/types";
 import { startOfWeek } from "date-fns";
 import CardsSection from "../components/layout/CardsSection";
 import TodaysWorkouts from "../components/workouts/TodaysWorkouts";
+import {
+	selectIsLoading,
+	selectUserWorkouts,
+	selectWorkoutSummary,
+} from "../features/workouts/workoutsSlice";
+import Loader from "../components/layout/Loader";
 
 const fakeStreak: StreakDay[] = [
-	{ date: "2025-02-16", mins: 7, goal: 10 }, // Sunday
-	{ date: "2025-02-17", mins: 3, goal: 10 },
-	{ date: "2025-02-18", mins: 18, goal: 10 },
-	{ date: "2025-02-19", mins: 13, goal: 10 },
-	{ date: "2025-02-20", mins: 27, goal: 10 },
-	{ date: "2025-02-21", mins: 4, goal: 10 },
-	{ date: "2025-02-22", mins: 0, goal: 10 }, // Saturday
+	{ date: "2025-02-16", mins: 7, goal: 10, weekDay: "Sunday" }, // Sunday
+	{ date: "2025-02-17", mins: 3, goal: 10, weekDay: "Monday" },
+	{ date: "2025-02-18", mins: 18, goal: 10, weekDay: "Tuesday" },
+	{ date: "2025-02-19", mins: 13, goal: 10, weekDay: "Wednesday" },
+	{ date: "2025-02-20", mins: 27, goal: 10, weekDay: "Thursday" },
+	{ date: "2025-02-21", mins: 4, goal: 10, weekDay: "Friday" },
+	{ date: "2025-02-22", mins: 0, goal: 10, weekDay: "Saturday" }, // Saturday
 ];
 
 const WorkoutWeekPage = () => {
 	const defaultDate = new Date();
 	const dispatch = useAppDispatch();
-	const { getParams, setParams } = useQueryParams();
 	const currentUser = useSelector(selectCurrentUser);
+	const todaysWorkouts = useSelector(selectUserWorkouts);
+	const todaysSummary = useSelector(selectWorkoutSummary);
+	const isLoading = useSelector(selectIsLoading);
+
+	const { getParams, setParams } = useQueryParams();
 	const base = getParams("selectedDate") as string;
 	const baseDate = formatDate(base || defaultDate, "long");
 	const [selectedDate, setSelectedDate] = useState<string>(baseDate);
@@ -56,7 +66,7 @@ const WorkoutWeekPage = () => {
 			endDate: selectedDate,
 		};
 
-		// dispatch(getUserWorkoutsByDate(params));
+		dispatch(getUserWorkoutsByDate(params));
 		dispatch(getWorkoutSummaryByDate(summaryParams));
 	}, [currentUser, dispatch, selectedDate]);
 
@@ -85,14 +95,23 @@ const WorkoutWeekPage = () => {
 					onSelect={selectDate}
 				/>
 			</div>
-			<div className={styles.WorkoutWeekPage_main}>
-				<CardsSection title="Goals" to="goals">
-					<WeeklyStreak title="Daily Minutes Goal" streak={fakeStreak} />
-				</CardsSection>
-				<CardsSection title="Today's Workouts" to="list">
-					<TodaysWorkouts workouts={[]} />
-				</CardsSection>
-			</div>
+			{isLoading ? (
+				<div className={styles.WorkoutWeekPage_main}>
+					<Loader>Loading todays data...</Loader>
+				</div>
+			) : (
+				<div className={styles.WorkoutWeekPage_main}>
+					<CardsSection title="Goals" to="goals">
+						<WeeklyStreak
+							title="Daily Minutes Goal"
+							streak={todaysSummary?.weeklyStreak}
+						/>
+					</CardsSection>
+					<CardsSection title="Today's Workouts" to="list">
+						<TodaysWorkouts workouts={todaysWorkouts} />
+					</CardsSection>
+				</div>
+			)}
 		</div>
 	);
 };

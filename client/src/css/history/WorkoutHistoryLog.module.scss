@@ -11,6 +11,10 @@
 	border-radius: 0 1rem 1rem 0;
 	border-left: 4px solid var(--blueGrey800);
 	font-size: 1.5rem;
+	&:hover,
+	&:focus-within {
+		border-color: $accentBlue;
+	}
 
 	&_top {
 		width: 100%;
@@ -22,8 +26,21 @@
 
 		&_name {
 			align-self: baseline;
-			font-size: 1.7rem;
-			color: $text3;
+
+			&_title {
+				font-size: 1.7rem;
+				color: $text3;
+			}
+			&_date {
+				font-size: 1.4rem;
+				color: $text2;
+			}
+		}
+		&_more {
+			position: relative;
+			margin-top: -0.5rem;
+			margin-left: auto;
+			align-self: flex-start;
 		}
 	}
 

@@ -3,6 +3,8 @@ import type {
 	ActivityTypeDB,
 } from "../services/ActivityTypesService.ts";
 import type {
+	DashboardSummaryClient,
+	DashboardSummaryDB,
 	DaysLeftClient,
 	DaysLeftDB,
 	MedicationClient,
@@ -13,6 +15,8 @@ import type {
 	MedLogEntryDB,
 	PillSummaryClient,
 	PillSummaryDB,
+	RecentMinsClient,
+	RecentMinsDB,
 	StreakDayClient,
 	StreakDayDB,
 	TakenPillsByRangeClient,
@@ -243,6 +247,16 @@ const normalizeSharedData = (sharedData: SharedDataDB) => {
 
 // Workout Summary
 
+const normalizeRecentMins = (data: RecentMinsDB): RecentMinsClient => {
+	const client: RecentMinsClient = {
+		date: data.date,
+		mins: data.mins,
+		weekDay: data.week_day.trim(),
+	};
+
+	return client;
+};
+
 const normalizeTotalMins = (data: TotalMinsDB): TotalMinsClient => {
 	const client: TotalMinsClient = {
 		totalMins: data.total_mins,
@@ -304,6 +318,37 @@ const normalizeWorkoutSummary = (
 	return client;
 };
 
+const normalizeDashboardSummary = (
+	summary: DashboardSummaryDB
+): DashboardSummaryClient => {
+	const {
+		total_mins,
+		recent_mins,
+		recent_steps,
+		recent_calories,
+		recent_workout_count,
+		recent_workouts,
+		weekly_streak,
+	} = summary;
+	const totalMins = total_mins?.[0]?.total_mins ?? 0;
+	const recentSteps = recent_steps?.[0]?.recent_steps ?? 0;
+	const recentCalories = recent_calories?.[0]?.total_calories ?? 0;
+	const recentWorkoutCount = recent_workout_count?.[0]?.recent_workouts ?? 0;
+	const recentMins = recent_mins?.map(normalizeRecentMins) ?? [];
+	const recentWorkouts = recent_workouts?.map(normalizeHistory) ?? [];
+	const weeklyStreak = weekly_streak?.map(normalizeStreakDay) ?? [];
+
+	return {
+		totalMins,
+		recentMins,
+		recentSteps,
+		recentCalories,
+		recentWorkouts,
+		recentWorkoutCount,
+		weeklyStreak,
+	};
+};
+
 export {
 	normalizeUser,
 	normalizeWorkout,
@@ -323,5 +368,7 @@ export {
 	normalizeTotalCalories,
 	normalizeTotalWorkouts,
 	normalizeStreakDay,
+	normalizeRecentMins,
 	normalizeWorkoutSummary,
+	normalizeDashboardSummary,
 };

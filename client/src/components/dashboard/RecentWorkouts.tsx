@@ -2,42 +2,16 @@ import { useMemo } from "react";
 import styles from "../../css/dashboard/RecentWorkouts.module.scss";
 import { RecentWorkout as IRecentWorkout } from "../../features/dashboard/types";
 import RecentWorkout from "./RecentWorkout";
+import { NavLink } from "react-router";
 
 type Props = {
 	recentWorkouts: IRecentWorkout[];
 	viewWorkout: (workout: IRecentWorkout) => void;
 };
 
-const fake: IRecentWorkout[] = [
-	{
-		workoutID: 1,
-		workoutDate: "2025-01-28T20:36:00.000Z",
-		workoutLength: 32,
-		activityType: "Strength",
-	},
-	{
-		workoutID: 2,
-		workoutDate: "2025-01-27T16:14:00.000Z",
-		workoutLength: 8,
-		activityType: "Stretch",
-	},
-	{
-		workoutID: 3,
-		workoutDate: "2025-02-01T14:39:00.000Z",
-		workoutLength: 117,
-		activityType: "Walk",
-	},
-	{
-		workoutID: 4,
-		workoutDate: "2025-01-30T18:22:00.000Z",
-		workoutLength: 42,
-		activityType: "Walk",
-	},
-];
+const LIMIT = 4;
 
-const LIMIT = 5;
-
-const RecentWorkouts = ({ recentWorkouts = fake, viewWorkout }: Props) => {
+const RecentWorkouts = ({ recentWorkouts = [], viewWorkout }: Props) => {
 	const limitedList = useMemo(() => {
 		if (!recentWorkouts || !recentWorkouts.length) return [];
 
@@ -53,10 +27,11 @@ const RecentWorkouts = ({ recentWorkouts = fake, viewWorkout }: Props) => {
 				<i>
 					{limitCount}/{totalCount}
 				</i>
+				<NavLink to="history?preset=this-week">Show All</NavLink>
 			</div>
 			<ul className={styles.RecentWorkouts_list}>
-				{recentWorkouts &&
-					recentWorkouts.map((workout) => (
+				{limitedList &&
+					limitedList.map((workout) => (
 						<RecentWorkout
 							key={workout.workoutID}
 							recentWorkout={workout}

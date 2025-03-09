@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TStatus } from "../types";
-import { Workout, WorkoutCategory, WorkoutSummaryForDate } from "./types";
+import { Workout, WorkoutCategory, WorkoutSummary } from "./types";
 import {
 	getUserWorkouts,
 	getUserWorkoutsByDate,
@@ -13,7 +13,7 @@ export interface WorkoutsSlice {
 	status: TStatus;
 	workouts: Workout[];
 	categories: WorkoutCategory[];
-	summary: WorkoutSummaryForDate | null;
+	summary: WorkoutSummary | null;
 	activeWorkout: {
 		record: Workout | null;
 		startedAt: string;
@@ -75,16 +75,21 @@ const workoutsSlice = createSlice({
 			})
 			.addCase(
 				getWorkoutSummaryByDate.fulfilled,
-				(
-					state: WorkoutsSlice,
-					action: PayloadAction<WorkoutSummaryForDate>
-				) => {
+				(state: WorkoutsSlice, action: PayloadAction<WorkoutSummary>) => {
 					state.status = "FULFILLED";
 					state.summary = action.payload;
 				}
 			);
 	},
 });
+
+export const selectIsLoading = (state: RootState) => {
+	return state.workouts.status === "PENDING";
+};
+
+export const selectWorkoutSummary = (state: RootState) => {
+	return state.workouts.summary as WorkoutSummary;
+};
 
 export const selectUserWorkouts = (state: RootState) => {
 	return state.workouts.workouts as Workout[];

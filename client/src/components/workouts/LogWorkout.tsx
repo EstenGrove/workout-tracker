@@ -124,6 +124,7 @@ const LogWorkout = ({ currentUser, onClose }: Props) => {
 			),
 			prev: 1,
 			next: 3,
+			validate: () => !!values.workout,
 		},
 		{
 			id: 3,
@@ -137,6 +138,7 @@ const LogWorkout = ({ currentUser, onClose }: Props) => {
 			),
 			prev: 2,
 			next: 4,
+			validate: () => !!values.workoutDate,
 		},
 		{
 			id: 4,
@@ -146,6 +148,7 @@ const LogWorkout = ({ currentUser, onClose }: Props) => {
 			),
 			prev: 3,
 			next: getNextStep(),
+			validate: () => true,
 		},
 		{
 			id: 5,

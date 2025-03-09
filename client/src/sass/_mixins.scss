@@ -27,3 +27,22 @@
 	backdrop-filter: blur(5px);
 	-webkit-backdrop-filter: blur(5px);
 }
+
+@mixin blueGradient() {
+	background-image: var(--blueGradient);
+}
+@mixin redGradient() {
+	background-image: var(--redGradient);
+}
+@mixin greenGradient() {
+	background-image: var(--greenGradient);
+}
+@mixin yellowGradient() {
+	background-image: var(--yellowGradient);
+}
+@mixin purpleGradient() {
+	background-image: var(--purpleGradient);
+}
+@mixin pinkGradient() {
+	background-image: var(--pinkGradient);
+}
