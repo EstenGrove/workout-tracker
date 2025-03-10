@@ -61,16 +61,9 @@ interface MinMaxRange {
 	max: number;
 }
 
-// ORIGINAL VERSION:
-// - ISSUES: doesn't reflect relative scale, very well!!!
-const getScaledHeight2 = (value: number, range: MinMaxRange) => {
-	const { min, max } = range;
-	if (value === 0) return 0;
-	if (value === min) return value;
-
-	const scaledValue = ((value - min) / (max - min)) * 100;
-	return scaledValue;
-};
+interface MinMaxStep extends MinMaxRange {
+	step: number;
+}
 
 // We use the max value as our true max & we calculate heights based off what percentage of our max a given value is
 const getScaledHeight = (value: number, range: MinMaxRange) => {
@@ -99,9 +92,7 @@ const getHighAndLowRanges = (data: RecentMinsByDate[]) => {
 };
 
 const RecentMinsForWeek = ({ recentMins }: Props) => {
-	const dataRange = getHighAndLowRanges(recentMins);
-
-	console.log("dataRange", dataRange);
+	const dataRange: MinMaxStep = getHighAndLowRanges(recentMins);
 
 	return (
 		<div className={styles.RecentMinsForWeek}>
@@ -114,19 +105,13 @@ const RecentMinsForWeek = ({ recentMins }: Props) => {
 							max: dataRange.max,
 						});
 
-						console.group("Scaled");
-						console.log("scaledMins", scaledMins);
-						console.log("mins", mins);
-						console.log("weekDay", weekDay);
-						console.groupEnd();
-
 						return (
 							<WeekDayBar
 								key={date + idx}
 								mins={mins}
-								value={Math.abs(scaledMins)}
-								weekDay={weekDay}
 								date={date}
+								weekDay={weekDay}
+								value={Math.abs(scaledMins)}
 							/>
 						);
 					})}

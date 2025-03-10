@@ -1,10 +1,12 @@
 import styles from "../../css/dashboard/RecentActivity.module.scss";
 import { iconsMap } from "../../utils/utils_icons";
-import DetailsCard from "../layout/DetailsCard";
 import { NavLink } from "react-router";
 import { Activity } from "../../features/activity/types";
-import RecentMinsForWeek from "./RecentMinsForWeek";
+import { isSunday } from "date-fns";
 import { WeeklyMinsByDate } from "../../features/dashboard/types";
+import DetailsCard from "../layout/DetailsCard";
+import NoDataFound from "../layout/NoDataFound";
+import RecentMinsForWeek from "./RecentMinsForWeek";
 
 type Props = {
 	title: string;
@@ -23,13 +25,22 @@ const getDetailsUrl = (type: Activity, date: string) => {
 	return basePath;
 };
 
+const isNewWeek = (data: WeeklyMinsByDate[]) => {
+	const now = new Date();
+	const hasNoData = data.filter((x) => x?.mins !== 0);
+	const isTodaySunday = isSunday(now);
+
+	return isTodaySunday && hasNoData?.length <= 0;
+};
+
 const RecentActivity = ({
 	title = "Recent Mins.",
 	icon = "recentActivity",
 	activityData = [],
 }: Props) => {
+	const isWeekStart: boolean = isNewWeek(activityData);
 	// based off activity type & date
-	const detailsUrl = getDetailsUrl("Walk", new Date().toString());
+	const detailsUrl: string = getDetailsUrl("Walk", new Date().toString());
 
 	return (
 		<div className={styles.RecentActivity}>
@@ -46,7 +57,10 @@ const RecentActivity = ({
 					icon={icon}
 					color="var(--accent-blue)"
 				>
-					<RecentMinsForWeek recentMins={activityData} />
+					{isWeekStart && (
+						<NoDataFound title="It's a new week!" icon="calendar" />
+					)}
+					{!isWeekStart && <RecentMinsForWeek recentMins={activityData} />}
 				</DetailsCard>
 			</div>
 		</div>

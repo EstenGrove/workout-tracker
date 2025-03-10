@@ -1,0 +1,4 @@
+# Ignore Local SSL cert files
+192.168.0.44*.pem
+192.168.0.203*.pem
+localhost*.pem

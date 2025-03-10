@@ -34,12 +34,13 @@
 	&_list {
 		margin-top: -2rem;
 		width: 100%;
-		// border: 1px solid red;
-		height: 40rem;
+		min-height: 23rem;
 		max-height: auto;
 		overflow-y: scroll;
 		list-style: none;
-		@include colCenter();
+		@include flex_col(flex-start, center);
 		gap: 0.5rem 0;
+		padding-top: 3rem;
+		padding-bottom: 5rem;
 	}
 }
