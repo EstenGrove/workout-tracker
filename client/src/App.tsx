@@ -23,6 +23,7 @@ import WorkoutGoalsPage from "./pages/WorkoutGoalsPage";
 import WorkoutSettingsPage from "./pages/WorkoutSettingsPage";
 import WorkoutPlansView from "./views/WorkoutPlansView";
 import WorkoutSettings from "./views/WorkoutSettings";
+import HistoryDetailsPage from "./pages/HistoryDetailsPage";
 
 function App() {
 	return (
@@ -38,6 +39,11 @@ function App() {
 								element={<ActiveWorkoutPage />}
 							/>
 							<Route path="workouts/goals" element={<WorkoutGoalsPage />} />
+
+							<Route
+								path="workouts/details/:id"
+								element={<HistoryDetailsPage />}
+							/>
 
 							{/* MEDICATION-SPECIFIC ROUTES */}
 							<Route path="meds/:id" element={<MedicationDetailsPage />}>

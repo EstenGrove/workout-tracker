@@ -103,3 +103,7 @@ export interface WorkoutHistoryEntry {
 	recordedMiles: number;
 	createdDate: string;
 }
+
+export interface SelectedWorkout {
+	record: Workout;
+}

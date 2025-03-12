@@ -70,6 +70,7 @@ const API_ENDPOINTS = {
 		getWorkoutSummaryByDate: "/workouts/getWorkoutSummaryByDate",
 	},
 	history: {
+		getByID: "/history/getWorkoutHistoryByID",
 		getByDate: "/history/getWorkoutHistoryByDate",
 		getByRange: "/history/getWorkoutHistoryByRange",
 	},

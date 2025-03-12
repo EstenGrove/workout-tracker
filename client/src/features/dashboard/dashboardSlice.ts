@@ -1,14 +1,14 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
 	DashboardActivity,
 	DashboardSummary,
 	RecentWorkout,
 	RecentWorkoutsByType,
 } from "./types";
-import { StreakDay } from "../workouts/types";
-import { getDashboardSummary } from "./operations";
 import { TStatus } from "../types";
 import { RootState } from "../../store/store";
+import { StreakDay } from "../workouts/types";
+import { getDashboardSummary } from "./operations";
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface DashboardSlice {
 	status: TStatus;

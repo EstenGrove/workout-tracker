@@ -1,6 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { TStatus } from "../types";
-import { Workout, WorkoutCategory, WorkoutSummary } from "./types";
+import {
+	SelectedWorkout,
+	Workout,
+	WorkoutCategory,
+	WorkoutSummary,
+} from "./types";
 import {
 	getUserWorkouts,
 	getUserWorkoutsByDate,
@@ -20,6 +25,9 @@ export interface WorkoutsSlice {
 		endedAt: string | null;
 		data: Array<object>;
 	};
+	selectedWorkout: {
+		record: SelectedWorkout | null;
+	};
 }
 
 const initialState: WorkoutsSlice = {
@@ -32,6 +40,9 @@ const initialState: WorkoutsSlice = {
 		startedAt: formatDate(new Date(), "long"),
 		endedAt: null,
 		data: [],
+	},
+	selectedWorkout: {
+		record: null,
 	},
 };
 
@@ -93,6 +104,10 @@ export const selectWorkoutSummary = (state: RootState) => {
 
 export const selectUserWorkouts = (state: RootState) => {
 	return state.workouts.workouts as Workout[];
+};
+
+export const selectSelectedWorkout = (state: RootState) => {
+	return state.workouts.selectedWorkout;
 };
 
 export default workoutsSlice.reducer;

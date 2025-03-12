@@ -1,17 +1,24 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { WorkoutHistory } from "./types";
-import { getHistoryByDate, getHistoryByRange } from "./operations";
+import { SelectedHistoryEntry, WorkoutHistory } from "./types";
+import {
+	getHistoryByDate,
+	getHistoryByRange,
+	getHistoryDetails,
+	HistoryDetailsBody,
+} from "./operations";
 import { TStatus } from "../types";
 import { RootState } from "../../store/store";
 
 interface HistorySlice {
-	logs: WorkoutHistory[];
 	status: TStatus;
+	logs: WorkoutHistory[];
+	selectedEntry: SelectedHistoryEntry | null;
 }
 
 const initialState: HistorySlice = {
 	logs: [],
 	status: "IDLE",
+	selectedEntry: null,
 };
 
 const historySlice = createSlice({
@@ -43,6 +50,23 @@ const historySlice = createSlice({
 					state.logs = action.payload;
 				}
 			);
+
+		// History Details
+		builder
+			.addCase(getHistoryDetails.pending, (state: HistorySlice) => {
+				state.status = "PENDING";
+			})
+			.addCase(
+				getHistoryDetails.fulfilled,
+				(state: HistorySlice, action: PayloadAction<HistoryDetailsBody>) => {
+					state.status = "FULFILLED";
+					state.selectedEntry = {
+						record: action.payload.entry,
+						workoutPlan: action.payload.workoutPlan,
+						planHistory: action.payload.history,
+					};
+				}
+			);
 	},
 });
 
@@ -51,6 +75,9 @@ export const selectIsLoadingHistory = (state: RootState): boolean => {
 };
 export const selectHistoryLogs = (state: RootState) => {
 	return state.history.logs;
+};
+export const selectHistoryEntry = (state: RootState) => {
+	return state.history.selectedEntry as SelectedHistoryEntry;
 };
 
 export default historySlice.reducer;

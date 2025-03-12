@@ -10,7 +10,10 @@ import MenuDropdown from "../ui/MenuDropdown";
 
 type Props = {
 	recentWorkout: IRecentWorkout;
-	selectWorkout: () => void;
+	onSelect?: (workout: IRecentWorkout) => void;
+	onEdit?: (workout: IRecentWorkout) => void;
+	onView?: (workout: IRecentWorkout) => void;
+	onDelete?: (workout: IRecentWorkout) => void;
 };
 
 const TypeBadge = ({ activityType }: { activityType: Activity }) => {
@@ -47,7 +50,15 @@ const MoreOptions = ({ viewLog, editLog, deleteLog }: MoreOptsProps) => {
 	);
 };
 
-const RecentWorkout = ({ recentWorkout, selectWorkout }: Props) => {
+type WorkoutAction = "SELECT" | "EDIT" | "VIEW" | "DELETE";
+
+const RecentWorkout = ({
+	recentWorkout,
+	onSelect,
+	onView,
+	onEdit,
+	onDelete,
+}: Props) => {
 	const { activityType, workoutDate, workoutName, startTime } = recentWorkout;
 	const day = formatDateAsWeekDay(workoutDate);
 	const startAt = formatDateTime(startTime, "short");
@@ -60,13 +71,38 @@ const RecentWorkout = ({ recentWorkout, selectWorkout }: Props) => {
 		setShowMore(false);
 	};
 
+	const selectWorkoutAction = (
+		type: WorkoutAction,
+		workout: IRecentWorkout
+	) => {
+		switch (type) {
+			case "SELECT": {
+				return onSelect && onSelect(workout);
+			}
+			case "EDIT": {
+				return onEdit && onEdit(workout);
+			}
+			case "VIEW": {
+				return onView && onView(workout);
+			}
+			case "DELETE": {
+				return onDelete && onDelete(workout);
+			}
+			default:
+				throw new Error("Invalid action type: " + type);
+		}
+	};
+
 	return (
-		<li className={styles.RecentWorkout} onClick={selectWorkout}>
+		<li className={styles.RecentWorkout}>
 			<div className={styles.RecentWorkout_top}>
 				<div className={styles.RecentWorkout_top_badge}>
 					<TypeBadge activityType={activityType} />
 				</div>
-				<div className={styles.RecentWorkout_top_head}>
+				<div
+					className={styles.RecentWorkout_top_head}
+					onClick={() => selectWorkoutAction("SELECT", recentWorkout)}
+				>
 					<h6 className={styles.RecentWorkout_top_head_title}>{workoutName}</h6>
 					<div className={styles.RecentWorkout_top_head_time}>{startAt}</div>
 				</div>
@@ -75,7 +111,11 @@ const RecentWorkout = ({ recentWorkout, selectWorkout }: Props) => {
 
 					{showMore && (
 						<MenuDropdown closeMenu={closeMoreOpts}>
-							<MoreOptions />
+							<MoreOptions
+								viewLog={() => selectWorkoutAction("VIEW", recentWorkout)}
+								editLog={() => selectWorkoutAction("EDIT", recentWorkout)}
+								deleteLog={() => selectWorkoutAction("DELETE", recentWorkout)}
+							/>
 						</MenuDropdown>
 					)}
 				</div>

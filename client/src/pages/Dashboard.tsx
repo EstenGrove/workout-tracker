@@ -19,6 +19,8 @@ import {
 } from "../features/dashboard/dashboardSlice";
 import Loader from "../components/layout/Loader";
 import ActivityTotal from "../components/activity/ActivityTotal";
+import { RecentWorkout } from "../features/dashboard/types";
+import { useNavigate } from "react-router";
 
 function formatSteps(num: number) {
 	if (num >= 1000) {
@@ -27,7 +29,14 @@ function formatSteps(num: number) {
 	return num.toString();
 }
 
+const getWorkoutDetailsRoute = (workout: RecentWorkout) => {
+	const { historyID } = workout;
+	const path = "workouts/details/" + historyID;
+	return path;
+};
+
 const Dashboard = () => {
+	const navigate = useNavigate();
 	const dispatch = useAppDispatch();
 	const baseDate = new Date().toString();
 	const isLoading = useSelector(selectIsLoadingDashboard);
@@ -39,6 +48,12 @@ const Dashboard = () => {
 
 	const selectDate = (date: Date | string) => {
 		setSelectedDate(date);
+	};
+
+	const selectWorkout = (workout: RecentWorkout) => {
+		const route = getWorkoutDetailsRoute(workout);
+
+		navigate(route);
 	};
 
 	const getDashboardData = useCallback(() => {
@@ -125,7 +140,10 @@ const Dashboard = () => {
 						</ActivityCard>
 					</div>
 					<div className={styles.Dashboard_main_row}>
-						<RecentWorkouts recentWorkouts={recentWorkouts} />
+						<RecentWorkouts
+							recentWorkouts={recentWorkouts}
+							viewWorkout={selectWorkout}
+						/>
 					</div>
 				</div>
 			)}

@@ -33,9 +33,9 @@ const RecentWorkouts = ({ recentWorkouts = [], viewWorkout }: Props) => {
 				{limitedList &&
 					limitedList.map((workout) => (
 						<RecentWorkout
-							key={workout.workoutID}
+							key={workout.historyID}
 							recentWorkout={workout}
-							selectWorkout={() => viewWorkout(workout)}
+							onSelect={() => viewWorkout(workout)}
 						/>
 					))}
 			</ul>
