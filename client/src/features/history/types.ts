@@ -20,3 +20,24 @@ export interface WorkoutHistory {
 	recordedMiles: number;
 	createdDate: string;
 }
+
+export interface WorkoutPlan {
+	planID: number;
+	planName: string;
+	planMetric: number;
+	planGoal: number;
+	planWeight: number;
+	planReps: number;
+	planSets: number;
+	planSteps: number;
+	planMiles: number;
+	planMins: number;
+	isActive: boolean;
+	createdDate: string;
+}
+
+export interface SelectedHistoryEntry {
+	record: WorkoutHistory;
+	workoutPlan: WorkoutPlan;
+	planHistory: WorkoutHistory[];
+}

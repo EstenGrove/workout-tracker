@@ -246,6 +246,17 @@ export interface WorkoutByCategoryClient {
 	categoryDesc: string;
 }
 
+export interface RecentMinsDB {
+	date: string;
+	mins: number;
+	week_day: string;
+}
+export interface RecentMinsClient {
+	date: string;
+	mins: number;
+	weekDay: string;
+}
+
 export interface TotalMinsDB {
 	total_mins: number;
 	start_date: string;
@@ -253,6 +264,26 @@ export interface TotalMinsDB {
 }
 export interface TotalMinsClient {
 	totalMins: number;
+	startDate: string;
+	endDate: string;
+}
+export interface TotalStepsDB {
+	recent_steps: number;
+	start_date: string;
+	end_date: string;
+}
+export interface TotalStepsClient {
+	totalSteps: number;
+	startDate: string;
+	endDate: string;
+}
+export interface RecentWorkoutCountDB {
+	recent_workouts: number;
+	start_date: string;
+	end_date: string;
+}
+export interface RecentWorkoutCountClient {
+	recentWorkouts: number;
 	startDate: string;
 	endDate: string;
 }
@@ -301,5 +332,25 @@ export interface WorkoutSummaryClient {
 	totalMins: TotalMinsClient;
 	totalCalories: TotalCaloriesClient;
 	totalWorkouts: TotalWorkoutsClient;
+	weeklyStreak: StreakDayClient[];
+}
+
+export interface DashboardSummaryDB {
+	recent_mins: RecentMinsDB[]; // mins for each date in week
+	total_mins: TotalMinsDB[]; // total mins for week
+	recent_steps: TotalStepsDB[]; // total steps for week
+	weekly_streak: StreakDayDB[]; // streak day for week
+	recent_calories: TotalCaloriesDB[]; // total calories for week
+	recent_workouts: WorkoutHistoryDB[]; // array of workouts
+	recent_workout_count: RecentWorkoutCountDB[]; // total workout count for week
+}
+
+export interface DashboardSummaryClient {
+	totalMins: number; // total mins for week
+	recentSteps: number; // steps for a given date
+	recentCalories: number; // calories for given date
+	recentWorkoutCount: number; // workouts for given date
+	recentMins: RecentMinsClient[]; // weekly streak basically, for bar chart
+	recentWorkouts: WorkoutHistoryClient[];
 	weeklyStreak: StreakDayClient[];
 }

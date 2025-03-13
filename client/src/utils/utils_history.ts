@@ -1,9 +1,14 @@
-import { WorkoutHistory } from "../features/history/types";
+import { WorkoutHistory, WorkoutPlan } from "../features/history/types";
 import { AsyncResponse } from "../features/types";
 import { IDateRange } from "./utils_dates";
 import { apiEndpoints, currentEnv } from "./utils_env";
 
 export type HistoryResp = AsyncResponse<{ history: WorkoutHistory[] }>;
+export type HistoryDetailsResp = AsyncResponse<{
+	entry: WorkoutHistory;
+	workoutPlan: WorkoutPlan;
+	history: WorkoutHistory[];
+}>;
 
 const fetchWorkoutHistoryByDate = async (
 	userID: string,
@@ -39,5 +44,26 @@ const fetchWorkoutHistoryByRange = async (
 		return error;
 	}
 };
+const fetchWorkoutHistoryDetails = async (
+	userID: string,
+	historyID: number
+): HistoryDetailsResp => {
+	let url = currentEnv.base + apiEndpoints.history.getByID;
+	url += "?" + new URLSearchParams({ userID });
+	url += "&" + new URLSearchParams({ historyID: String(historyID) });
 
-export { fetchWorkoutHistoryByDate, fetchWorkoutHistoryByRange };
+	try {
+		const request = await fetch(url);
+		const response = await request.json();
+
+		return response;
+	} catch (error) {
+		return error;
+	}
+};
+
+export {
+	fetchWorkoutHistoryByDate,
+	fetchWorkoutHistoryByRange,
+	fetchWorkoutHistoryDetails,
+};

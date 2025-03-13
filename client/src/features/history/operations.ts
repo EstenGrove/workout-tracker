@@ -2,18 +2,29 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import {
 	fetchWorkoutHistoryByDate,
 	fetchWorkoutHistoryByRange,
+	fetchWorkoutHistoryDetails,
 } from "../../utils/utils_history";
 import { AwaitedResponse } from "../types";
-import { WorkoutHistory } from "./types";
+import { WorkoutHistory, WorkoutPlan } from "./types";
 
-interface HistoryByDateParams {
+export interface HistoryByDateParams {
 	userID: string;
 	targetDate: string;
 }
-interface HistoryByRangeParams {
+export interface HistoryByRangeParams {
 	userID: string;
 	startDate: string;
 	endDate: string;
+}
+export interface HistoryDetailsParams {
+	userID: string;
+	historyID: number;
+}
+
+export interface HistoryDetailsBody {
+	entry: WorkoutHistory;
+	workoutPlan: WorkoutPlan;
+	history: WorkoutHistory[];
 }
 
 const getHistoryByDate = createAsyncThunk(
@@ -43,5 +54,18 @@ const getHistoryByRange = createAsyncThunk(
 		return data.history as WorkoutHistory[];
 	}
 );
+const getHistoryDetails = createAsyncThunk(
+	"history/getHistoryDetails",
+	async (params: HistoryDetailsParams) => {
+		const { userID, historyID } = params;
+		const response = (await fetchWorkoutHistoryDetails(
+			userID,
+			historyID
+		)) as AwaitedResponse<HistoryDetailsBody>;
+		const data = response.Data;
 
-export { getHistoryByDate, getHistoryByRange };
+		return data as HistoryDetailsBody;
+	}
+);
+
+export { getHistoryByDate, getHistoryByRange, getHistoryDetails };

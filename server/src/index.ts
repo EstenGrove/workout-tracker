@@ -47,6 +47,7 @@ app.route("/meds", allRoutes.meds);
 app.route("/shared", allRoutes.shared);
 app.route("/history", allRoutes.history);
 app.route("/workouts", allRoutes.workouts);
+app.route("/dashboard", allRoutes.dashboard);
 
 // Log env info:
 logInfo(ENABLE_HTTPS);

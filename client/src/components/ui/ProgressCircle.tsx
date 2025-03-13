@@ -9,6 +9,7 @@ type Props = {
 	color?: ColorType;
 	trackColor?: string;
 	showText?: boolean;
+	showBlank?: boolean;
 };
 
 const accents = {
@@ -34,8 +35,8 @@ const accents = {
 	},
 	blank: {
 		main: "var(--blueGrey800)",
-		start: "var(--blueTint200)",
-		stop: "var(--accent)",
+		start: "var(--blueGrey800)",
+		stop: "var(--blueGrey800)",
 	},
 };
 
@@ -51,9 +52,9 @@ const range = {
 };
 
 const getProgressFromPercent = (percent: number) => {
-	// if (percent > 100) {
-	// 	return 0;
-	// }
+	if (percent > 100) {
+		return 0;
+	}
 
 	const rangeMax = range.max; // The value corresponding to 0%
 	const progress = rangeMax - percent * (rangeMax / 100);
@@ -68,12 +69,14 @@ const ProgressCircle = ({
 	color = "purple",
 	trackColor = "var(--blueGrey800)",
 	showText = false,
+	showBlank = false,
 }: Props) => {
 	const gradientId = "progress-bar";
 	const gradients = getGradients(color);
 	const circum = 2 * Math.PI * 90;
 	const circleRef = useRef<SVGCircleElement>(null);
 	const [offset, setOffset] = useState(initial);
+	const ringColor = showBlank ? gradients.main : `url(#${gradientId})`;
 
 	const updateOffset = useCallback((value: number) => {
 		const newOffset = getProgressFromPercent(value);
@@ -105,8 +108,8 @@ const ProgressCircle = ({
 			>
 				<defs>
 					<linearGradient id={gradientId} x1="0%" y1="0%" x2="100%" y2="100%">
-						<stop offset="100%" stopColor={gradients.stop} />
-						<stop offset="0%" stopColor={gradients.start} />
+						<stop offset="100%" stopColor={gradients.main} />
+						<stop offset="0%" stopColor={gradients.main} />
 					</linearGradient>
 
 					<filter id="shadow" x="-50%" y="-50%" width="200%" height="200%">
@@ -153,7 +156,8 @@ const ProgressCircle = ({
 					r="90"
 					cx="100"
 					cy="100"
-					stroke={`url(#${gradientId})`}
+					// stroke={`url(#${gradientId})`}
+					stroke={ringColor}
 					strokeWidth="16px"
 					strokeLinecap="round"
 					fill="transparent"
@@ -172,7 +176,8 @@ const ProgressCircle = ({
 						cx="100"
 						cy="100"
 						fill="transparent"
-						stroke={`url(#${gradientId})`} // Second progress ring color
+						stroke={ringColor}
+						// stroke={`url(#${gradientId})`} // Second progress ring color
 						strokeWidth="16px"
 						strokeLinecap="round"
 						strokeDasharray={`${circum} ${circum}`}

@@ -15,9 +15,28 @@
 		@include flex_row(flex-start, center);
 		gap: 0 0.7rem;
 
-		&_title {
-			font-size: 2.5rem;
-			color: $text3;
+		&_head {
+			width: auto;
+			&_title {
+				font-size: 1.6rem;
+				color: $text3;
+			}
+			&_time {
+				font-size: 1.2rem;
+				color: $text2;
+			}
+		}
+		&_more {
+			position: relative;
+			margin-left: auto;
+			align-self: flex-start;
+			margin-top: -0.5rem;
+
+			&_options {
+				width: 1.4rem;
+				height: 1.4rem;
+				fill: $text2;
+			}
 		}
 	}
 
@@ -30,6 +49,28 @@
 			font-size: 1.2rem;
 			color: $text2;
 			padding: 0.4rem 0.2rem;
+		}
+	}
+}
+
+.MoreOptions {
+	width: 100%;
+	height: auto;
+	&_item {
+		width: 100%;
+		padding: 0.3rem 0;
+		font-size: 1.3rem;
+		color: var(--blueGrey400);
+		&:hover {
+			cursor: pointer;
+		}
+
+		&:last-of-type {
+			padding: 0.5rem 0;
+			margin-top: auto;
+			margin-top: 1rem;
+			color: var(--accent-red);
+			border-top: $borderLight;
 		}
 	}
 }

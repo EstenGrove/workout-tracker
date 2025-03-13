@@ -88,8 +88,16 @@ app.get("/getOpenWorkouts", async (ctx: Context) => {
 app.post("/logWorkout", async (ctx: Context) => {
 	const body = await ctx.req.json<LogWorkoutVals>();
 	const { userID, newLog } = body;
+	console.log("body", body);
+	console.log("newLog", newLog);
+	console.log("activityType", newLog.activityType);
 
-	const newHistory = (await logWorkout(userID, newLog)) as WorkoutHistoryDB;
+	const newHistory = (await logWorkout(userID, {
+		...newLog,
+		workoutID: newLog.workoutID,
+	})) as WorkoutHistoryDB;
+
+	console.log("newHistory", newHistory);
 
 	if (newHistory instanceof Error) {
 		const errResp = getResponseError(newHistory, {
@@ -141,6 +149,15 @@ app.get("/getWorkoutSummaryByDate", async (ctx: Context) => {
 		weekly_streak: data.weekly_streak,
 	});
 	const response = getResponseOk(summary);
+
+	return ctx.json(response);
+});
+app.get("/getUserWorkoutsByDate", async (ctx: Context) => {
+	const { userID, targetDate } = ctx.req.query();
+
+	const response = getResponseOk({
+		userWorkouts: [],
+	});
 
 	return ctx.json(response);
 });

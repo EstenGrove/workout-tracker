@@ -46,6 +46,7 @@ export interface StreakDay {
 	date: Date | string;
 	mins: number;
 	goal: number;
+	weekDay: string;
 }
 
 export interface TotalCalories {
@@ -72,10 +73,16 @@ export interface WorkoutSummaryForDate {
 
 export interface WorkoutSummaryResp {
 	weeklyStreak: StreakDay[];
-	summary: WorkoutSummaryForDate[];
 	totalMins: TotalMins;
 	totalCalories: TotalCalories;
 	totalWorkouts: TotalWorkouts;
+}
+
+export interface WorkoutSummary {
+	totalMins: number;
+	totalCalories: number;
+	totalWorkouts: number;
+	weeklyStreak: StreakDay[];
 }
 
 export interface WorkoutHistoryEntry {
@@ -95,4 +102,8 @@ export interface WorkoutHistoryEntry {
 	recordedSteps: number;
 	recordedMiles: number;
 	createdDate: string;
+}
+
+export interface SelectedWorkout {
+	record: Workout;
 }

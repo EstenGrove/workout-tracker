@@ -21,22 +21,41 @@ import LogWorkout from "../components/workouts/LogWorkout";
 import WorkoutHistoryHeader from "../components/history/WorkoutHistoryHeader";
 import WorkoutHistoryList from "../components/history/WorkoutHistoryList";
 import WorkoutHistoryRangeHeader from "../components/history/WorkoutHistoryRangeHeader";
+import { getUserWorkouts } from "../features/workouts/operations";
+import { useQueryParams } from "../hooks/useQueryParams";
+
+const getInitialPreset = (params: URLSearchParams): RangePreset => {
+	const presetKey = params.get("preset");
+	const preset = presetsMap[presetKey as keyof object];
+
+	return preset || "Today";
+};
+
+const presetsMap = {
+	today: "Today",
+	yesterday: "Yesterday",
+	"this-week": "This Week",
+	"last-week": "Last Week",
+	"this-month": "This Month",
+};
 
 const HistoryPage = () => {
 	const dispatch = useAppDispatch();
+	const { params } = useQueryParams();
+	const initialPreset = getInitialPreset(params);
 	const baseDate = formatDate(new Date(), "long");
 	const currentUser = useSelector(selectCurrentUser);
 	const settings = useSelector(selectHistorySettings);
 	const workoutHistory = useSelector(selectHistoryLogs);
 	const isLoadingLogs = useSelector(selectIsLoadingHistory);
+	const [showLogWorkoutModal, setShowLogWorkoutModal] =
+		useState<boolean>(false);
 	const [customRange, setCustomRange] = useState<CustomRange>({
 		type: "None",
 		startDate: formatDate(new Date(), "long"),
 		endDate: formatDate(new Date(), "long"),
 	});
-	const [rangePreset, setSelectedPreset] = useState<RangePreset>("Today");
-	const [showLogWorkoutModal, setShowLogWorkoutModal] =
-		useState<boolean>(false);
+	const [rangePreset, setSelectedPreset] = useState<RangePreset>(initialPreset);
 
 	// Select's a range preset (eg. 'Today', 'Last Week' etc)
 	const onSelectPreset = (preset: RangePreset) => {
@@ -95,6 +114,19 @@ const HistoryPage = () => {
 			isMounted = false;
 		};
 	}, [getHistoryData, rangePreset]);
+
+	useEffect(() => {
+		let isMounted = true;
+		if (!isMounted) return;
+
+		if (currentUser.userID) {
+			dispatch(getUserWorkouts(currentUser.userID));
+		}
+
+		return () => {
+			isMounted = false;
+		};
+	}, [currentUser.userID, dispatch]);
 
 	return (
 		<div className={styles.HistoryPage}>

@@ -13,6 +13,7 @@ import type {
 export interface WorkoutDB {
 	workout_id: number;
 	activity_id: number;
+	activity_type: Activity;
 	plan_id: number;
 	user_id: string;
 	workout_name: string;
@@ -25,6 +26,7 @@ export interface WorkoutDB {
 export interface WorkoutClient {
 	workoutID: number;
 	activityID: number;
+	activityType: Activity;
 	planID: number;
 	userID: string;
 	workoutName: string;
@@ -54,6 +56,7 @@ export interface LogWorkoutBody {
 	userID: string;
 	activityType: Activity;
 	workoutID: number;
+	// workout: number;
 	workoutDate: string;
 	startTime: string;
 	endTime: string;
@@ -81,7 +84,15 @@ class WorkoutService {
 	// get all active workouts
 	async getAllWorkouts() {
 		try {
-			const query = `SELECT * FROM workouts WHERE is_active = true`;
+			const query = `
+				SELECT
+					*,
+					a.activity_type
+				FROM workouts w
+				JOIN activity_types a
+				ON a.activity_id = w.activity_id
+				WHERE w.is_active = true
+			`;
 			const results = await this.#db.query(query);
 			const rows = results?.rows as TQueryRow<WorkoutDB>[];
 
@@ -233,8 +244,7 @@ class WorkoutService {
 				$6,
 				$7,
 				$8,
-				$9,
-				$10
+				$9
 			)`;
 			const params = [
 				userID,

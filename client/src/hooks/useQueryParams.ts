@@ -1,14 +1,15 @@
 import { useSearchParams } from "react-router";
 
+type ParamsObj = Record<string, string | number | boolean | null | undefined>;
+type ParamValOrVals = Record<string, string> | string;
+
 const useQueryParams = () => {
 	const [params, setParams] = useSearchParams();
 
-	const set = (
-		values: Record<string, string | number | boolean | null | undefined>
-	) => {
+	const set = (values: ParamsObj) => {
 		setParams({ ...params, ...values });
 	};
-	const get = (key?: string): Record<string, string> | string => {
+	const get = (key?: string): ParamValOrVals => {
 		if (!key) {
 			const all = Object.fromEntries([...params]);
 			return all;

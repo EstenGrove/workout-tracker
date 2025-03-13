@@ -1,4 +1,4 @@
-import { addMinutes, differenceInMinutes, formatDistance } from "date-fns";
+import { addMinutes, formatDistance } from "date-fns";
 import { ActiveTimer, TimerStatus } from "../hooks/useWorkoutTimer";
 import { apiEndpoints, currentEnv } from "./utils_env";
 import { AsyncResponse } from "../features/types";
@@ -9,7 +9,7 @@ import {
 	WorkoutSummaryResp,
 } from "../features/workouts/types";
 import { Activity } from "../features/activity/types";
-import { toBackendFormat } from "./utils_dates";
+import { applyTimeStrToDate, toBackendFormat } from "./utils_dates";
 
 export type Effort = "Easy" | "Moderate" | "Hard" | "Strenuous" | "None";
 
@@ -29,6 +29,23 @@ export interface LogWorkoutValues {
 	// Strength/Yoga/Stretch etc
 	reps: number;
 	sets: number;
+	// ALTERNATIVE
+}
+
+export interface LogWorkoutPayload {
+	userID: string;
+	activityType: Activity;
+	workoutID: number;
+	workoutDate: string;
+	startTime: string;
+	endTime: string;
+	recordedEffort: string;
+	recordedMins: number;
+	recordedWeight: number;
+	recordedReps: number;
+	recordedSets: number;
+	recordedSteps: number;
+	recordedMiles: number;
 }
 
 export type LoggedWorkoutResp = AsyncResponse<{ log: WorkoutHistoryEntry }>;
@@ -38,7 +55,7 @@ export type SummaryByDateResp = AsyncResponse<WorkoutSummaryResp>;
 
 const saveWorkoutHistoryLog = async (
 	userID: string,
-	values: LogWorkoutValues
+	values: LogWorkoutPayload
 ): LoggedWorkoutResp => {
 	let url = currentEnv.base + apiEndpoints.workouts.logWorkout;
 	url += "?" + new URLSearchParams({ userID });
@@ -159,31 +176,65 @@ interface StartAndEnd {
 	endTime: string;
 }
 
-// Checks if the start/end times line up with the workout mins & fixes it, if needed
-const prepareStartAndEndDuration = (values: LogWorkoutValues): StartAndEnd => {
-	const { startTime, endTime, workoutMins } = values;
-	const diffByTime = differenceInMinutes(endTime, startTime);
+const calculateEndTimeFromDuration = (values: {
+	startTime: string;
+	date: Date | string;
+	mins: number;
+}) => {
+	const { startTime, date, mins } = values;
+	const start = applyTimeStrToDate(startTime, date);
+	const endByMins = addMinutes(start, mins);
 
-	if (Number(diffByTime) !== Number(workoutMins)) {
-		const newEnd = addMinutes(startTime, workoutMins);
-		return {
-			startTime: toBackendFormat(startTime),
-			endTime: toBackendFormat(newEnd),
-		};
-	} else {
-		return {
-			startTime: toBackendFormat(startTime),
-			endTime: toBackendFormat(endTime),
-		};
-	}
+	return endByMins;
 };
 
-const prepareWorkoutHistory = (values: LogWorkoutValues): LogWorkoutValues => {
-	const newTimes = prepareStartAndEndDuration(values);
+// Checks if the start/end times line up with the workout mins & fixes it, if needed
+const prepareStartAndEndDuration = (values: LogWorkoutValues): StartAndEnd => {
+	const { startTime, workoutDate, workoutMins } = values;
+	const startStr = startTime as string;
+	const start = applyTimeStrToDate(startStr, workoutDate);
+	const endTime = calculateEndTimeFromDuration({
+		startTime: startStr,
+		date: workoutDate,
+		mins: workoutMins,
+	});
 
 	return {
-		...values,
-		...newTimes,
+		startTime: toBackendFormat(new Date(start)),
+		endTime: toBackendFormat(new Date(endTime)),
+	};
+};
+
+interface LogWorkoutValsWithUser extends LogWorkoutValues {
+	userID: string;
+}
+
+const prepareWorkoutHistory = (
+	values: LogWorkoutValsWithUser,
+	workouts: Workout[]
+): LogWorkoutPayload => {
+	const newTimes = prepareStartAndEndDuration(values);
+	const matchingWorkout = workouts.find((w) => {
+		return (
+			w.workoutName === values.workout && w.activityType === values.activityType
+		);
+	});
+	const workoutID = matchingWorkout?.workoutID ?? (10 as number);
+
+	return {
+		userID: values.userID,
+		activityType: values.activityType as Activity,
+		startTime: newTimes.startTime,
+		endTime: newTimes.endTime,
+		workoutID: workoutID,
+		workoutDate: values.workoutDate as string,
+		recordedMins: values.workoutMins,
+		recordedWeight: values.weight,
+		recordedReps: values.reps,
+		recordedSets: values.sets,
+		recordedMiles: values.miles,
+		recordedSteps: values.steps,
+		recordedEffort: values.effort,
 	};
 };
 
@@ -197,4 +248,5 @@ export {
 	getTotalTime,
 	isWorkoutInProgress,
 	prepareWorkoutHistory,
+	calculateEndTimeFromDuration,
 };

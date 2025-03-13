@@ -3,14 +3,14 @@ import {
 	fetchUserWorkouts,
 	fetchUserWorkoutsByDate,
 	fetchUserWorkoutSummaryByDate,
-	LogWorkoutValues,
+	LogWorkoutPayload,
 	saveWorkoutHistoryLog,
 } from "../../utils/utils_workouts";
 import { AwaitedResponse } from "../types";
 import {
 	Workout,
 	WorkoutHistoryEntry,
-	WorkoutSummaryForDate,
+	WorkoutSummary,
 	WorkoutSummaryResp,
 } from "./types";
 
@@ -64,21 +64,21 @@ const getWorkoutSummaryByDate = createAsyncThunk(
 		)) as AwaitedResponse<WorkoutSummaryResp>;
 		const data = response.Data as WorkoutSummaryResp;
 
-		const summaryData: WorkoutSummaryForDate = {
-			date: endDate,
+		const summaryData: WorkoutSummary = {
+			weeklyStreak: data.weeklyStreak,
 			totalMins: data.totalMins.totalMins,
 			totalCalories: data.totalCalories.totalCalories,
 			totalWorkouts: data.totalWorkouts.totalWorkouts,
 		};
 
 		// return data as WorkoutsSummaryByDate;
-		return summaryData as WorkoutSummaryForDate;
+		return summaryData as WorkoutSummary;
 	}
 );
 
 interface LogWorkoutParams {
 	userID: string;
-	newLog: LogWorkoutValues;
+	newLog: LogWorkoutPayload;
 }
 
 // Records a single workout history entry for a historical workout

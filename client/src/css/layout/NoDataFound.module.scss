@@ -1,0 +1,17 @@
+@import "../../sass/variables";
+@import "../../sass/mixins";
+@import "../../sass/custom";
+
+.NoDataFound {
+	width: 100%;
+	@include colCenter();
+	font-size: 1.7rem;
+	color: $text3;
+	font-weight: 600;
+
+	&_icon {
+		width: 3.2rem;
+		height: 3.2rem;
+		fill: $text3;
+	}
+}

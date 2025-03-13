@@ -8,6 +8,7 @@
 	/* Theme/Color Variables */
 	--bg-body: rgb(234, 236, 239);
 	--main-accent: rgb(124, 58, 237);
+	--main-accent: #7c3aed;
 	/* --main-accent: #7c3aed; */
 	--accent-green: rgb(0, 226, 189);
 	/* --accent-green: #00e2bd; */
@@ -28,6 +29,56 @@
 	--greenBG: rgba(0, 226, 189, 0.3);
 	--pinkBG: rgba(255, 0, 102, 0.3);
 
+	/* background-image: */
+	--blueGradient: linear-gradient(
+		to right top,
+		#007cff,
+		#0071f8,
+		#0065f0,
+		#005ae8,
+		#004ee0
+	);
+	--redGradient: linear-gradient(
+		to right top,
+		#ff333d,
+		#fa2f3a,
+		#f42c37,
+		#ef2835,
+		#ea2432
+	);
+	--greenGradient: linear-gradient(
+		to right top,
+		#00e2bd,
+		#00d4be,
+		#00c6bc,
+		#00b8b8,
+		#04aab2
+	);
+	--yellowGradient: linear-gradient(
+		to right top,
+		#f9f871,
+		#eeee5e,
+		#e3e349,
+		#d7d931,
+		#cccf0c
+	);
+	--purpleGradient: linear-gradient(
+		to right top,
+		#7c3aed,
+		#722edd,
+		#6722ce,
+		#5d13be,
+		#5200af
+	);
+	--pinkGradient: linear-gradient(
+		to right top,
+		#ff0066,
+		#f80e69,
+		#f1186c,
+		#ea1f6f,
+		#e32571
+	);
+
 	/* darker accent bgs */
 	--accent-blue-bg: rgba(0, 124, 255, 0.1);
 
@@ -36,6 +87,7 @@
 
 	/* --accent: #ff0066; */
 	--accent: rgb(255, 0, 102);
+	--accent: #ff0066;
 	--accent-purple: rgb(105 25 255);
 	--accent-bright-red: rgb(255, 0, 102);
 	--accent-bg: rgba(105, 25, 255, 0.2);

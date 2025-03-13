@@ -4,6 +4,10 @@ import { Activity } from "../../features/activity/types";
 import { WorkoutHistory } from "../../features/history/types";
 import { getActivityStyles } from "../../utils/utils_activity";
 import { differenceInHours, format } from "date-fns";
+import { formatCustomDate } from "../../utils/utils_dates";
+import MenuIcon from "../ui/MenuIcon";
+import { useState } from "react";
+import MenuDropdown from "../ui/MenuDropdown";
 
 type Props = {
 	entry: WorkoutHistory;
@@ -60,6 +64,16 @@ const TimeBadge = ({
 };
 
 const WorkoutHistoryLog = ({ entry }: Props) => {
+	const date = formatCustomDate(entry.workoutDate, "monthAndDay");
+	const [showMore, setShowMore] = useState<boolean>(false);
+
+	const openMoreOpts = () => {
+		setShowMore(true);
+	};
+	const closeMoreOpts = () => {
+		setShowMore(false);
+	};
+
 	return (
 		<div className={styles.WorkoutHistoryLog}>
 			<div className={styles.WorkoutHistoryLog_top}>
@@ -67,7 +81,21 @@ const WorkoutHistoryLog = ({ entry }: Props) => {
 					<TypeBadge activityType={entry.activityType} />
 				</div>
 				<div className={styles.WorkoutHistoryLog_top_name}>
-					{entry.workoutName}
+					<div className={styles.WorkoutHistoryLog_top_name_title}>
+						{entry.workoutName}
+					</div>
+					<div className={styles.WorkoutHistoryLog_top_name_date}>{date}</div>
+				</div>
+				<div className={styles.WorkoutHistoryLog_top_more}>
+					<MenuIcon openMenu={openMoreOpts} />
+
+					{showMore && (
+						<MenuDropdown closeMenu={closeMoreOpts}>
+							<li>View</li>
+							<li>Edit</li>
+							<li>Delete</li>
+						</MenuDropdown>
+					)}
 				</div>
 			</div>
 			{/* SHOW SUMMARY OF WORKOUT */}

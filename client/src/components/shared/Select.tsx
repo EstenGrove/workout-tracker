@@ -10,6 +10,7 @@ interface SelectProps {
 	name: string;
 	id: string;
 	value: string;
+	defaultValue?: string;
 	options: SelectOption[];
 	onChange: (name: string, value: string) => void;
 }
@@ -17,13 +18,19 @@ interface SelectProps {
 // @ts-expect-error: this is fine
 interface Props extends SelectProps, ComponentPropsWithoutRef<"div"> {}
 
-const Select = ({ name, id, value, options, onChange, ...rest }: Props) => {
+const Select = ({
+	name,
+	id,
+	value,
+	defaultValue = "",
+	options,
+	onChange,
+	...rest
+}: Props) => {
 	const handleChange = (e: ChangeEvent<HTMLSelectElement>) => {
 		const { name, value } = e.target;
 		return onChange && onChange(name, value);
 	};
-
-	console.log("value", value);
 
 	return (
 		<div className={styles.Select} {...rest}>
@@ -32,6 +39,8 @@ const Select = ({ name, id, value, options, onChange, ...rest }: Props) => {
 				id={id}
 				className={styles.Select_select}
 				onChange={handleChange}
+				onSelect={handleChange}
+				defaultValue={defaultValue}
 				value={value}
 			>
 				{options &&

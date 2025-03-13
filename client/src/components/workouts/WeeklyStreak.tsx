@@ -36,14 +36,30 @@ const GoalReached = () => {
 };
 
 const StreakGoal = ({ streak }: StreakGoalProps) => {
-	const { date, mins, goal } = streak;
+	const { date, mins, goal, weekDay } = streak;
 	const percent = getPercent(mins, goal);
 	const hasGoal = percent === 100;
 
 	if (isFuture(date)) {
 		return (
 			<div className={styles.StreakGoal}>
-				<ProgressCircle percentage={100} size={40} color="blank" />
+				<div className={styles.StreakGoal_circle}>
+					<ProgressCircle
+						percentage={0}
+						size={40}
+						color="blank"
+						trackColor="var(--blueGrey800)"
+						showBlank={true}
+					/>
+					{hasGoal && (
+						<FadeIn>
+							<GoalReached />
+						</FadeIn>
+					)}
+				</div>
+				<div className={styles.StreakGoal_day}>
+					<DayLabel day={date} weekDay={weekDay} />
+				</div>
 			</div>
 		);
 	}
@@ -58,7 +74,7 @@ const StreakGoal = ({ streak }: StreakGoalProps) => {
 				)}
 			</div>
 			<div className={styles.StreakGoal_day}>
-				<DayLabel day={date} />
+				<DayLabel day={date} weekDay={weekDay} />
 			</div>
 		</div>
 	);
@@ -71,9 +87,15 @@ const getWeekDayFromDate = (day: string) => {
 	return weekDay;
 };
 
-const DayLabel = ({ day }: { day: Date | string }) => {
-	const weekDay = getWeekDayFromDate(day as string);
-	const abbrevDay = weekDay.slice(0, 3);
+const DayLabel = ({
+	day,
+	weekDay,
+}: {
+	day: Date | string;
+	weekDay: string;
+}) => {
+	const dayOfWeek = getWeekDayFromDate(day as string);
+	const abbrevDay = !weekDay ? dayOfWeek.slice(0, 3) : weekDay.slice(0, 3);
 	return (
 		<div className={styles.DayLabel}>
 			<div>{abbrevDay}</div>
